@@ -38,9 +38,224 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
     _unfocusNode.dispose();
     super.dispose();
   }
-
+  Widget widgetTransaccion(String fechaTransaccion, double montoTransaccion, String concepto){
+    return
+      Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(
+            0.0, 20.0, 0.0, 0.0),
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+        Expanded(
+        child:
+      Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(
+          20.0, 10.0, 20.0, 10.0),
+      child: Container(
+        width: double.infinity,
+        height: 110.0,
+        decoration: BoxDecoration(
+          color: Color(0xFFEEEEEE),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 30.0,
+              color: Color(0x123629B7),
+              offset: Offset(0.0, 4.0),
+              spreadRadius: 30.0,
+            )
+          ],
+          borderRadius:
+          BorderRadius.circular(15.0),
+        ),
+        child: Padding(
+          padding:
+          EdgeInsetsDirectional.fromSTEB(
+              5.0, 5.0, 5.0, 5.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment:
+            MainAxisAlignment.spaceAround,
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional
+                    .fromSTEB(
+                    10.0, 0.0, 10.0, 0.0),
+                child: Row(
+                  mainAxisSize:
+                  MainAxisSize.max,
+                  mainAxisAlignment:
+                  MainAxisAlignment
+                      .spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisSize:
+                      MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Fecha: ',
+                          style:
+                          AzaBankTheme.of(
+                              context)
+                              .titleMedium
+                              .override(
+                            fontFamily:
+                            'Poppins',
+                            color: Colors
+                                .black,
+                            fontWeight:
+                            FontWeight
+                                .w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisSize:
+                      MainAxisSize.max,
+                      children: [
+                        Text(
+                          '$fechaTransaccion',
+                          style:
+                          AzaBankTheme.of(
+                              context)
+                              .titleMedium
+                              .override(
+                            fontFamily:
+                            'Poppins',
+                            color: Colors
+                                .black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional
+                    .fromSTEB(
+                    10.0, 0.0, 10.0, 0.0),
+                child: Row(
+                  mainAxisSize:
+                  MainAxisSize.max,
+                  mainAxisAlignment:
+                  MainAxisAlignment
+                      .spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisSize:
+                      MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Monto Transacción: ',
+                          style:
+                          AzaBankTheme.of(
+                              context)
+                              .titleSmall
+                              .override(
+                            fontFamily:
+                            'Poppins',
+                            color: Colors
+                                .black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisSize:
+                      MainAxisSize.max,
+                      children: [
+                        Text(
+                          '\$$montoTransaccion',
+                          style:
+                          AzaBankTheme.of(
+                              context)
+                              .titleMedium
+                              .override(
+                            fontFamily:
+                            'Poppins',
+                            color: AzaBankTheme.of(
+                                context)
+                                .primary,
+                            fontWeight:
+                            FontWeight
+                                .bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional
+                    .fromSTEB(
+                    10.0, 0.0, 10.0, 0.0),
+                child: Row(
+                  mainAxisSize:
+                  MainAxisSize.max,
+                  mainAxisAlignment:
+                  MainAxisAlignment
+                      .spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisSize:
+                      MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Concepto',
+                          style:
+                          AzaBankTheme.of(
+                              context)
+                              .titleSmall
+                              .override(
+                            fontFamily:
+                            'Poppins',
+                            color: Colors
+                                .black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisSize:
+                      MainAxisSize.max,
+                      children: [
+                        Text(
+                          '$concepto',
+                          style:
+                          AzaBankTheme.of(
+                              context)
+                              .titleMedium
+                              .override(
+                            fontFamily:
+                            'Poppins',
+                            color: AzaBankTheme.of(
+                                context)
+                                .primary,
+                            fontWeight:
+                            FontWeight
+                                .w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    )
+        ),
+            ],
+        ),
+      );
+  }
   @override
   Widget build(BuildContext context) {
+    String saldo = "50";
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -74,7 +289,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                       child: Text(
-                        'Account & Cards',
+                        'Ahorro - Detalles',
                         style: AzaBankTheme.of(context).headlineMedium,
                       ),
                     ),
@@ -116,9 +331,9 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                                           onPressed: () {
                                             print('Button pressed ...');
                                           },
-                                          text: 'Account',
+                                          text: 'Saldo/Transacciones',
                                           options: FFButtonOptions(
-                                            width: 150.0,
+                                            width: 200.0,
                                             height: 40.0,
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
@@ -158,7 +373,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                                               curve: Curves.ease,
                                             );
                                           },
-                                          text: 'Cards',
+                                          text: 'Agregar',
                                           options: FFButtonOptions(
                                             width: 150.0,
                                             height: 40.0,
@@ -209,25 +424,34 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                                             shape: BoxShape.circle,
                                           ),
                                           child: Image.asset(
-                                            'assets/images/Avatar-seetings.png',
+                                            'assets/images/dinero_icon.webp',
                                           ),
                                         ),
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 10.0, 0.0, 0.0),
-                                          child: Text(
-                                            'Push Puttichai',
-                                            style: AzaBankTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Poppins',
-                                                  color:
-                                                      AzaBankTheme.of(context)
-                                                          .primary,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.w600,
+                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                                          child: RichText(
+                                            text: TextSpan(
+                                              style: AzaBankTheme.of(context).bodyMedium.override(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 25.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                              children: [
+                                                TextSpan(
+                                                  text: 'Saldo Actual: ',
+                                                  style: TextStyle(
+                                                    color: AzaBankTheme.of(context).primary,  // Color azul
+                                                  ),
                                                 ),
+                                                TextSpan(
+                                                  text: '\$$saldo',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 30.0// Color negro
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -235,625 +459,11 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 20.0, 0.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            20.0, 10.0, 20.0, 10.0),
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 110.0,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFEEEEEE),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                blurRadius: 30.0,
-                                                color: Color(0x123629B7),
-                                                offset: Offset(0.0, 4.0),
-                                                spreadRadius: 30.0,
-                                              )
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    5.0, 5.0, 5.0, 5.0),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          10.0, 0.0, 10.0, 0.0),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'Account 1',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            '1900 8988 1234',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          10.0, 0.0, 10.0, 0.0),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'Avalable balance',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            '\$20,000',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: AzaBankTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          10.0, 0.0, 10.0, 0.0),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'Branch',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'New York',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: AzaBankTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 20.0, 0.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            20.0, 10.0, 20.0, 10.0),
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 110.0,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFEEEEEE),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                blurRadius: 30.0,
-                                                color: Color(0x123629B7),
-                                                offset: Offset(0.0, 4.0),
-                                                spreadRadius: 30.0,
-                                              )
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    5.0, 5.0, 5.0, 5.0),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          10.0, 0.0, 10.0, 0.0),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'Account 2',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            '8988 1234 1234',
-                                                            style: AzaBankTheme
-                                                                    .of(context)
-                                                                .titleMedium,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          10.0, 0.0, 10.0, 0.0),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'Avalable balance',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            '\$10,000',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: AzaBankTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          10.0, 0.0, 10.0, 0.0),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'Branch',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'New York',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: AzaBankTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 20.0, 0.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            20.0, 10.0, 20.0, 10.0),
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 110.0,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFEEEEEE),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                blurRadius: 30.0,
-                                                color: Color(0x123629B7),
-                                                offset: Offset(0.0, 4.0),
-                                                spreadRadius: 30.0,
-                                              )
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    5.0, 5.0, 5.0, 5.0),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          10.0, 0.0, 10.0, 0.0),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'Account 3',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            '1900 1234 2222',
-                                                            style: AzaBankTheme
-                                                                    .of(context)
-                                                                .titleMedium,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          10.0, 0.0, 10.0, 0.0),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'Avalable balance',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            '\$770,000',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: AzaBankTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          10.0, 0.0, 10.0, 0.0),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'Branch',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'New York',
-                                                            style:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .titleMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: AzaBankTheme.of(
-                                                                              context)
-                                                                          .primary,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                    ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              widgetTransaccion("2024-12-08", 50.15, "Transferencia"),
+                              widgetTransaccion("2025-01-08", 150.15, "Transferencia"),
+                              widgetTransaccion("2026-02-08", 80.15, "Transferencia"),
+                              widgetTransaccion("2026-03-08", 115.15, "Transferencia"),
+                              widgetTransaccion("2026-04-08", 95.50, "Transferencia"),
                             ],
                           ),
                         ),
