@@ -9,6 +9,7 @@ import '/pages/notification/notification_widget.dart';
 import '/pages/saveonline/saveonline_widget.dart';
 import '/pages/transactionreport/transactionreport_widget.dart';
 import '/pages/withdraw_funds/withdraw_funds_widget.dart';
+import '/pages/creditos/creditos_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'home_page_model.dart';
@@ -371,7 +372,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                     reverseDuration:
                                         Duration(milliseconds: 300),
                                     child: NavBarPage(
-                                        initialPage: 'TransferFunds'),
+                                        initialPage: 'Creditos'),
                                   ),
                                 );
                               },

@@ -6,7 +6,7 @@ import 'theme/internationalization.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:aza_bank/pages/welcome_page/welcome_page_widget.dart';
 import 'package:aza_bank/pages/home_page/home_page_widget.dart';
-import 'package:aza_bank/pages/transfer_funds/transfer_funds_widget.dart';
+import 'package:aza_bank/pages/creditos/creditos_widget.dart';
 import 'package:aza_bank/pages/search_page/search_page_widget.dart';
 import 'package:aza_bank/pages/settingspage/settingspage_widget.dart';
 
@@ -88,7 +88,7 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'HomePage': HomePageWidget(),
-      'TransferFunds': TransferFundsWidget(),
+      'Creditos': CreditosWidget(),
       'SearchPage': SearchPageWidget(),
       'Settingspage': SettingspageWidget(),
     };
@@ -120,7 +120,7 @@ class _NavBarPageState extends State<NavBarPage> {
           ),
           GButton(
             icon: Icons.compare_arrows_rounded,
-            text: 'Transfer',
+            text: 'Creditos',
             iconSize: 24.0,
           ),
           GButton(
