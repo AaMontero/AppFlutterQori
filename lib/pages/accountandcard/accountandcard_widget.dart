@@ -475,7 +475,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 20.0, 0.0, 10.0),
+                                    10.0, 20.0, 0.0, 10.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment:
@@ -533,6 +533,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                                             print('Button pressed ...');
                                           },
                                           text: 'Cards',
+
                                           options: FFButtonOptions(
                                             width: 150.0,
                                             height: 40.0,
@@ -835,7 +836,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                                         await showModalBottomSheet(
                                           isScrollControlled: true,
                                           backgroundColor: Colors.transparent,
-                                          barrierColor: Color(0x00000000),
+                                          barrierColor: Color(0x00000000000),
                                           context: context,
                                           builder: (bottomSheetContext) {
                                             return GestureDetector(
