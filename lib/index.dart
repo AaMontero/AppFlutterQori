@@ -10,7 +10,7 @@ export '/pages/interestrate/interestrate_widget.dart' show InterestrateWidget;
 export '/pages/searchfor_branch/searchfor_branch_widget.dart'
     show SearchforBranchWidget;
 export '/pages/exchangerate/exchangerate_widget.dart' show ExchangerateWidget;
-export '/pages/transfer_funds/transfer_funds_widget.dart'
+export '/pages/creditos/creditos_widget.dart'
     show TransferFundsWidget;
 export '/pages/comfirm_tranfer/comfirm_tranfer_widget.dart'
     show ComfirmTranferWidget;

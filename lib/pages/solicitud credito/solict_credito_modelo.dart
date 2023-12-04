@@ -2,7 +2,7 @@ import '../../theme/aza_bank_util.dart';
 import '../../theme/form_field_controller.dart';
 import 'package:flutter/material.dart';
 
-class TransferFundsModel extends AzaBankModel {
+class SolicitCreditoModel extends AzaBankModel {
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for PageView widget.
@@ -64,5 +64,5 @@ class TransferFundsModel extends AzaBankModel {
     textController10?.dispose();
   }
 
-  /// Additional helper methods are added here.
+/// Additional helper methods are added here.
 }

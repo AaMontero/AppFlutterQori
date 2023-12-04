@@ -55,10 +55,10 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
             children: [
         Expanded(
         child:
-      Padding(
+        Padding(
       padding: EdgeInsetsDirectional.fromSTEB(
           20.0, 10.0, 20.0, 10.0),
-      child: Container(
+        child: Container(
         width: double.infinity,
         height: 110.0,
         decoration: BoxDecoration(
