@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 import '/components/add_card_info_section/add_card_info_section_widget.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
@@ -6,6 +8,11 @@ import '/pages/delete_card/delete_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'accountandcard_model.dart';
 export 'accountandcard_model.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'dart:io';
+
+
 
 class AccountandcardWidget extends StatefulWidget {
   const AccountandcardWidget({Key? key}) : super(key: key);
@@ -15,8 +22,9 @@ class AccountandcardWidget extends StatefulWidget {
 }
 
 class _AccountandcardWidgetState extends State<AccountandcardWidget> {
+  File? file;
+  String? url;
   late AccountandcardModel _model;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
   int get pageViewCurrentIndex => _model.pageViewController != null &&
@@ -34,7 +42,6 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
   @override
   void dispose() {
     _model.dispose();
-
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -253,6 +260,27 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
         ),
       );
   }
+
+  getImageGaleria() async
+  {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image =
+      await picker.pickImage(source: ImageSource.gallery);
+
+    if(image!= null){
+      file = File(image!.path);
+      print("El path es el siguiente:"+ file.toString());
+      var refStorage = firebase_storage.FirebaseStorage.instance.ref("nombre.jpg");
+      await refStorage.putFile(file!);
+      url = await refStorage.getDownloadURL();
+    }else{
+      print ("La imagen es nula");
+    }
+
+    setState(() {
+
+    });
+  }
   @override
   Widget build(BuildContext context) {
     String saldo = "50";
@@ -365,13 +393,9 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                                       children: [
                                         FFButtonWidget(
                                           onPressed: () async {
-                                            await _model.pageViewController
-                                                ?.animateToPage(
-                                              1,
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              curve: Curves.ease,
-                                            );
+                                            await getImageGaleria();
+                                            print("Entra al metodo");
+                                            if(file!= null) Image.file(file!);
                                           },
                                           text: 'Agregar',
                                           options: FFButtonOptions(

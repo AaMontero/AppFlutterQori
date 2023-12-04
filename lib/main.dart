@@ -9,12 +9,13 @@ import 'package:aza_bank/pages/home_page/home_page_widget.dart';
 import 'package:aza_bank/pages/transfer_funds/transfer_funds_widget.dart';
 import 'package:aza_bank/pages/search_page/search_page_widget.dart';
 import 'package:aza_bank/pages/settingspage/settingspage_widget.dart';
-
+//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await AzaBankTheme.initialize();
-
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

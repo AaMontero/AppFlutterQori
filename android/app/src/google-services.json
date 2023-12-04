@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "968651732349",
+    "project_id": "projecto-95dd3",
+    "storage_bucket": "projecto-95dd3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968651732349:android:20e14092a4bf586f0c4814",
+        "android_client_info": {
+          "package_name": "com.azabank.denoveo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqINcDcweASjt0MGZXZh8bXo4FtIx2hxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
