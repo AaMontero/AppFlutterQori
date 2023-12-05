@@ -18,8 +18,6 @@ class InversionAporte {
   String concepto;
   String fecha;
   double monto;
-
-  // Constructor
   InversionAporte({
     required this.concepto,
     required this.fecha,
@@ -45,6 +43,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
   File? file;
   String? url;
   String? email;
+  double? saldoTotal;
   List<InversionAporte> listaAportes = [];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -326,6 +325,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
               String fecha = data['fecha'].toString();
               return InversionAporte(concepto: concepto, fecha: fecha, monto: monto);
             }));
+            saldoTotal = listaAportes.map((aporte) => aporte.monto).fold(0.0, (a, b) => a !+ b);
           });
         }).catchError((error) {
           print("Error al obtener datos de Firebase: $error");
@@ -335,7 +335,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    String saldo = "50";
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -553,7 +553,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: '\$$saldo',
+                                  text: '\$$saldoTotal',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 30.0// Color negro
