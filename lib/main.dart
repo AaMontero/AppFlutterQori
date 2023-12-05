@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -9,12 +10,12 @@ import 'package:aza_bank/pages/home_page/home_page_widget.dart';
 import 'package:aza_bank/pages/creditos/creditos_widget.dart';
 import 'package:aza_bank/pages/search_page/search_page_widget.dart';
 import 'package:aza_bank/pages/settingspage/settingspage_widget.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await AzaBankTheme.initialize();
-
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -79,6 +80,15 @@ class _NavBarPageState extends State<NavBarPage> {
 
   @override
   void initState() {
+   FirebaseAuth.instance.authStateChanges().listen(
+        ((User? user){
+          if(user == null){
+            print("user is currently signed out! ");
+          }else{
+            print("User is signed in");
+          }
+        })
+    );
     super.initState();
     _currentPageName = widget.initialPage ?? _currentPageName;
     _currentPage = widget.page;
