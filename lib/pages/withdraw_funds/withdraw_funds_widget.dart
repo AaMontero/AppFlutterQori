@@ -1,20 +1,36 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../components/add_card_info_section/add_card_info_section_widget.dart';
 import '../../main.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
-//import '../../theme/aza_bank_widgets.dart';
-//import '/main.dart';
-//import '/pages/comfirm_tranfer/comfirm_tranfer_widget.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
 import '../../theme/aza_bank_widgets.dart';
 import '../delete_card/delete_card_widget.dart';
 import 'withdraw_funds_model.dart';
 export 'withdraw_funds_model.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
+
+class InversionAporte {
+  String concepto;
+  String fecha;
+  double monto;
+
+  // Constructor
+  InversionAporte({
+    required this.concepto,
+    required this.fecha,
+    required this.monto,
+  });
+  String toString(){
+    return "Objeto Ahorro" + this.concepto + this.fecha + this.monto.toString();
+  }
+
+}
+
 
 
 class WithdrawFundsWidget extends StatefulWidget {
@@ -28,6 +44,8 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
   late WithdrawFundsModel _model;
   File? file;
   String? url;
+  String? email;
+  List<InversionAporte> listaAportes = [];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
   int get pageViewCurrentIndex => _model.pageViewController != null &&
@@ -39,6 +57,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
   @override
   void initState() {
     super.initState();
+    cargarDatosDesdeFireBase();
     _model = createModel(context, () => WithdrawFundsModel());
 
     _model.textController1 ??= TextEditingController();
@@ -290,6 +309,30 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
 
     });
   }
+  void cargarDatosDesdeFireBase(){
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        email = user.email.toString();
+        CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
+
+        usuarios.doc(email).collection("inversiones").get().then((QuerySnapshot querySnapshot) {
+          // Limpia la lista antes de agregar nuevos elementos
+          setState(() {
+            listaAportes.clear();
+            listaAportes.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
+              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+              String concepto = data['concepto'];
+              double monto = data['monto'];
+              String fecha = data['fecha'].toString();
+              return InversionAporte(concepto: concepto, fecha: fecha, monto: monto);
+            }));
+          });
+        }).catchError((error) {
+          print("Error al obtener datos de Firebase: $error");
+        });
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     String saldo = "50";
@@ -464,6 +507,50 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                   ],
                 ),
               ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(
+                    0.0, 30.0, 0.0, 0.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment:
+                      MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                          child: RichText(
+                            text: TextSpan(
+                              style: AzaBankTheme.of(context).bodyMedium.override(
+                                fontFamily: 'Poppins',
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'Saldo Actual: ',
+                                  style: TextStyle(
+                                    color: AzaBankTheme.of(context).primary,  // Color azul
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '\$$saldo',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 30.0// Color negro
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
               Expanded(
                 child: Padding(
                   padding:
@@ -477,75 +564,29 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                           PageController(initialPage: 0),
                       scrollDirection: Axis.horizontal,
                       children: [
-                        SingleChildScrollView(
-                          primary: false,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 30.0, 0.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: 100.0,
-                                          height: 100.0,
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Image.asset(
-                                            'assets/images/dinero_icon.webp',
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-                                          child: RichText(
-                                            text: TextSpan(
-                                              style: AzaBankTheme.of(context).bodyMedium.override(
-                                                fontFamily: 'Poppins',
-                                                fontSize: 25.0,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                  text: 'Saldo Actual: ',
-                                                  style: TextStyle(
-                                                    color: AzaBankTheme.of(context).primary,  // Color azul
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: '\$$saldo',
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 30.0// Color negro
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              widgetTransaccion("2024-12-08", 50.15, "Transferencia"),
-                              widgetTransaccion("2025-01-08", 150.15, "Transferencia"),
-                              widgetTransaccion("2026-02-08", 80.15, "Transferencia"),
-                              widgetTransaccion("2026-03-08", 115.15, "Transferencia"),
-                              widgetTransaccion("2026-04-08", 95.50, "Transferencia"),
-                            ],
-                          ),
-                        ),
+                        ListView.builder(
+                          itemCount: 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: listaAportes.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return widgetTransaccion(
+                                  listaAportes[index].fecha,
+                                  listaAportes[index].monto,
+                                  listaAportes[index].concepto,
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      }),
+
                         SingleChildScrollView(
                           primary: false,
                           child: Column(

@@ -326,28 +326,6 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
   }
   @override
   Widget build(BuildContext context) {
-
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        email = user.email.toString();
-        CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
-        usuarios.doc(email).collection("ahorros").get().then((QuerySnapshot querySnapshot) {
-          List<AhorroAporte> listaAportes = querySnapshot.docs.map((DocumentSnapshot document) {
-            Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-            String concepto = data['concepto'];
-            double monto = data['monto'];
-            String fecha = data['fecha'].toString();
-            return AhorroAporte(concepto: concepto, fecha: fecha, monto: monto);
-          }).toList();
-          for (var aporte in listaAportes) {
-            print(aporte.toString());
-          }
-        }).catchError((error) {
-          print("Error al obtener datos de Firebase: $error");
-        });
-      }
-    });
-
     String saldo = "50";
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
