@@ -1,17 +1,11 @@
-import '/components/choose_accoun_section/choose_accoun_section_widget.dart';
-//import '/components/choose_bank_section/choose_bank_section_widget.dart';
-import '../../theme/aza_bank_checkbox_group.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
-import '../../theme/form_field_controller.dart';
 import '/main.dart';
-import '/pages/comfirm_tranfer/comfirm_tranfer_widget.dart';
 import '/pages/solicitud credito/solicit_credito1_widget.dart';
 import 'package:flutter/material.dart';
 import 'solict_credito_modelo.dart';
 export 'solict_credito_modelo.dart';
-
 
 
 class SolicitCreditoWidget extends StatefulWidget {
@@ -68,7 +62,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
         backgroundColor: AzaBankTheme.of(context).secondaryBackground,
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 0.0),
+            padding: EdgeInsetsDirectional.fromSTEB(10.0, 00.0 ,10.0 ,0.0),
             child: SingleChildScrollView(
               primary: false,
               child: Column(
@@ -76,7 +70,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                 children: [
                   Padding(
                     padding:
-                    EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 10.0, 20.0),
+                    EdgeInsetsDirectional.fromSTEB(10.0, 15.0, 10.0, 0.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -592,7 +586,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                         ),
 
                                         Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 15.0),
                                           child: Container(
                                             width: 332.0,
                                             height: 55.0,
@@ -605,15 +599,15 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                               ),
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
                                               child: Row(
-                                                children: [
+                                                  children: [
                                                   Text(
-                                                    'Estado Civil: ',
+                                                    '',
+
                                                     style: TextStyle(
                                                       color: AzaBankTheme.of(context).primaryText,
-                                                      // Ajusta otros estilos según tus preferencias
-                                                    ),
+                                                     ),
                                                   ),
                                                   DropdownButton<String>(
                                                     value: selectedStatus,
@@ -625,34 +619,40 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                     items: maritalStatusOptions.map((String status) {
                                                       return DropdownMenuItem<String>(
                                                         value: status,
-                                                        child: Text(
-                                                          status,
-                                                          style: TextStyle(
-                                                            color: AzaBankTheme.of(context).primaryText,
-                                                            // Ajusta otros estilos según tus preferencias
+                                                        child: Padding(
+                                                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                                                          child: Text(
+                                                            status,
+                                                            style: TextStyle(
+                                                              color: AzaBankTheme.of(context).primaryText,
+                                                              fontFamily: 'Poppins',
+                                                              fontSize: 16.0,
+                                                              fontWeight: FontWeight.normal,
+                                                            ),
                                                           ),
                                                         ),
                                                       );
                                                     }).toList(),
                                                   ),
+
                                                   Visibility(
                                                     visible: selectedStatus == 'Casado',
                                                     child: Expanded(
                                                       child: Padding(
-                                                        padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
+                                                        padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                                                         child: Container(
-                                                          width: 332.0,
+                                                          width: 335.0,
                                                           height: 55.0,
                                                           decoration: BoxDecoration(
                                                             color: Color(0x12000000),
                                                             borderRadius: BorderRadius.circular(5.0),
                                                             border: Border.all(
-                                                              color: AzaBankTheme.of(context).orange,
+                                                              color: AzaBankTheme.of(context).primaryText,
                                                               width: 2.0,
                                                             ),
                                                           ),
                                                           child: Padding(
-                                                            padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                                            padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
                                                             child: TextFormField(
                                                               decoration: InputDecoration(
                                                                 labelText: 'Cédula del Cónyuge',

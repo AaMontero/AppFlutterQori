@@ -12,6 +12,7 @@ class WithdrawFundsModel extends AzaBankModel {
   String? Function(BuildContext, String?)? textController2Validator;
 
   /// Initialization and disposal methods.
+  PageController? pageViewController;
 
   void initState(BuildContext context) {}
 

@@ -1,12 +1,9 @@
-import '/components/choose_accoun_section/choose_accoun_section_widget.dart';
-//import '/components/choose_bank_section/choose_bank_section_widget.dart';
 import '../../theme/aza_bank_checkbox_group.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
 import '../../theme/form_field_controller.dart';
 import '/main.dart';
-import '/pages/comfirm_tranfer/comfirm_tranfer_widget.dart';
 import '/pages/solicitud credito/solicit_credito_widget.dart';
 import 'package:flutter/material.dart';
 import 'solict_credito_modelo.dart';
@@ -489,7 +486,7 @@ class _SolicitCredito1WidgetState extends State<SolicitCredito1Widget> {
                                                 _model.textController4,
                                                 obscureText: false,
                                                 decoration: InputDecoration(
-                                                  labelText: 'Note',
+                                                  labelText: '',
                                                   enabledBorder:
                                                   UnderlineInputBorder(
                                                     borderSide: BorderSide(
@@ -802,26 +799,49 @@ class _SolicitCredito1WidgetState extends State<SolicitCredito1Widget> {
   }
 }
 
-void _mostrarAlerta(BuildContext context){
+void _mostrarAlerta(BuildContext context) {
   showDialog(
-      builder: (context) => AlertDialog(
+    builder: (context) => AlertDialog(
       title: Text("Enviar"),
       content: Text("Desea enviar los datos"),
       actions: [
         TextButton(
-            child: Text("Cancelar"),
-            onPressed:() {
-          print("NO");
-          Navigator.pop(context);
-        }),
+          child: Text("Cancelar"),
+          onPressed: () {
+            print("NO");
+            Navigator.pop(context);
+          },
+        ),
         TextButton(
           child: Text("Aceptar"),
-          onPressed: (){
-          print("SI");
-          Navigator.pop(context);
-  },
-          )
+          onPressed: () {
+            print("SI");
+            Navigator.pop(context);
+
+            // Muestra el SnackBar después de aceptar
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Formulario Enviado',
+                  style: AzaBankTheme.of(context)
+                      .titleSmall
+                      .override(
+                    fontFamily: 'Poppins',
+                    color: AzaBankTheme.of(context)
+                        .primary3,
+                  ),
+                ),
+                duration: Duration(milliseconds: 3000),
+                backgroundColor:
+                AzaBankTheme.of(context).green,
+              ),
+            );
+          },
+        ),
       ],
-    ), barrierDismissible: false,
-      context: context);
-  }
+    ),
+    barrierDismissible: false,
+    context: context,
+  );
+}
+
