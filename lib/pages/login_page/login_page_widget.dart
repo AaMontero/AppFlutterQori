@@ -24,7 +24,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   String? password = "";
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
-
   @override
   void initState() {
     super.initState();
@@ -33,23 +32,23 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     _model.textController1 ??= TextEditingController();
     _model.textController2 ??= TextEditingController();
   }
-  logearSesionCorreoPass(correoPar, passwordPar) async {
-    print ("El correo es: " +correoPar);
-    print ("El password es: " + passwordPar);
+  Future<bool> logearSesionCorreoPass(correoPar, passwordPar) async {
 
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: correoPar,
           password: passwordPar
       );
-
+      return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
+
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
     }
+    return false;
   }
   @override
   void dispose() {
@@ -416,36 +415,43 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                     8.0, 0.0, 0.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    logearSesionCorreoPass(correo, password);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'Login Successful',
-                                          style: AzaBankTheme.of(context)
-                                              .titleSmall
-                                              .override(
-                                                fontFamily: 'Poppins',
-                                                color: AzaBankTheme.of(context)
-                                                    .primary3,
-                                              ),
+                                    print("Credenciales: " + correo!);
+                                    print("Credenciales: " + password!);
+                                    if(await logearSesionCorreoPass(correo, password)){
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Login Successful',
+                                            style: AzaBankTheme.of(context)
+                                                .titleSmall
+                                                .override(
+                                              fontFamily: 'Poppins',
+                                              color: AzaBankTheme.of(context)
+                                                  .primary3,
+                                            ),
+                                          ),
+                                          duration: Duration(milliseconds: 4000),
+                                          backgroundColor:
+                                          AzaBankTheme.of(context).green,
                                         ),
-                                        duration: Duration(milliseconds: 4000),
-                                        backgroundColor:
-                                            AzaBankTheme.of(context).green,
-                                      ),
-                                    );
-                                    await Navigator.push(
-                                      context,
-                                      PageTransition(
-                                        type: PageTransitionType.scale,
-                                        alignment: Alignment.bottomCenter,
-                                        duration: Duration(milliseconds: 300),
-                                        reverseDuration:
-                                            Duration(milliseconds: 300),
-                                        child:
-                                            NavBarPage(initialPage: 'HomePage'),
-                                      ),
-                                    );
+                                      );
+                                      await Navigator.push(
+                                        context,
+                                        PageTransition(
+                                          type: PageTransitionType.scale,
+                                          alignment: Alignment.bottomCenter,
+                                          duration: Duration(milliseconds: 300),
+                                          reverseDuration:
+                                          Duration(milliseconds: 300),
+                                          child:
+                                          NavBarPage(initialPage: 'HomePage'),
+                                        ),
+                                      );
+                                    }else{
+                                      print("No se pudo acceder a la cuenta");
+                                    }
+
+
                                   },
                                   text: 'Ingresar',
                                   options: FFButtonOptions(

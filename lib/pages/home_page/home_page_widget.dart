@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '/main.dart';
@@ -18,7 +21,8 @@ class HomePageWidget extends StatefulWidget {
 
 class _HomePageWidgetState extends State<HomePageWidget> {
   late HomePageModel _model;
-
+  String? nombresUsuarioActivo;
+  String? email;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
 
@@ -38,6 +42,28 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        email = user.email.toString();
+        CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
+        usuarios.doc(email).get().then((value) {
+          if (value.exists) {
+            // Obtener los datos del documento
+            Map<String, dynamic> userData = value.data() as Map<String,
+                dynamic>;
+            setState(() {
+              nombresUsuarioActivo = userData['nombres'];
+            });
+
+          }
+
+        }
+        );
+
+
+
+      }
+    });
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -102,7 +128,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     10.0, 0.0, 0.0, 0.0),
                                 child: Text(
-                                  'Hola, Nombre Apellido',
+                                  'Hola, $nombresUsuarioActivo',
                                   style: AzaBankTheme.of(context)
                                       .titleMedium
                                       .override(
@@ -213,7 +239,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Text(
-                                        'Nombre Apellido',
+                                        '$nombresUsuarioActivo',
                                         style: AzaBankTheme.of(context)
                                             .displaySmall
                                             .override(

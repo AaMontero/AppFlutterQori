@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '/components/add_card_info_section/add_card_info_section_widget.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
@@ -12,7 +13,21 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 
 
+class AhorroAporte {
+  String concepto;
+  String fecha;
+  double monto;
 
+  // Constructor
+  AhorroAporte({
+    required this.concepto,
+    required this.fecha,
+    required this.monto,
+  });
+  String toString(){
+    return "Objeto Ahorro" + this.concepto + this.fecha + this.monto.toString();
+  }
+}
 class AccountandcardWidget extends StatefulWidget {
   const AccountandcardWidget({Key? key}) : super(key: key);
 
@@ -23,6 +38,9 @@ class AccountandcardWidget extends StatefulWidget {
 class _AccountandcardWidgetState extends State<AccountandcardWidget> {
   File? file;
   String? url;
+  String? email;
+  List<AhorroAporte> listaAportes = [];
+  double? saldoTotal;
   late AccountandcardModel _model;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -35,6 +53,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
   @override
   void initState() {
     super.initState();
+    cargarDatosDesdeFireBase();
     _model = createModel(context, () => AccountandcardModel());
   }
 
@@ -45,6 +64,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
     super.dispose();
   }
   Widget widgetTransaccion(String fechaTransaccion, double montoTransaccion, String concepto){
+    print("Lo que llega es: " + fechaTransaccion + "  " + montoTransaccion.toString() + "   " + concepto);
     return
       Padding(
         padding: EdgeInsetsDirectional.fromSTEB(
@@ -280,8 +300,54 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
 
     });
   }
+  void cargarDatosDesdeFireBase(){
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        email = user.email.toString();
+        CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
+
+        usuarios.doc(email).collection("ahorros").get().then((QuerySnapshot querySnapshot) {
+          // Limpia la lista antes de agregar nuevos elementos
+          setState(() {
+            listaAportes.clear();
+            listaAportes.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
+              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+              String concepto = data['concepto'];
+              double monto = data['monto'];
+              String fecha = data['fecha'].toString();
+              return AhorroAporte(concepto: concepto, fecha: fecha, monto: monto);
+            }));
+          });
+        }).catchError((error) {
+          print("Error al obtener datos de Firebase: $error");
+        });
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
+
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        email = user.email.toString();
+        CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
+        usuarios.doc(email).collection("ahorros").get().then((QuerySnapshot querySnapshot) {
+          List<AhorroAporte> listaAportes = querySnapshot.docs.map((DocumentSnapshot document) {
+            Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+            String concepto = data['concepto'];
+            double monto = data['monto'];
+            String fecha = data['fecha'].toString();
+            return AhorroAporte(concepto: concepto, fecha: fecha, monto: monto);
+          }).toList();
+          for (var aporte in listaAportes) {
+            print(aporte.toString());
+          }
+        }).catchError((error) {
+          print("Error al obtener datos de Firebase: $error");
+        });
+      }
+    });
+
     String saldo = "50";
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
@@ -336,159 +402,168 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                           PageController(initialPage: 0),
                       scrollDirection: Axis.horizontal,
                       children: [
-                        SingleChildScrollView(
-                          primary: false,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 20.0, 0.0, 10.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        FFButtonWidget(
-                                          onPressed: () {
-                                            print('Button pressed ...');
-                                          },
-                                          text: 'Saldo/Transacciones',
-                                          options: FFButtonOptions(
-                                            width: 200.0,
-                                            height: 40.0,
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 0.0),
-                                            iconPadding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 0.0),
-                                            color: AzaBankTheme.of(context)
-                                                .primary,
-                                            textStyle: AzaBankTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.white,
-                                                ),
-                                            elevation: 2.0,
-                                            borderSide: BorderSide(
-                                              color: Colors.transparent,
-                                              width: 1.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        FFButtonWidget(
-                                          onPressed: () async {
-                                            await getImageGaleria();
-                                            print("Entra al metodo");
-                                            if(file!= null) Image.file(file!);
-                                          },
-                                          text: 'Agregar',
-                                          options: FFButtonOptions(
-                                            width: 150.0,
-                                            height: 40.0,
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 0.0),
-                                            iconPadding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 0.0),
-                                            color: Color(0xFFF2F1F9),
-                                            textStyle: AzaBankTheme.of(context)
-                                                .titleSmall
-                                                .override(
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.black,
-                                                ),
-                                            elevation: 2.0,
-                                            borderSide: BorderSide(
-                                              color: Colors.transparent,
-                                              width: 1.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 30.0, 0.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: 100.0,
-                                          height: 100.0,
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Image.asset(
-                                            'assets/images/dinero_icon.webp',
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-                                          child: RichText(
-                                            text: TextSpan(
-                                              style: AzaBankTheme.of(context).bodyMedium.override(
-                                                fontFamily: 'Poppins',
-                                                fontSize: 25.0,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                  text: 'Saldo Actual: ',
-                                                  style: TextStyle(
-                                                    color: AzaBankTheme.of(context).primary,  // Color azul
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: '\$$saldo',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 30.0// Color negro
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              widgetTransaccion("2024-12-08", 50.15, "Transferencia"),
-                              widgetTransaccion("2025-01-08", 150.15, "Transferencia"),
-                              widgetTransaccion("2026-02-08", 80.15, "Transferencia"),
-                              widgetTransaccion("2026-03-08", 115.15, "Transferencia"),
-                              widgetTransaccion("2026-04-08", 95.50, "Transferencia"),
-                            ],
+                        ListView.builder(
+                          itemCount: 1,
+    itemBuilder: (BuildContext context, int index) {
+      return Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(
+                0.0, 20.0, 0.0, 10.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment:
+              MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    FFButtonWidget(
+                      onPressed: () {
+                        print('Button pressed ...');
+                      },
+                      text: 'Saldo/Trans',
+                      options: FFButtonOptions(
+                        width: 200.0,
+                        height: 40.0,
+                        padding:
+                        EdgeInsetsDirectional.fromSTEB(
+                            0.0, 0.0, 0.0, 0.0),
+                        iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(
+                            0.0, 0.0, 0.0, 0.0),
+                        color: AzaBankTheme.of(context)
+                            .primary,
+                        textStyle: AzaBankTheme.of(context)
+                            .bodyMedium
+                            .override(
+                          fontFamily: 'Poppins',
+                          color: Colors.white,
+                        ),
+                        elevation: 2.0,
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 1.0,
+                        ),
+                        borderRadius:
+                        BorderRadius.circular(12.0),
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    FFButtonWidget(
+                      onPressed: () async {
+                        await getImageGaleria();
+                        print("Entra al metodo");
+                        if(file!= null) Image.file(file!);
+                      },
+                      text: 'Agregar',
+                      options: FFButtonOptions(
+                        width: 150.0,
+                        height: 40.0,
+                        padding:
+                        EdgeInsetsDirectional.fromSTEB(
+                            0.0, 0.0, 0.0, 0.0),
+                        iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(
+                            0.0, 0.0, 0.0, 0.0),
+                        color: Color(0xFFF2F1F9),
+                        textStyle: AzaBankTheme.of(context)
+                            .titleSmall
+                            .override(
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                        ),
+                        elevation: 2.0,
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 1.0,
+                        ),
+                        borderRadius:
+                        BorderRadius.circular(12.0),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(
+                0.0, 30.0, 0.0, 0.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment:
+                  MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 100.0,
+                      height: 100.0,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: Image.asset(
+                        'assets/images/dinero_icon.webp',
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                      child: RichText(
+                        text: TextSpan(
+                          style: AzaBankTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Poppins',
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.w600,
                           ),
+                          children: [
+                            TextSpan(
+                              text: 'Saldo Actual: ',
+                              style: TextStyle(
+                                color: AzaBankTheme.of(context).primary,  // Color azul
+                              ),
+                            ),
+                            TextSpan(
+                              text: '\$$saldo',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 30.0// Color negro
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: listaAportes.length,
+            itemBuilder: (BuildContext context, int index) {
+              return widgetTransaccion(
+                listaAportes[index].fecha,
+                listaAportes[index].monto,
+                listaAportes[index].concepto,
+              );
+            },
+          ),
+        ],
+      );
+    }
+
                         ),
                         SingleChildScrollView(
                           primary: false,
