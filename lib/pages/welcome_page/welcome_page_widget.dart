@@ -120,7 +120,7 @@ class _WelcomePageWidgetState extends State<WelcomePageWidget> {
                             ),
                           );
                         },
-                        text: 'Login',
+                        text: 'Ingresar',
                         options: FFButtonOptions(
                           width: 130.0,
                           height: 55.0,
@@ -159,7 +159,7 @@ class _WelcomePageWidgetState extends State<WelcomePageWidget> {
                             ),
                           );
                         },
-                        text: 'Create Account',
+                        text: 'Crear Cuenta',
                         options: FFButtonOptions(
                           width: 130.0,
                           height: 55.0,

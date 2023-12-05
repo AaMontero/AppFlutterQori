@@ -114,7 +114,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                         padding:
                             EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                         child: Text(
-                          'Sign in',
+                          'Inicio Sesión',
                           style:
                               AzaBankTheme.of(context).headlineMedium.override(
                                     fontFamily: 'Poppins',
@@ -195,7 +195,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       controller: _model.textController1,
                                       obscureText: false,
                                       decoration: InputDecoration(
-                                        labelText: 'Account ID',
+                                        labelText: 'Correo Electrónico',
                                         enabledBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
@@ -285,7 +285,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       controller: _model.textController2,
                                       obscureText: !_model.passwordVisibility,
                                       decoration: InputDecoration(
-                                        labelText: 'Password',
+                                        labelText: 'Contraseña',
                                         enabledBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
@@ -394,7 +394,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                     );
                                   },
                                   child: Text(
-                                    'Forgot your password ?',
+                                    '¿Olvidaste tu contraseña ?',
                                     textAlign: TextAlign.end,
                                     style: AzaBankTheme.of(context).bodyMedium,
                                   ),
@@ -446,7 +446,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       ),
                                     );
                                   },
-                                  text: 'Sign in',
+                                  text: 'Ingresar',
                                   options: FFButtonOptions(
                                     width: 130.0,
                                     height: 55.0,
@@ -544,7 +544,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Don\'t have an account? ',
+                                '¿No tienes una cuenta? ',
                                 style: AzaBankTheme.of(context).bodyMedium,
                               ),
                               Padding(
@@ -569,7 +569,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                     );
                                   },
                                   child: Text(
-                                    'Sign Up',
+                                    'Registrarse',
                                     style: AzaBankTheme.of(context)
                                         .bodyMedium
                                         .override(
