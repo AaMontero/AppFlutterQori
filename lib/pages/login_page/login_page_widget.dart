@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
@@ -18,7 +20,8 @@ class LoginPageWidget extends StatefulWidget {
 
 class _LoginPageWidgetState extends State<LoginPageWidget> {
   late LoginPageModel _model;
-
+  String? correo = "";
+  String? password = "";
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
 
@@ -30,7 +33,24 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     _model.textController1 ??= TextEditingController();
     _model.textController2 ??= TextEditingController();
   }
+  logearSesionCorreoPass(correoPar, passwordPar) async {
+    print ("El correo es: " +correoPar);
+    print ("El password es: " + passwordPar);
 
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: correoPar,
+          password: passwordPar
+      );
+
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
   @override
   void dispose() {
     _model.dispose();
@@ -228,6 +248,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                           ),
                                       validator: _model.textController1Validator
                                           .asValidator(context),
+                                      onChanged: (value){
+                                        correo = value;
+                                      },
                                     ),
                                   ),
                                 ),
@@ -333,6 +356,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                           TextInputType.visiblePassword,
                                       validator: _model.textController2Validator
                                           .asValidator(context),
+                                      onChanged: (value) {
+                                        password = value;
+                                      }
                                     ),
                                   ),
                                 ),
@@ -390,10 +416,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                     8.0, 0.0, 0.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
+                                    logearSesionCorreoPass(correo, password);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          'Login Successful ',
+                                          'Login Successful',
                                           style: AzaBankTheme.of(context)
                                               .titleSmall
                                               .override(

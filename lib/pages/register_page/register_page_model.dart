@@ -12,9 +12,15 @@ class RegisterPageModel extends AzaBankModel {
   String? Function(BuildContext, String?)? textController2Validator;
   // State field(s) for TextField widget.
   TextEditingController? textController3;
-  late bool passwordVisibility;
   String? Function(BuildContext, String?)? textController3Validator;
+  TextEditingController? textController4;
+  String? Function(BuildContext, String?)? textController4Validator;
+  TextEditingController? textController5;
+  String? Function(BuildContext, String?)? textController5Validator;
 
+
+
+  late bool passwordVisibility;
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {

@@ -136,7 +136,7 @@ class _AzaBankIconButtonState extends State<AzaBankIconButton> {
               ),
             )
           : Theme(
-              data: Theme.of(context).copyWith(useMaterial3: true),
+              data: Theme.of(context).copyWith(),
               child: IconButton(
                 icon: effectiveIcon,
                 onPressed: widget.onPressed == null

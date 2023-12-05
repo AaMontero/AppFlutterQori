@@ -8,7 +8,6 @@ import '/pages/delete_card/delete_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'accountandcard_model.dart';
 export 'accountandcard_model.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 
@@ -268,7 +267,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
       await picker.pickImage(source: ImageSource.gallery);
 
     if(image!= null){
-      file = File(image!.path);
+      file = File(image.path);
       print("El path es el siguiente:"+ file.toString());
       var refStorage = firebase_storage.FirebaseStorage.instance.ref("nombre.jpg");
       await refStorage.putFile(file!);
