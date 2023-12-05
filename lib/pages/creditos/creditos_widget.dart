@@ -1,4 +1,6 @@
+import '../../main.dart';
 import '../../theme/aza_bank_theme.dart';
+import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
 import 'package:flutter/material.dart';
 import '/pages/solicitud credito/solicit_credito_widget.dart';
@@ -24,7 +26,7 @@ class _CreditosWidgetState extends State<CreditosWidget> {
         backgroundColor: AzaBankTheme.of(context).secondaryBackground,
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 0.0),
+            padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
             child: SingleChildScrollView(
               primary: false,
               child: Column(
@@ -32,7 +34,7 @@ class _CreditosWidgetState extends State<CreditosWidget> {
                 children: [
                   Padding(
                     padding:
-                    EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 10.0, 20.0),
+                    EdgeInsetsDirectional.fromSTEB(10.0, 15.0, 10.0, 0.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -98,18 +100,18 @@ class _CreditosWidgetState extends State<CreditosWidget> {
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center, // Alinea el texto a la izquierda
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         'Nombre Completo',
                                         style: TextStyle(
-                                          color: AzaBankTheme.of(context).primary,  // Color azul
+                                          color: AzaBankTheme.of(context).primary,
                                           fontFamily: 'Poppins',
                                           fontSize: 25.0,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                      SizedBox(height: 5.0), // Espaciado entre los textos, puedes ajustarlo según sea necesario
+                                      SizedBox(height: 5.0),
                                       Text(
                                         'Monto: \$300.00',
                                         style: TextStyle(
@@ -132,11 +134,11 @@ class _CreditosWidgetState extends State<CreditosWidget> {
 
                       Padding(
                         padding:
-                        EdgeInsetsDirectional.fromSTEB(40.0, 10.0, 40.0, 80.0),
+                        EdgeInsetsDirectional.fromSTEB(30.0, 10.0, 30.0, 50.0),
                         child: Container(
 
                           width: 332.0,
-                          height: 250.0,
+                          height: 310.0,
                           decoration: BoxDecoration(
                             color: Color(0x12000000),
                             borderRadius: BorderRadius.circular(5.0),
@@ -152,7 +154,7 @@ class _CreditosWidgetState extends State<CreditosWidget> {
                             children:[
                               Padding (
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    10.0, 0.0, 0.0, 30.0),
+                                    10.0, 0.0, 0.0, 40.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -169,7 +171,7 @@ class _CreditosWidgetState extends State<CreditosWidget> {
                                             .primaryText,
                                       ),
                                     ),
-                                    SizedBox(height: 5.0),
+                                    SizedBox(height: 10.0),
                                     Text(
                                       'Vencimiento:       ',
                                       style: AzaBankTheme.of(context)
@@ -182,7 +184,7 @@ class _CreditosWidgetState extends State<CreditosWidget> {
                                             .primaryText,
                                       ),
                                     ),
-                                    SizedBox(height: 5.0),
+                                    SizedBox(height: 10.0),
                                     Text(
                                       'Cuotas:     ',
                                       style: AzaBankTheme.of(context)
@@ -195,7 +197,7 @@ class _CreditosWidgetState extends State<CreditosWidget> {
                                             .primaryText,
                                       ),
                                     ),
-                                    SizedBox(height: 5.0),
+                                    SizedBox(height: 10.0),
                                     Text(
                                       'Tipo de cobro:    ',
                                       style: AzaBankTheme.of(context)
@@ -208,7 +210,7 @@ class _CreditosWidgetState extends State<CreditosWidget> {
                                             .primaryText,
                                       ),
                                     ),
-                                    SizedBox(height: 5.0),
+                                    SizedBox(height: 10.0),
                                     Text(
                                       'Estado:      ',
                                       style: AzaBankTheme.of(context)
@@ -221,7 +223,7 @@ class _CreditosWidgetState extends State<CreditosWidget> {
                                             .primaryText,
                                       ),
                                     ),
-                                    SizedBox(height: 5.0),
+                                    SizedBox(height: 10.0),
                                     Text(
                                       'Saldo:     ',
                                       style: AzaBankTheme.of(context)
@@ -245,7 +247,7 @@ class _CreditosWidgetState extends State<CreditosWidget> {
                       Padding(
                         padding:
                         EdgeInsetsDirectional.fromSTEB(
-                            0.0, 20.0, 0.0, 0.0),
+                            0.0, 0.0, 0.0, 0.0),
                         child: FFButtonWidget(
                           onPressed: ()=>{
                             Navigator.push(
