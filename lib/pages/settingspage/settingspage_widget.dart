@@ -247,7 +247,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                     padding:
                         EdgeInsetsDirectional.fromSTEB(24.0, 12.0, 0.0, 12.0),
                     child: Text(
-                      'Account Settings',
+                      'Configuraciones de la cuenta',
                       style: AzaBankTheme.of(context).bodyMedium.override(
                             fontFamily: 'Lexend Deca',
                             color: Color(0xFF090F13),
@@ -385,7 +385,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   12.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                'Languages',
+                                'Idiomas',
                                 style: AzaBankTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -459,7 +459,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   12.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                'My Notifications',
+                                'Notificaciones',
                                 style: AzaBankTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -516,7 +516,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 12.0, 0.0, 0.0, 0.0),
                             child: Text(
-                              'Terms of Service',
+                              'Términos de servicio',
                               style:
                                   AzaBankTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Lexend Deca',
@@ -589,7 +589,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   12.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                'Light Mode',
+                                'Modo Claro',
                                 style: AzaBankTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -664,7 +664,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   12.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                'Dark Mood',
+                                'Modo Obscuro',
                                 style: AzaBankTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -721,7 +721,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 12.0, 0.0, 0.0, 0.0),
                             child: Text(
-                              'Customer care',
+                              'Atención al cliente',
                               style:
                                   AzaBankTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Lexend Deca',
@@ -767,7 +767,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                         ),
                       );
                     },
-                    text: 'Log Out',
+                    text: 'Cerrar sesión',
                     options: FFButtonOptions(
                       width: 90.0,
                       height: 40.0,
