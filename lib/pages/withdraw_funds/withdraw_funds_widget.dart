@@ -442,10 +442,27 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                             children: [
                               FFButtonWidget(
                                 onPressed: () async {
-                                  await getImageGaleria();
-                                  print("Entra al metodo");
-                                  if(file!= null) Image.file(file!);
-                                },
+                              await getImageGaleria();
+                              print("Entra al metodo");
+                              if (file != null) {
+                              await Image.file(file!);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                              content: Text(
+                              'Foto Subida Correctamente',
+                              style: AzaBankTheme.of(context).titleSmall.override(
+                              fontFamily: 'Poppins',
+                              color: AzaBankTheme.of(context).primary3,
+                              ),
+                              ),
+                              duration: Duration(milliseconds: 3000),
+                              backgroundColor: AzaBankTheme.of(context).green,
+                              ),
+                              );
+                              } else {
+                              print('No se ha subido ninguna foto.');
+                              }
+                              },
                                 text: 'Agregar',
                                 options: FFButtonOptions(
                                   width: 150.0,
