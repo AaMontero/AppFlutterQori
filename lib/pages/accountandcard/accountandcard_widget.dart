@@ -317,6 +317,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
               String fecha = data['fecha'].toString();
               return AhorroAporte(concepto: concepto, fecha: fecha, monto: monto);
             }));
+            saldoTotal = listaAportes.map((aporte) => aporte.monto).fold(0.0, (a, b) => a !+ b);
           });
         }).catchError((error) {
           print("Error al obtener datos de Firebase: $error");
@@ -326,7 +327,6 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    String saldo = "50";
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -529,7 +529,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                               ),
                             ),
                             TextSpan(
-                              text: '\$$saldo',
+                              text: '\$$saldoTotal',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 30.0// Color negro
