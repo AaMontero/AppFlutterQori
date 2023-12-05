@@ -7,6 +7,7 @@ import '../../theme/aza_bank_widgets.dart';
 import '../../theme/form_field_controller.dart';
 import '/main.dart';
 import '/pages/comfirm_tranfer/comfirm_tranfer_widget.dart';
+import '/pages/solicitud credito/solicit_credito1_widget.dart';
 import 'package:flutter/material.dart';
 import 'solict_credito_modelo.dart';
 export 'solict_credito_modelo.dart';
@@ -22,6 +23,8 @@ class SolicitCreditoWidget extends StatefulWidget {
 
 class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
   late SolicitCreditoModel _model;
+  List<String> maritalStatusOptions = ['Soltero', 'Casado', 'Divorciado', 'Viudo'];
+  String selectedStatus = 'Soltero';
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -111,104 +114,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding:
-                    EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 15.0),
-                    child: InkWell(
-                      splashColor: Colors.transparent,
-                      focusColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () async {
-                        await showModalBottomSheet(
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          barrierColor: Color(0x00000000),
-                          context: context,
-                          builder: (bottomSheetContext) {
-                            return GestureDetector(
-                              onTap: () => FocusScope.of(context)
-                                  .requestFocus(_unfocusNode),
-                              child: Padding(
-                                padding: MediaQuery.of(bottomSheetContext)
-                                    .viewInsets,
-                                child: Container(
-                                  height:
-                                  MediaQuery.of(context).size.height * 0.65,
-                                  child: ChooseAccounSectionWidget(),
-                                ),
-                              ),
-                            );
-                          },
-                        ).then((value) => setState(() {}));
-                      },
-                      child: Container(
-                        width: 332.0,
-                        height: 55.0,
-                        decoration: BoxDecoration(
-                          color: Color(0x12000000),
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(
-                            color: AzaBankTheme.of(context).orange,
-                            width: 2.0,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  15.0, 0.0, 0.0, 0.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'VISA **** **** **** 1234',
-                                    style: AzaBankTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                      fontFamily: 'Poppins',
-                                      color: AzaBankTheme.of(context)
-                                          .primaryText,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Available balance : 10,000\$',
-                                    style: AzaBankTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                      fontFamily: 'Poppins',
-                                      color:
-                                      AzaBankTheme.of(context).orange,
-                                      fontSize: 12.0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 10.0, 0.0),
-                                  child: Icon(
-                                    Icons.attach_money_rounded,
-                                    color: AzaBankTheme.of(context).primaryText,
-                                    size: 24.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+
 
 
                   Row(
@@ -253,559 +159,588 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                       CrossAxisAlignment.stretch,
                                       children: [
                                         Padding(
-                                          padding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              4.0, 0.0, 0.0, 10.0),
+                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
                                           child: Container(
                                             width: 332.0,
                                             height: 55.0,
                                             decoration: BoxDecoration(
                                               color: Color(0x12000000),
-                                              borderRadius:
-                                              BorderRadius.circular(5.0),
+                                              borderRadius: BorderRadius.circular(5.0),
                                               border: Border.all(
-                                                color: AzaBankTheme.of(context)
-                                                    .orange,
+                                                color: AzaBankTheme.of(context).orange,
                                                 width: 2.0,
                                               ),
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                  15.0, 0.0, 20.0, 0.0),
+                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
                                               child: TextFormField(
-                                                controller:
-                                                _model.textController1,
+                                                controller: _model.textController1,
                                                 obscureText: false,
                                                 decoration: InputDecoration(
-                                                  labelText:
-                                                  'Cedula de Identidad',
-                                                  enabledBorder:
-                                                  UnderlineInputBorder(
+                                                  labelText: 'Nombres',
+                                                  enabledBorder: UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
                                                     ),
                                                   ),
-                                                  focusedBorder:
-                                                  UnderlineInputBorder(
+                                                  focusedBorder: UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
                                                     ),
                                                   ),
-                                                  errorBorder:
-                                                  UnderlineInputBorder(
+                                                  errorBorder: UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
                                                     ),
                                                   ),
-                                                  focusedErrorBorder:
-                                                  UnderlineInputBorder(
+                                                  focusedErrorBorder: UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
                                                     ),
                                                   ),
                                                 ),
-                                                style: AzaBankTheme.of(context)
-                                                    .bodyMedium
-                                                    .override(
+                                                style: AzaBankTheme.of(context).bodyMedium.override(
                                                   fontFamily: 'Poppins',
-                                                  color: AzaBankTheme.of(
-                                                      context)
-                                                      .primaryText,
+                                                  color: AzaBankTheme.of(context).primaryText,
                                                 ),
-                                                keyboardType:
-                                                TextInputType.number,
-                                                validator: _model
-                                                    .textController1Validator
-                                                    .asValidator(context),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              4.0, 0.0, 0.0, 10.0),
-                                          child: Container(
-                                            width: 332.0,
-                                            height: 55.0,
-                                            decoration: BoxDecoration(
-                                              color: Color(0x12000000),
-                                              borderRadius:
-                                              BorderRadius.circular(5.0),
-                                              border: Border.all(
-                                                color: AzaBankTheme.of(context)
-                                                    .orange,
-                                                width: 2.0,
-                                              ),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                  15.0, 0.0, 20.0, 0.0),
-                                              child: TextFormField(
-                                                controller:
-                                                _model.textController2,
-                                                obscureText: false,
-                                                decoration: InputDecoration(
-                                                  labelText:
-                                                  'Nombre Completo',
-                                                  enabledBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  focusedBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  errorBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  focusedErrorBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                ),
-                                                style: AzaBankTheme.of(context)
-                                                    .bodyMedium
-                                                    .override(
-                                                  fontFamily: 'Poppins',
-                                                  color: AzaBankTheme.of(
-                                                      context)
-                                                      .primaryText,
-                                                ),
-                                                validator: _model
-                                                    .textController2Validator
-                                                    .asValidator(context),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              4.0, 0.0, 0.0, 10.0),
-                                          child: Container(
-                                            width: 332.0,
-                                            height: 55.0,
-                                            decoration: BoxDecoration(
-                                              color: Color(0x12000000),
-                                              borderRadius:
-                                              BorderRadius.circular(5.0),
-                                              border: Border.all(
-                                                color: AzaBankTheme.of(context)
-                                                    .orange,
-                                                width: 2.0,
-                                              ),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                  15.0, 0.0, 20.0, 0.0),
-                                              child: TextFormField(
-                                                controller:
-                                                _model.textController3,
-                                                obscureText: false,
-                                                decoration: InputDecoration(
-                                                  labelText: 'Telefono',
-                                                  enabledBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  focusedBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  errorBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  focusedErrorBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                ),
-                                                style: AzaBankTheme.of(context)
-                                                    .bodyMedium
-                                                    .override(
-                                                  fontFamily: 'Poppins',
-                                                  color: AzaBankTheme.of(
-                                                      context)
-                                                      .primaryText,
-                                                ),
-                                                keyboardType:
-                                                TextInputType.number,
-                                                validator: _model
-                                                    .textController3Validator
-                                                    .asValidator(context),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              4.0, 0.0, 0.0, 10.0),
-                                          child: Container(
-                                            width: 332.0,
-                                            height: 55.0,
-                                            decoration: BoxDecoration(
-                                              color: Color(0x12000000),
-                                              borderRadius:
-                                              BorderRadius.circular(5.0),
-                                              border: Border.all(
-                                                color: AzaBankTheme.of(context)
-                                                    .orange,
-                                                width: 2.0,
-                                              ),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                  15.0, 0.0, 20.0, 0.0),
-                                              child: TextFormField(
-                                                controller:
-                                                _model.textController4,
-                                                obscureText: false,
-                                                decoration: InputDecoration(
-                                                  labelText: 'Note',
-                                                  enabledBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  focusedBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  errorBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  focusedErrorBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                ),
-                                                style: AzaBankTheme.of(context)
-                                                    .bodyMedium
-                                                    .override(
-                                                  fontFamily: 'Poppins',
-                                                  color: AzaBankTheme.of(
-                                                      context)
-                                                      .primaryText,
-                                                ),
-                                                keyboardType:
-                                                TextInputType.multiline,
-                                                validator: _model
-                                                    .textController4Validator
-                                                    .asValidator(context),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              4.0, 0.0, 0.0, 10.0),
-                                          child: Container(
-                                            width: 332.0,
-                                            height: 55.0,
-                                            decoration: BoxDecoration(
-                                              color: Color(0x12000000),
-                                              borderRadius:
-                                              BorderRadius.circular(5.0),
-                                              border: Border.all(
-                                                color: AzaBankTheme.of(context)
-                                                    .orange,
-                                                width: 2.0,
-                                              ),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                  15.0, 0.0, 20.0, 0.0),
-                                              child: TextFormField(
-                                                controller:
-                                                _model.textController4,
-                                                obscureText: false,
-                                                decoration: InputDecoration(
-                                                  labelText: 'Monto',
-                                                  enabledBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  focusedBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  errorBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  focusedErrorBorder:
-                                                  UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft:
-                                                      Radius.circular(4.0),
-                                                      topRight:
-                                                      Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                ),
-                                                style: AzaBankTheme.of(context)
-                                                    .bodyMedium
-                                                    .override(
-                                                  fontFamily: 'Poppins',
-                                                  color: AzaBankTheme.of(
-                                                      context)
-                                                      .primaryText,
-                                                ),
-                                                keyboardType:
-                                                TextInputType.multiline,
-                                                validator: _model
-                                                    .textController4Validator
-                                                    .asValidator(context),
+                                                keyboardType: TextInputType.text,
+                                                validator: _model.textController1Validator.asValidator(context),
                                               ),
                                             ),
                                           ),
                                         ),
 
-                                        AzaBankCheckboxGroup(
-                                          options: [
-                                            'Save to directory of beneficiary '
-                                          ],
-                                          onChanged: (val) => setState(() =>
-                                          _model.checkboxGroupValues1 =
-                                              val),
-                                          controller: _model
-                                              .checkboxGroupValueController1 ??=
-                                              FormFieldController<List<String>>(
-                                                [],
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                          child: Container(
+                                            width: 332.0,
+                                            height: 55.0,
+                                            decoration: BoxDecoration(
+                                              color: Color(0x12000000),
+                                              borderRadius: BorderRadius.circular(5.0),
+                                              border: Border.all(
+                                                color: AzaBankTheme.of(context).orange,
+                                                width: 2.0,
                                               ),
-                                          activeColor:
-                                          AzaBankTheme.of(context).primary,
-                                          checkColor: Colors.white,
-                                          checkboxBorderColor:
-                                          Color(0xFF95A1AC),
-                                          textStyle: AzaBankTheme.of(context)
-                                              .bodyMedium,
-                                          itemPadding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              0.0, 2.0, 0.0, 0.0),
-                                          initialized:
-                                          _model.checkboxGroupValues1 !=
-                                              null,
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              child: TextFormField(
+                                                controller: _model.textController2,
+                                                obscureText: false,
+                                                decoration: InputDecoration(
+                                                  labelText: 'Apellidos',
+                                                  enabledBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  focusedBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  errorBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  focusedErrorBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                ),
+                                                style: AzaBankTheme.of(context).bodyMedium.override(
+                                                  fontFamily: 'Poppins',
+                                                  color: AzaBankTheme.of(context).primaryText,
+                                                ),
+                                                keyboardType: TextInputType.text,
+                                                validator: _model.textController2Validator.asValidator(context),
+                                              ),
+                                            ),
+                                          ),
                                         ),
+
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                          child: Container(
+                                            width: 332.0,
+                                            height: 55.0,
+                                            decoration: BoxDecoration(
+                                              color: Color(0x12000000),
+                                              borderRadius: BorderRadius.circular(5.0),
+                                              border: Border.all(
+                                                color: AzaBankTheme.of(context).orange,
+                                                width: 2.0,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              child: TextFormField(
+                                                controller: _model.textController3,
+                                                obscureText: false,
+                                                decoration: InputDecoration(
+                                                  labelText: 'Cedula',
+                                                  enabledBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  focusedBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  errorBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  focusedErrorBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                ),
+                                                style: AzaBankTheme.of(context).bodyMedium.override(
+                                                  fontFamily: 'Poppins',
+                                                  color: AzaBankTheme.of(context).primaryText,
+                                                ),
+                                                keyboardType: TextInputType.text,
+                                                validator: _model.textController3Validator.asValidator(context),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                          child: Container(
+                                            width: 332.0,
+                                            height: 55.0,
+                                            decoration: BoxDecoration(
+                                              color: Color(0x12000000),
+                                              borderRadius: BorderRadius.circular(5.0),
+                                              border: Border.all(
+                                                color: AzaBankTheme.of(context).orange,
+                                                width: 2.0,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              child: TextFormField(
+                                                controller: _model.textController4,
+                                                obscureText: false,
+                                                decoration: InputDecoration(
+                                                  labelText: 'Telefono',
+                                                  enabledBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  focusedBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  errorBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  focusedErrorBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                ),
+                                                style: AzaBankTheme.of(context).bodyMedium.override(
+                                                  fontFamily: 'Poppins',
+                                                  color: AzaBankTheme.of(context).primaryText,
+                                                ),
+                                                keyboardType: TextInputType.text,
+                                                validator: _model.textController4Validator.asValidator(context),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                          child: Container(
+                                            width: 332.0,
+                                            height: 55.0,
+                                            decoration: BoxDecoration(
+                                              color: Color(0x12000000),
+                                              borderRadius: BorderRadius.circular(5.0),
+                                              border: Border.all(
+                                                color: AzaBankTheme.of(context).orange,
+                                                width: 2.0,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              child: TextFormField(
+                                                controller: _model.textController5,
+                                                obscureText: false,
+                                                decoration: InputDecoration(
+                                                  labelText: 'Direccion',
+                                                  enabledBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  focusedBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  errorBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  focusedErrorBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                ),
+                                                style: AzaBankTheme.of(context).bodyMedium.override(
+                                                  fontFamily: 'Poppins',
+                                                  color: AzaBankTheme.of(context).primaryText,
+                                                ),
+                                                keyboardType: TextInputType.text,
+                                                validator: _model.textController5Validator.asValidator(context),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                          child: Container(
+                                            width: 332.0,
+                                            height: 55.0,
+                                            decoration: BoxDecoration(
+                                              color: Color(0x12000000),
+                                              borderRadius: BorderRadius.circular(5.0),
+                                              border: Border.all(
+                                                color: AzaBankTheme.of(context).orange,
+                                                width: 2.0,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              child: TextFormField(
+                                                controller: _model.textController6,
+                                                obscureText: false,
+                                                decoration: InputDecoration(
+                                                  labelText: 'Correo Electrónico',
+                                                  enabledBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  focusedBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  errorBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                  focusedErrorBorder: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0x00000000),
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(4.0),
+                                                      topRight: Radius.circular(4.0),
+                                                    ),
+                                                  ),
+                                                ),
+                                                style: AzaBankTheme.of(context).bodyMedium.override(
+                                                  fontFamily: 'Poppins',
+                                                  color: AzaBankTheme.of(context).primaryText,
+                                                ),
+                                                keyboardType: TextInputType.text,
+                                                validator: _model.textController6Validator.asValidator(context),
+
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                          child: Container(
+                                            width: 332.0,
+                                            height: 55.0,
+                                            decoration: BoxDecoration(
+                                              color: Color(0x12000000),
+                                              borderRadius: BorderRadius.circular(5.0),
+                                              border: Border.all(
+                                                color: AzaBankTheme.of(context).orange,
+                                                width: 2.0,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    'Estado Civil: ',
+                                                    style: TextStyle(
+                                                      color: AzaBankTheme.of(context).primaryText,
+                                                      // Ajusta otros estilos según tus preferencias
+                                                    ),
+                                                  ),
+                                                  DropdownButton<String>(
+                                                    value: selectedStatus,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        selectedStatus = value!;
+                                                      });
+                                                    },
+                                                    items: maritalStatusOptions.map((String status) {
+                                                      return DropdownMenuItem<String>(
+                                                        value: status,
+                                                        child: Text(
+                                                          status,
+                                                          style: TextStyle(
+                                                            color: AzaBankTheme.of(context).primaryText,
+                                                            // Ajusta otros estilos según tus preferencias
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }).toList(),
+                                                  ),
+                                                  Visibility(
+                                                    visible: selectedStatus == 'Casado',
+                                                    child: Expanded(
+                                                      child: Padding(
+                                                        padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
+                                                        child: Container(
+                                                          width: 332.0,
+                                                          height: 55.0,
+                                                          decoration: BoxDecoration(
+                                                            color: Color(0x12000000),
+                                                            borderRadius: BorderRadius.circular(5.0),
+                                                            border: Border.all(
+                                                              color: AzaBankTheme.of(context).orange,
+                                                              width: 2.0,
+                                                            ),
+                                                          ),
+                                                          child: Padding(
+                                                            padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                                            child: TextFormField(
+                                                              decoration: InputDecoration(
+                                                                labelText: 'Cédula del Cónyuge',
+                                                                enabledBorder: UnderlineInputBorder(
+                                                                  borderSide: BorderSide(
+                                                                    color: Color(0x00000000),
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius: const BorderRadius.only(
+                                                                    topLeft: Radius.circular(4.0),
+                                                                    topRight: Radius.circular(4.0),
+                                                                  ),
+                                                                ),
+                                                                focusedBorder: UnderlineInputBorder(
+                                                                  borderSide: BorderSide(
+                                                                    color: Color(0x00000000),
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius: const BorderRadius.only(
+                                                                    topLeft: Radius.circular(4.0),
+                                                                    topRight: Radius.circular(4.0),
+                                                                  ),
+                                                                ),
+                                                                errorBorder: UnderlineInputBorder(
+                                                                  borderSide: BorderSide(
+                                                                    color: Color(0x00000000),
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius: const BorderRadius.only(
+                                                                    topLeft: Radius.circular(4.0),
+                                                                    topRight: Radius.circular(4.0),
+                                                                  ),
+                                                                ),
+                                                                focusedErrorBorder: UnderlineInputBorder(
+                                                                  borderSide: BorderSide(
+                                                                    color: Color(0x00000000),
+                                                                    width: 1.0,
+                                                                  ),
+                                                                  borderRadius: const BorderRadius.only(
+                                                                    topLeft: Radius.circular(4.0),
+                                                                    topRight: Radius.circular(4.0),
+                                                                  ),
+                                                                ),
+                                                                labelStyle: TextStyle(
+                                                                  fontFamily: 'Poppins',
+                                                                  color: AzaBankTheme.of(context).primaryText,
+                                                                ),
+                                                              ),
+                                                              style: AzaBankTheme.of(context).bodyMedium.override(
+                                                                fontFamily: 'Poppins',
+                                                                color: AzaBankTheme.of(context).primaryText,
+                                                              ),
+                                                              keyboardType: TextInputType.number,
+                                                              validator: (value) {
+                                                                if (selectedStatus == 'Casado' && value!.isEmpty) {
+                                                                  return 'Por favor, ingrese la cédula del cónyuge';
+                                                                }
+                                                                return null;
+                                                              },
+                                                            ),
+                                                          ),
+
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+
+
+
+
                                         Padding(
                                           padding:
                                           EdgeInsetsDirectional.fromSTEB(
                                               0.0, 20.0, 0.0, 0.0),
                                           child: FFButtonWidget(
-                                            onPressed: () async {
-                                              await Navigator.push(
+                                            onPressed: () =>{
+                                              Navigator.push(
                                                 context,
-                                                PageTransition(
-                                                  type:
-                                                  PageTransitionType.scale,
-                                                  alignment:
-                                                  Alignment.bottomCenter,
-                                                  duration: Duration(
-                                                      milliseconds: 300),
-                                                  reverseDuration: Duration(
-                                                      milliseconds: 300),
-                                                  child: ComfirmTranferWidget(),
-                                                ),
-                                              );
+                                                MaterialPageRoute(builder: (context) => SolicitCredito1Widget()),
+                                              ),
                                             },
-                                            text: 'Guardar',
+                                            text: 'Siguiente',
                                             options: FFButtonOptions(
                                               width: 130.0,
                                               height: 55.0,
