@@ -17,16 +17,26 @@ class SolicitCreditoWidget extends StatefulWidget {
 
 class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
   late SolicitCreditoModel _model;
-  List<String> maritalStatusOptions = ['Soltero', 'Casado', 'Divorciado', 'Viudo'];
+  bool _camposLlenos = false;
+  bool _mostrarError = false;
+  final _focusNode = FocusNode();
+  List<String> maritalStatusOptions = [
+    'Soltero',
+    'Casado',
+    'Divorciado',
+    'Viudo'
+  ];
   String selectedStatus = 'Soltero';
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
-  int get pageViewCurrentIndex => _model.pageViewController != null &&
-      _model.pageViewController!.hasClients &&
-      _model.pageViewController!.page != null
-      ? _model.pageViewController!.page!.round()
-      : 0;
+
+  int get pageViewCurrentIndex =>
+      _model.pageViewController != null &&
+          _model.pageViewController!.hasClients &&
+          _model.pageViewController!.page != null
+          ? _model.pageViewController!.page!.round()
+          : 0;
 
   @override
   void initState() {
@@ -59,10 +69,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: AzaBankTheme.of(context).secondaryBackground,
+        backgroundColor: AzaBankTheme
+            .of(context)
+            .secondaryBackground,
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(10.0, 00.0 ,10.0 ,0.0),
+            padding: EdgeInsetsDirectional.fromSTEB(10.0, 00.0, 10.0, 0.0),
             child: SingleChildScrollView(
               primary: false,
               child: Column(
@@ -93,7 +105,9 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                           },
                           child: Icon(
                             Icons.arrow_back_ios,
-                            color: AzaBankTheme.of(context).primaryText,
+                            color: AzaBankTheme
+                                .of(context)
+                                .primaryText,
                             size: 24.0,
                           ),
                         ),
@@ -102,13 +116,14 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                               5.0, 0.0, 0.0, 0.0),
                           child: Text(
                             'Solicitud de Credito',
-                            style: AzaBankTheme.of(context).headlineMedium,
+                            style: AzaBankTheme
+                                .of(context)
+                                .headlineMedium,
                           ),
                         ),
                       ],
                     ),
                   ),
-
 
 
                   Row(
@@ -117,7 +132,10 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                       Expanded(
                         child: Container(
                           width: double.infinity,
-                          height: MediaQuery.of(context).size.height * 1.0,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 1.0,
                           child: PageView(
                             physics: const NeverScrollableScrollPhysics(),
                             controller: _model.pageViewController ??=
@@ -129,16 +147,20 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                 children: [
                                   Padding(
                                     padding:
-                                    EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 10.0, 20.0),
+                                    EdgeInsetsDirectional.fromSTEB(
+                                        10.0, 20.0, 10.0, 20.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(
+                                          padding: EdgeInsetsDirectional
+                                              .fromSTEB(
                                               5.0, 0.0, 0.0, 0.0),
                                           child: Text(
                                             'Datos Personales',
-                                            style: AzaBankTheme.of(context).headlineMedium,
+                                            style: AzaBankTheme
+                                                .of(context)
+                                                .headlineMedium,
                                           ),
                                         ),
                                       ],
@@ -153,23 +175,36 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                       CrossAxisAlignment.stretch,
                                       children: [
                                         Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                          padding: EdgeInsetsDirectional
+                                              .fromSTEB(4.0, 0.0, 0.0, 10.0),
                                           child: Container(
                                             width: 332.0,
                                             height: 55.0,
                                             decoration: BoxDecoration(
                                               color: Color(0x12000000),
-                                              borderRadius: BorderRadius.circular(5.0),
+                                              borderRadius: BorderRadius
+                                                  .circular(5.0),
                                               border: Border.all(
-                                                color: AzaBankTheme.of(context).orange,
+                                                color: AzaBankTheme
+                                                    .of(context)
+                                                    .orange,
                                                 width: 2.0,
                                               ),
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                  15.0, 0.0, 20.0, 0.0),
                                               child: TextFormField(
-                                                controller: _model.textController1,
+                                                controller: _model
+                                                    .textController1,
                                                 obscureText: false,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _camposLlenos = value.isNotEmpty;
+                                                    _mostrarError = _focusNode.hasFocus && !_camposLlenos;
+                                                  });
+                                                },
                                                 decoration: InputDecoration(
                                                   labelText: 'Nombres',
                                                   enabledBorder: UnderlineInputBorder(
@@ -177,9 +212,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   focusedBorder: UnderlineInputBorder(
@@ -187,9 +225,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   errorBorder: UnderlineInputBorder(
@@ -197,9 +238,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   focusedErrorBorder: UnderlineInputBorder(
@@ -207,41 +251,66 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
+                                                  errorText: _mostrarError ? 'Llenar campo Nombres' : null,
                                                 ),
-                                                style: AzaBankTheme.of(context).bodyMedium.override(
+                                                style: AzaBankTheme
+                                                    .of(context)
+                                                    .bodyMedium
+                                                    .override(
                                                   fontFamily: 'Poppins',
-                                                  color: AzaBankTheme.of(context).primaryText,
+                                                  color: AzaBankTheme
+                                                      .of(context)
+                                                      .primaryText,
                                                 ),
-                                                keyboardType: TextInputType.text,
-                                                validator: _model.textController1Validator.asValidator(context),
+                                                keyboardType: TextInputType
+                                                    .text,
+                                                validator: _model
+                                                    .textController1Validator
+                                                    .asValidator(context),
                                               ),
                                             ),
                                           ),
                                         ),
 
-                                        Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                       Padding(
+                                          padding: EdgeInsetsDirectional
+                                              .fromSTEB(4.0, 0.0, 0.0, 10.0),
                                           child: Container(
                                             width: 332.0,
                                             height: 55.0,
                                             decoration: BoxDecoration(
                                               color: Color(0x12000000),
-                                              borderRadius: BorderRadius.circular(5.0),
+                                              borderRadius: BorderRadius
+                                                  .circular(5.0),
                                               border: Border.all(
-                                                color: AzaBankTheme.of(context).orange,
+                                                color: AzaBankTheme
+                                                    .of(context)
+                                                    .orange,
                                                 width: 2.0,
                                               ),
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                  15.0, 0.0, 20.0, 0.0),
                                               child: TextFormField(
-                                                controller: _model.textController2,
+                                                controller: _model
+                                                    .textController2,
                                                 obscureText: false,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _camposLlenos = value.isNotEmpty;
+                                                    _mostrarError = _focusNode.hasFocus && !_camposLlenos;
+                                                  });
+                                                },
                                                 decoration: InputDecoration(
                                                   labelText: 'Apellidos',
                                                   enabledBorder: UnderlineInputBorder(
@@ -249,9 +318,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   focusedBorder: UnderlineInputBorder(
@@ -259,9 +331,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   errorBorder: UnderlineInputBorder(
@@ -269,9 +344,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   focusedErrorBorder: UnderlineInputBorder(
@@ -279,41 +357,66 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
+                                                  errorText: _mostrarError ? 'Llenar campo Apellidos' : null,
                                                 ),
-                                                style: AzaBankTheme.of(context).bodyMedium.override(
+                                                style: AzaBankTheme
+                                                    .of(context)
+                                                    .bodyMedium
+                                                    .override(
                                                   fontFamily: 'Poppins',
-                                                  color: AzaBankTheme.of(context).primaryText,
+                                                  color: AzaBankTheme
+                                                      .of(context)
+                                                      .primaryText,
                                                 ),
-                                                keyboardType: TextInputType.text,
-                                                validator: _model.textController2Validator.asValidator(context),
+                                                keyboardType: TextInputType
+                                                    .text,
+                                                validator: _model
+                                                    .textController2Validator
+                                                    .asValidator(context),
                                               ),
                                             ),
                                           ),
                                         ),
 
                                         Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                          padding: EdgeInsetsDirectional
+                                              .fromSTEB(4.0, 0.0, 0.0, 10.0),
                                           child: Container(
                                             width: 332.0,
                                             height: 55.0,
                                             decoration: BoxDecoration(
                                               color: Color(0x12000000),
-                                              borderRadius: BorderRadius.circular(5.0),
+                                              borderRadius: BorderRadius
+                                                  .circular(5.0),
                                               border: Border.all(
-                                                color: AzaBankTheme.of(context).orange,
+                                                color: AzaBankTheme
+                                                    .of(context)
+                                                    .orange,
                                                 width: 2.0,
                                               ),
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                  15.0, 0.0, 20.0, 0.0),
                                               child: TextFormField(
-                                                controller: _model.textController3,
+                                                controller: _model
+                                                    .textController3,
                                                 obscureText: false,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _camposLlenos = value.isNotEmpty;
+                                                    _mostrarError = _focusNode.hasFocus && !_camposLlenos;
+                                                  });
+                                                },
                                                 decoration: InputDecoration(
                                                   labelText: 'Cedula',
                                                   enabledBorder: UnderlineInputBorder(
@@ -321,9 +424,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   focusedBorder: UnderlineInputBorder(
@@ -331,9 +437,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   errorBorder: UnderlineInputBorder(
@@ -341,9 +450,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   focusedErrorBorder: UnderlineInputBorder(
@@ -351,41 +463,67 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
+
+                                                  errorText: _mostrarError ? 'Llenar campo Cedula' : null,
                                                 ),
-                                                style: AzaBankTheme.of(context).bodyMedium.override(
+                                                style: AzaBankTheme
+                                                    .of(context)
+                                                    .bodyMedium
+                                                    .override(
                                                   fontFamily: 'Poppins',
-                                                  color: AzaBankTheme.of(context).primaryText,
+                                                  color: AzaBankTheme
+                                                      .of(context)
+                                                      .primaryText,
                                                 ),
-                                                keyboardType: TextInputType.text,
-                                                validator: _model.textController3Validator.asValidator(context),
+                                                keyboardType: TextInputType
+                                                    .text,
+                                                validator: _model
+                                                    .textController3Validator
+                                                    .asValidator(context),
                                               ),
                                             ),
                                           ),
                                         ),
 
                                         Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                          padding: EdgeInsetsDirectional
+                                              .fromSTEB(4.0, 0.0, 0.0, 10.0),
                                           child: Container(
                                             width: 332.0,
                                             height: 55.0,
                                             decoration: BoxDecoration(
                                               color: Color(0x12000000),
-                                              borderRadius: BorderRadius.circular(5.0),
+                                              borderRadius: BorderRadius
+                                                  .circular(5.0),
                                               border: Border.all(
-                                                color: AzaBankTheme.of(context).orange,
+                                                color: AzaBankTheme
+                                                    .of(context)
+                                                    .orange,
                                                 width: 2.0,
                                               ),
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                  15.0, 0.0, 20.0, 0.0),
                                               child: TextFormField(
-                                                controller: _model.textController4,
+                                                controller: _model
+                                                    .textController4,
                                                 obscureText: false,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _camposLlenos = value.isNotEmpty;
+                                                    _mostrarError = _focusNode.hasFocus && !_camposLlenos;
+                                                  });
+                                                },
                                                 decoration: InputDecoration(
                                                   labelText: 'Telefono',
                                                   enabledBorder: UnderlineInputBorder(
@@ -393,9 +531,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   focusedBorder: UnderlineInputBorder(
@@ -403,9 +544,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   errorBorder: UnderlineInputBorder(
@@ -413,9 +557,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   focusedErrorBorder: UnderlineInputBorder(
@@ -423,41 +570,66 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
+                                                  errorText: _mostrarError ? 'Llenar campo Telefono' : null,
                                                 ),
-                                                style: AzaBankTheme.of(context).bodyMedium.override(
+                                                style: AzaBankTheme
+                                                    .of(context)
+                                                    .bodyMedium
+                                                    .override(
                                                   fontFamily: 'Poppins',
-                                                  color: AzaBankTheme.of(context).primaryText,
+                                                  color: AzaBankTheme
+                                                      .of(context)
+                                                      .primaryText,
                                                 ),
-                                                keyboardType: TextInputType.text,
-                                                validator: _model.textController4Validator.asValidator(context),
+                                                keyboardType: TextInputType
+                                                    .text,
+                                                validator: _model
+                                                    .textController4Validator
+                                                    .asValidator(context),
                                               ),
                                             ),
                                           ),
                                         ),
 
                                         Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                          padding: EdgeInsetsDirectional
+                                              .fromSTEB(4.0, 0.0, 0.0, 10.0),
                                           child: Container(
                                             width: 332.0,
                                             height: 55.0,
                                             decoration: BoxDecoration(
                                               color: Color(0x12000000),
-                                              borderRadius: BorderRadius.circular(5.0),
+                                              borderRadius: BorderRadius
+                                                  .circular(5.0),
                                               border: Border.all(
-                                                color: AzaBankTheme.of(context).orange,
+                                                color: AzaBankTheme
+                                                    .of(context)
+                                                    .orange,
                                                 width: 2.0,
                                               ),
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                  15.0, 0.0, 20.0, 0.0),
                                               child: TextFormField(
-                                                controller: _model.textController5,
+                                                controller: _model
+                                                    .textController5,
                                                 obscureText: false,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _camposLlenos = value.isNotEmpty;
+                                                    _mostrarError = _focusNode.hasFocus && !_camposLlenos;
+                                                  });
+                                                },
                                                 decoration: InputDecoration(
                                                   labelText: 'Direccion',
                                                   enabledBorder: UnderlineInputBorder(
@@ -465,9 +637,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   focusedBorder: UnderlineInputBorder(
@@ -475,9 +650,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   errorBorder: UnderlineInputBorder(
@@ -485,9 +663,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   focusedErrorBorder: UnderlineInputBorder(
@@ -495,40 +676,59 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
+                                                  errorText: _mostrarError ? 'Llenar campo Direccion' : null,
                                                 ),
-                                                style: AzaBankTheme.of(context).bodyMedium.override(
+                                                style: AzaBankTheme
+                                                    .of(context)
+                                                    .bodyMedium
+                                                    .override(
                                                   fontFamily: 'Poppins',
-                                                  color: AzaBankTheme.of(context).primaryText,
+                                                  color: AzaBankTheme
+                                                      .of(context)
+                                                      .primaryText,
                                                 ),
-                                                keyboardType: TextInputType.text,
-                                                validator: _model.textController5Validator.asValidator(context),
+                                                keyboardType: TextInputType
+                                                    .text,
+                                                validator: _model
+                                                    .textController5Validator
+                                                    .asValidator(context),
                                               ),
                                             ),
                                           ),
                                         ),
 
                                         Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 10.0),
+                                          padding: EdgeInsetsDirectional
+                                              .fromSTEB(4.0, 0.0, 0.0, 10.0),
                                           child: Container(
                                             width: 332.0,
                                             height: 55.0,
                                             decoration: BoxDecoration(
                                               color: Color(0x12000000),
-                                              borderRadius: BorderRadius.circular(5.0),
+                                              borderRadius: BorderRadius
+                                                  .circular(5.0),
                                               border: Border.all(
-                                                color: AzaBankTheme.of(context).orange,
+                                                color: AzaBankTheme
+                                                    .of(context)
+                                                    .orange,
                                                 width: 2.0,
                                               ),
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                  15.0, 0.0, 20.0, 0.0),
                                               child: TextFormField(
-                                                controller: _model.textController6,
+                                                controller: _model
+                                                    .textController6,
                                                 obscureText: false,
                                                 decoration: InputDecoration(
                                                   labelText: 'Correo Electrónico',
@@ -537,9 +737,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   focusedBorder: UnderlineInputBorder(
@@ -547,9 +750,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   errorBorder: UnderlineInputBorder(
@@ -557,9 +763,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                   focusedErrorBorder: UnderlineInputBorder(
@@ -567,18 +776,33 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       color: Color(0x00000000),
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(4.0),
-                                                      topRight: Radius.circular(4.0),
+                                                    borderRadius: const BorderRadius
+                                                        .only(
+                                                      topLeft: Radius.circular(
+                                                          4.0),
+                                                      topRight: Radius.circular(
+                                                          4.0),
                                                     ),
                                                   ),
                                                 ),
-                                                style: AzaBankTheme.of(context).bodyMedium.override(
+                                                style: AzaBankTheme
+                                                    .of(context)
+                                                    .bodyMedium
+                                                    .override(
                                                   fontFamily: 'Poppins',
-                                                  color: AzaBankTheme.of(context).primaryText,
+                                                  color: AzaBankTheme
+                                                      .of(context)
+                                                      .primaryText,
                                                 ),
-                                                keyboardType: TextInputType.text,
-                                                validator: _model.textController6Validator.asValidator(context),
+                                                keyboardType: TextInputType.emailAddress,
+                                                validator: (value) {
+                                                  if (value!.isEmpty) {
+                                                    return 'Llenar este campo';
+                                                  } else if (!value.contains('@')) {
+                                                    return 'Debe contener el símbolo "@"';
+                                                  }
+                                                  return null;
+                                                },
 
                                               ),
                                             ),
@@ -586,28 +810,36 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                         ),
 
                                         Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 15.0),
+                                          padding: EdgeInsetsDirectional
+                                              .fromSTEB(4.0, 0.0, 0.0, 15.0),
                                           child: Container(
                                             width: 332.0,
                                             height: 55.0,
                                             decoration: BoxDecoration(
                                               color: Color(0x12000000),
-                                              borderRadius: BorderRadius.circular(5.0),
+                                              borderRadius: BorderRadius
+                                                  .circular(5.0),
                                               border: Border.all(
-                                                color: AzaBankTheme.of(context).orange,
+                                                color: AzaBankTheme
+                                                    .of(context)
+                                                    .orange,
                                                 width: 2.0,
                                               ),
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                  15.0, 0.0, 0.0, 0.0),
                                               child: Row(
-                                                  children: [
+                                                children: [
                                                   Text(
                                                     '',
 
                                                     style: TextStyle(
-                                                      color: AzaBankTheme.of(context).primaryText,
-                                                     ),
+                                                      color: AzaBankTheme
+                                                          .of(context)
+                                                          .primaryText,
+                                                    ),
                                                   ),
                                                   DropdownButton<String>(
                                                     value: selectedStatus,
@@ -616,18 +848,25 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                         selectedStatus = value!;
                                                       });
                                                     },
-                                                    items: maritalStatusOptions.map((String status) {
-                                                      return DropdownMenuItem<String>(
+                                                    items: maritalStatusOptions
+                                                        .map((String status) {
+                                                      return DropdownMenuItem<
+                                                          String>(
                                                         value: status,
                                                         child: Padding(
-                                                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                              vertical: 8.0),
                                                           child: Text(
                                                             status,
                                                             style: TextStyle(
-                                                              color: AzaBankTheme.of(context).primaryText,
+                                                              color: AzaBankTheme
+                                                                  .of(context)
+                                                                  .primaryText,
                                                               fontFamily: 'Poppins',
                                                               fontSize: 16.0,
-                                                              fontWeight: FontWeight.normal,
+                                                              fontWeight: FontWeight
+                                                                  .normal,
                                                             ),
                                                           ),
                                                         ),
@@ -636,78 +875,125 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                   ),
 
                                                   Visibility(
-                                                    visible: selectedStatus == 'Casado',
+                                                    visible: selectedStatus ==
+                                                        'Casado',
                                                     child: Expanded(
                                                       child: Padding(
-                                                        padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
+                                                        padding: EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                            5.0, 0.0, 0.0, 0.0),
                                                         child: Container(
                                                           width: 335.0,
                                                           height: 55.0,
                                                           decoration: BoxDecoration(
-                                                            color: Color(0x12000000),
-                                                            borderRadius: BorderRadius.circular(5.0),
+                                                            color: Color(
+                                                                0x12000000),
+                                                            borderRadius: BorderRadius
+                                                                .circular(5.0),
                                                             border: Border.all(
-                                                              color: AzaBankTheme.of(context).primaryText,
+                                                              color: AzaBankTheme
+                                                                  .of(context)
+                                                                  .primaryText,
                                                               width: 2.0,
                                                             ),
                                                           ),
                                                           child: Padding(
-                                                            padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
+                                                            padding: EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                20.0, 0.0, 0.0,
+                                                                0.0),
                                                             child: TextFormField(
                                                               decoration: InputDecoration(
                                                                 labelText: 'Cédula del Cónyuge',
                                                                 enabledBorder: UnderlineInputBorder(
                                                                   borderSide: BorderSide(
-                                                                    color: Color(0x00000000),
+                                                                    color: Color(
+                                                                        0x00000000),
                                                                     width: 1.0,
                                                                   ),
-                                                                  borderRadius: const BorderRadius.only(
-                                                                    topLeft: Radius.circular(4.0),
-                                                                    topRight: Radius.circular(4.0),
+                                                                  borderRadius: const BorderRadius
+                                                                      .only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                        4.0),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                        4.0),
                                                                   ),
                                                                 ),
                                                                 focusedBorder: UnderlineInputBorder(
                                                                   borderSide: BorderSide(
-                                                                    color: Color(0x00000000),
+                                                                    color: Color(
+                                                                        0x00000000),
                                                                     width: 1.0,
                                                                   ),
-                                                                  borderRadius: const BorderRadius.only(
-                                                                    topLeft: Radius.circular(4.0),
-                                                                    topRight: Radius.circular(4.0),
+                                                                  borderRadius: const BorderRadius
+                                                                      .only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                        4.0),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                        4.0),
                                                                   ),
                                                                 ),
                                                                 errorBorder: UnderlineInputBorder(
                                                                   borderSide: BorderSide(
-                                                                    color: Color(0x00000000),
+                                                                    color: Color(
+                                                                        0x00000000),
                                                                     width: 1.0,
                                                                   ),
-                                                                  borderRadius: const BorderRadius.only(
-                                                                    topLeft: Radius.circular(4.0),
-                                                                    topRight: Radius.circular(4.0),
+                                                                  borderRadius: const BorderRadius
+                                                                      .only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                        4.0),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                        4.0),
                                                                   ),
                                                                 ),
                                                                 focusedErrorBorder: UnderlineInputBorder(
                                                                   borderSide: BorderSide(
-                                                                    color: Color(0x00000000),
+                                                                    color: Color(
+                                                                        0x00000000),
                                                                     width: 1.0,
                                                                   ),
-                                                                  borderRadius: const BorderRadius.only(
-                                                                    topLeft: Radius.circular(4.0),
-                                                                    topRight: Radius.circular(4.0),
+                                                                  borderRadius: const BorderRadius
+                                                                      .only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                        4.0),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                        4.0),
                                                                   ),
                                                                 ),
                                                                 labelStyle: TextStyle(
                                                                   fontFamily: 'Poppins',
-                                                                  color: AzaBankTheme.of(context).primaryText,
+                                                                  color: AzaBankTheme
+                                                                      .of(
+                                                                      context)
+                                                                      .primaryText,
                                                                 ),
                                                               ),
-                                                              style: AzaBankTheme.of(context).bodyMedium.override(
+                                                              style: AzaBankTheme
+                                                                  .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
                                                                 fontFamily: 'Poppins',
-                                                                color: AzaBankTheme.of(context).primaryText,
+                                                                color: AzaBankTheme
+                                                                    .of(context)
+                                                                    .primaryText,
                                                               ),
-                                                              keyboardType: TextInputType.number,
-                                                              validator: (value) {
-                                                                if (selectedStatus == 'Casado' && value!.isEmpty) {
+                                                              keyboardType: TextInputType
+                                                                  .number,
+                                                              validator: (
+                                                                  value) {
+                                                                if (selectedStatus ==
+                                                                    'Casado' &&
+                                                                    value!
+                                                                        .isEmpty) {
                                                                   return 'Por favor, ingrese la cédula del cónyuge';
                                                                 }
                                                                 return null;
@@ -726,20 +1012,14 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                         ),
 
 
-
-
-
                                         Padding(
                                           padding:
                                           EdgeInsetsDirectional.fromSTEB(
                                               0.0, 20.0, 0.0, 0.0),
                                           child: FFButtonWidget(
-                                            onPressed: () =>{
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(builder: (context) => SolicitCredito1Widget()),
-                                              ),
-                                            },
+                                            onPressed: _camposLlenos ? () =>
+                                                _irASiguiente() : _mostrarMensajeError,
+
                                             text: 'Siguiente',
                                             options: FFButtonOptions(
                                               width: 130.0,
@@ -748,10 +1028,12 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                   .fromSTEB(0.0, 0.0, 0.0, 0.0),
                                               iconPadding: EdgeInsetsDirectional
                                                   .fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                              color: AzaBankTheme.of(context)
+                                              color: AzaBankTheme
+                                                  .of(context)
                                                   .primary,
                                               textStyle:
-                                              AzaBankTheme.of(context)
+                                              AzaBankTheme
+                                                  .of(context)
                                                   .titleSmall
                                                   .override(
                                                 fontFamily: 'Poppins',
@@ -785,6 +1067,20 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _irASiguiente() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SolicitCredito1Widget()),
+    );
+  }
+  void _mostrarMensajeError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Llenar todos los campos antes de continuar'),
       ),
     );
   }

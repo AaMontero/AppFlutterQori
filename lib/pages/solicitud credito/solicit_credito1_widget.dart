@@ -20,6 +20,9 @@ class SolicitCredito1Widget extends StatefulWidget {
 
 class _SolicitCredito1WidgetState extends State<SolicitCredito1Widget> {
   late SolicitCreditoModel _model;
+  bool _camposLlenos = false;
+  bool _mostrarError = false;
+  final _focusNode = FocusNode();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -179,6 +182,13 @@ class _SolicitCredito1WidgetState extends State<SolicitCredito1Widget> {
                                                 controller:
                                                 _model.textController7,
                                                 obscureText: false,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _camposLlenos = value.isNotEmpty;
+                                                    _mostrarError = _focusNode.hasFocus && !_camposLlenos;
+                                                  });
+                                                },
+
                                                 decoration: InputDecoration(
                                                   labelText:
                                                   'Monto Credito',
@@ -238,6 +248,7 @@ class _SolicitCredito1WidgetState extends State<SolicitCredito1Widget> {
                                                       Radius.circular(4.0),
                                                     ),
                                                   ),
+                                                  errorText: _mostrarError ? 'Llenar campo Monto Credito' : null,
                                                 ),
                                                 style: AzaBankTheme.of(context)
                                                     .bodyMedium
@@ -282,9 +293,15 @@ class _SolicitCredito1WidgetState extends State<SolicitCredito1Widget> {
                                                 controller:
                                                 _model.textController8,
                                                 obscureText: false,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _camposLlenos = value.isNotEmpty;
+                                                    _mostrarError = _focusNode.hasFocus && !_camposLlenos;
+                                                  });
+                                                },
                                                 decoration: InputDecoration(
                                                   labelText:
-                                                  'Pazo (meses)',
+                                                  'Plazo (meses)',
                                                   enabledBorder:
                                                   UnderlineInputBorder(
                                                     borderSide: BorderSide(
@@ -341,6 +358,7 @@ class _SolicitCredito1WidgetState extends State<SolicitCredito1Widget> {
                                                       Radius.circular(4.0),
                                                     ),
                                                   ),
+                                                  errorText: _mostrarError ? 'Llenar campo Plazo Meses' : null,
                                                 ),
                                                 style: AzaBankTheme.of(context)
                                                     .bodyMedium
@@ -383,6 +401,12 @@ class _SolicitCredito1WidgetState extends State<SolicitCredito1Widget> {
                                                 controller:
                                                 _model.textController9,
                                                 obscureText: false,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _camposLlenos = value.isNotEmpty;
+                                                    _mostrarError = _focusNode.hasFocus && !_camposLlenos;
+                                                  });
+                                                },
                                                 decoration: InputDecoration(
                                                   labelText: 'Cuotas de cada Mes',
                                                   enabledBorder:
@@ -441,6 +465,7 @@ class _SolicitCredito1WidgetState extends State<SolicitCredito1Widget> {
                                                       Radius.circular(4.0),
                                                     ),
                                                   ),
+                                                  errorText: _mostrarError ? 'Llenar campo Cuotas' : null,
                                                 ),
                                                 style: AzaBankTheme.of(context)
                                                     .bodyMedium
@@ -724,8 +749,10 @@ class _SolicitCredito1WidgetState extends State<SolicitCredito1Widget> {
                                             children: [
                                               FFButtonWidget(
                                                 onPressed: () {
+                                                  _model.textController1?.clear();
+                                                  _model.textController6?.clear();
                                                   _mostrarAlerta(context);
-                                                },
+                                                  },
                                                 text: 'Enviar',
                                                 options: FFButtonOptions(
                                                   width: 130.0,

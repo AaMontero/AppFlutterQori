@@ -479,72 +479,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             ],
                           ),
                         ),
+
+
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 25.0, 0.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  await Future.delayed(
-                                      const Duration(milliseconds: 1000));
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Fingerprints Matched Successfully ',
-                                        style: AzaBankTheme.of(context)
-                                            .titleSmall
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              color: AzaBankTheme.of(context)
-                                                  .primary3,
-                                            ),
-                                      ),
-                                      duration: Duration(milliseconds: 4000),
-                                      backgroundColor:
-                                          AzaBankTheme.of(context).green,
-                                      action: SnackBarAction(
-                                        label: 'Continue to Wallet',
-                                        textColor:
-                                            AzaBankTheme.of(context).primary3,
-                                        onPressed: () async {
-                                          await Navigator.push(
-                                            context,
-                                            PageTransition(
-                                              type: PageTransitionType.scale,
-                                              alignment: Alignment.bottomCenter,
-                                              duration:
-                                                  Duration(milliseconds: 300),
-                                              reverseDuration:
-                                                  Duration(milliseconds: 300),
-                                              child: NavBarPage(
-                                                  initialPage: 'HomePage'),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Image.asset(
-                                  'assets/images/Fingerprint.png',
-                                  width: 60.0,
-                                  height: 60.0,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 0.0),
+                              0.0, 30.0, 0.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
