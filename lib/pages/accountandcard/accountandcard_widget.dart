@@ -282,12 +282,15 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
   getImageGaleria() async  {
     final ImagePicker picker = ImagePicker();
     final XFile? image =
-      await picker.pickImage(source: ImageSource.gallery);
+      await picker.pickImage(source: ImageSource.gallery,
+      imageQuality: 40);
+      String now = DateTime.now().toString();
 
+    var path = '$email/ahorros/$now.jpg';
     if(image!= null){
       file = File(image.path);
       print("El path es el siguiente:"+ file.toString());
-      var refStorage = firebase_storage.FirebaseStorage.instance.ref("nombre.jpg");
+      var refStorage = firebase_storage.FirebaseStorage.instance.ref(path);
       await refStorage.putFile(file!);
       url = await refStorage.getDownloadURL();
     }else{

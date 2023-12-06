@@ -22,6 +22,7 @@ class HomePageWidget extends StatefulWidget {
 class _HomePageWidgetState extends State<HomePageWidget> {
   late HomePageModel _model;
   String? nombresUsuarioActivo;
+  String? apellidosUsuarioActivo;
   String? email;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -53,6 +54,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 dynamic>;
             setState(() {
               nombresUsuarioActivo = userData['nombres'];
+              apellidosUsuarioActivo = userData['apellidos'];
             });
           }
         }
@@ -247,12 +249,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 33.0, 0.0, 0.0),
+                                        0.0, 10.0, 0.0, 0.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Text(
-                                          'Amazon Platinium',
+                                          '$apellidosUsuarioActivo',
                                           style: AzaBankTheme.of(context)
                                               .bodyMedium
                                               .override(
