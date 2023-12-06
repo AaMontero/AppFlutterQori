@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
@@ -15,22 +18,47 @@ class ChnagePasswordWidget extends StatefulWidget {
 
 class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
   late ChnagePasswordModel _model;
-
+  String? email;
+  String? passViejo;
+  String? nuevaContrasenia;
+  String? confirmarNuevaContrasenia;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
 
+  void cargarUsuario(){
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        email = user.email.toString();
+      }
+    });
+  }
+  Future<void> cambiarPassWord(
+      String nuevaContrasenia, String confNuevaContrasenia) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (nuevaContrasenia == confNuevaContrasenia) {
+      try {
+        await user?.updatePassword(nuevaContrasenia);
+        print("Contraseña cambiada con éxito");
+      } catch (error) {
+        print("Error al cambiar la contraseña: $error");
+      }
+    } else {
+      print("Las contraseñas no son iguales");
+    }
+  }
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => ChnagePasswordModel());
-
+     cargarUsuario();
     _model.textController1 ??= TextEditingController();
     _model.textController2 ??= TextEditingController();
     _model.textController3 ??= TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-          _model.textController1?.text = '************';
-          _model.textController2?.text = '************';
-          _model.textController3?.text = '************';
+          _model.textController1?.text = '';
+          _model.textController2?.text = '';
+          _model.textController3?.text = '';
         }));
   }
 
@@ -120,6 +148,7 @@ class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
+
                         Row(
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,123 +157,7 @@ class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   4.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                'Type your old password',
-                                style: AzaBankTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      color: AzaBankTheme.of(context)
-                                          .secondaryText,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  4.0, 1.0, 0.0, 10.0),
-                              child: Container(
-                                width: 310.0,
-                                height: 50.0,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFE0E0E0),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  border: Border.all(
-                                    color: AzaBankTheme.of(context).orange,
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      15.0, 0.0, 20.0, 0.0),
-                                  child: TextFormField(
-                                    controller: _model.textController1,
-                                    obscureText: !_model.passwordVisibility1,
-                                    decoration: InputDecoration(
-                                      hintText: 'Email',
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      errorBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      focusedErrorBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      suffixIcon: InkWell(
-                                        onTap: () => setState(
-                                          () => _model.passwordVisibility1 =
-                                              !_model.passwordVisibility1,
-                                        ),
-                                        focusNode:
-                                            FocusNode(skipTraversal: true),
-                                        child: Icon(
-                                          _model.passwordVisibility1
-                                              ? Icons.visibility_outlined
-                                              : Icons.visibility_off_outlined,
-                                          color:
-                                              AzaBankTheme.of(context).orange,
-                                          size: 22.0,
-                                        ),
-                                      ),
-                                    ),
-                                    style: AzaBankTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Poppins',
-                                          color: Color(0xFF0C0F10),
-                                        ),
-                                    keyboardType: TextInputType.phone,
-                                    validator: _model.textController1Validator
-                                        .asValidator(context),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  4.0, 0.0, 0.0, 0.0),
-                              child: Text(
-                                'Type your new password',
+                                'Escriba su nueva contraseña',
                                 style: AzaBankTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -279,7 +192,7 @@ class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
                                     controller: _model.textController2,
                                     obscureText: !_model.passwordVisibility2,
                                     decoration: InputDecoration(
-                                      hintText: 'Email',
+                                      hintText: 'Nueva Contraseña',
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
@@ -346,6 +259,7 @@ class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
                                     keyboardType: TextInputType.phone,
                                     validator: _model.textController2Validator
                                         .asValidator(context),
+                                    onChanged:(value) => nuevaContrasenia = value,
                                   ),
                                 ),
                               ),
@@ -360,7 +274,7 @@ class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   4.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                'Confirm password ',
+                                'Repita su nueva contraseña ',
                                 style: AzaBankTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -395,7 +309,7 @@ class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
                                     controller: _model.textController3,
                                     obscureText: !_model.passwordVisibility3,
                                     decoration: InputDecoration(
-                                      hintText: 'Email',
+                                      hintText: 'Nueva Contraseña',
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
@@ -462,6 +376,7 @@ class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
                                     keyboardType: TextInputType.phone,
                                     validator: _model.textController3Validator
                                         .asValidator(context),
+                                    onChanged: (value) => confirmarNuevaContrasenia = value,
                                   ),
                                 ),
                               ),
@@ -480,10 +395,11 @@ class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
                                     0.0, 20.0, 0.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
+                                    cambiarPassWord(nuevaContrasenia!, confirmarNuevaContrasenia!);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          'Set Successfully',
+                                          'Contraseña modificada',
                                           style: TextStyle(
                                             color: AzaBankTheme.of(context)
                                                 .primary3,
@@ -517,7 +433,7 @@ class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
                                       ),
                                     );
                                   },
-                                  text: 'Change password',
+                                  text: 'Cambiar Contraseña',
                                   options: FFButtonOptions(
                                     width: 130.0,
                                     height: 55.0,

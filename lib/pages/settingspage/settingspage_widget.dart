@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
 import '/main.dart';
 import '/pages/chnage_password/chnage_password_widget.dart';
-import '/pages/languagepage/languagepage_widget.dart';
 import '/pages/login_page/login_page_widget.dart';
 import '/pages/notification/notification_widget.dart';
 import 'package:flutter/material.dart';
@@ -20,19 +22,41 @@ class SettingspageWidget extends StatefulWidget {
 
 class _SettingspageWidgetState extends State<SettingspageWidget> {
   late SettingspageModel _model;
-
+  String? nombresUsuarioActivo;
+  String? email;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  void cargarDatosDesdeFireBase(){
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        email = user.email.toString();
+        CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
+        usuarios.doc(email).get().then((value) {
+          if (value.exists) {
+            // Obtener los datos del documento
+            Map<String, dynamic> userData = value.data() as Map<String,
+                dynamic>;
+            setState(() {
+              nombresUsuarioActivo = userData['nombres'];
+            });
+          }
+        }
+        );
+
+      }
+    });
+  }
+
 
   @override
   void initState() {
     super.initState();
+    cargarDatosDesdeFireBase();
     _model = createModel(context, () => SettingspageModel());
   }
 
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
@@ -202,7 +226,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 8.0, 0.0, 0.0),
                             child: Text(
-                              'Push Puttichai',
+                              '$nombresUsuarioActivo',
                               style: AzaBankTheme.of(context)
                                   .headlineMedium
                                   .override(
@@ -221,7 +245,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 4.0, 0.0, 0.0),
                             child: Text(
-                              'user.name@domainname.com',
+                              '$email',
                               style:
                                   AzaBankTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Lexend Deca',
@@ -338,80 +362,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                     ],
                   ),
                 ),
-                InkWell(
-                  splashColor: Colors.transparent,
-                  focusColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: () async {
-                    await Navigator.push(
-                      context,
-                      PageTransition(
-                        type: PageTransitionType.scale,
-                        alignment: Alignment.bottomCenter,
-                        duration: Duration(milliseconds: 300),
-                        reverseDuration: Duration(milliseconds: 300),
-                        child: LanguagepageWidget(),
-                      ),
-                    );
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 1.0,
-                        height: 50.0,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.rectangle,
-                          border: Border.all(
-                            color: Color(0xFFEFEFEF),
-                            width: 1.0,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  12.0, 0.0, 0.0, 0.0),
-                              child: Icon(
-                                Icons.settings_rounded,
-                                color: Color(0xFF4B39EF),
-                                size: 24.0,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  12.0, 0.0, 0.0, 0.0),
-                              child: Text(
-                                'Idiomas',
-                                style: AzaBankTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Lexend Deca',
-                                      color: Color(0xFF090F13),
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Align(
-                                alignment: AlignmentDirectional(0.9, 0.0),
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Color(0xFF95A1AC),
-                                  size: 18.0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+
                 InkWell(
                   splashColor: Colors.transparent,
                   focusColor: Colors.transparent,
@@ -756,6 +707,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                 children: [
                   FFButtonWidget(
                     onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
                       await Navigator.push(
                         context,
                         PageTransition(

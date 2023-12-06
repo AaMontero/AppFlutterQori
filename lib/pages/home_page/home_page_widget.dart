@@ -54,14 +54,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             setState(() {
               nombresUsuarioActivo = userData['nombres'];
             });
-
           }
-
         }
         );
-
-
-
       }
     });
     return GestureDetector(

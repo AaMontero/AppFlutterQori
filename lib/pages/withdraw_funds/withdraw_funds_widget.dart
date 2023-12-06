@@ -23,10 +23,10 @@ class InversionAporte {
     required this.fecha,
     required this.monto,
   });
+
   String toString(){
     return "Objeto Ahorro" + this.concepto + this.fecha + this.monto.toString();
   }
-
 }
 
 

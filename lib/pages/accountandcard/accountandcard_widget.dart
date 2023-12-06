@@ -64,7 +64,6 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
     super.dispose();
   }
   Widget widgetTransaccion(String fechaTransaccion, double montoTransaccion, String concepto){
-    print("Lo que llega es: " + fechaTransaccion + "  " + montoTransaccion.toString() + "   " + concepto);
     return
       Padding(
         padding: EdgeInsetsDirectional.fromSTEB(
@@ -280,8 +279,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
       );
   }
 
-  getImageGaleria() async
-  {
+  getImageGaleria() async  {
     final ImagePicker picker = ImagePicker();
     final XFile? image =
       await picker.pickImage(source: ImageSource.gallery);
