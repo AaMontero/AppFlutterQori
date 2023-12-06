@@ -134,12 +134,12 @@ class _NavBarPageState extends State<NavBarPage> {
           ),
           GButton(
             icon: Icons.search_rounded,
-            text: 'Search',
+            text: 'Consejos',
             iconSize: 24.0,
           ),
           GButton(
             icon: Icons.settings_rounded,
-            text: 'Settings',
+            text: 'Configuracion',
             iconSize: 24.0,
           )
         ],
