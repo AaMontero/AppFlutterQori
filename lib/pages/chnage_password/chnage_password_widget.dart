@@ -117,7 +117,7 @@ class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
                         padding:
                             EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                         child: Text(
-                          'Change password',
+                          'Cambiar Contraseña',
                           style: AzaBankTheme.of(context).headlineMedium,
                         ),
                       ),
