@@ -1,7 +1,7 @@
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
-import '/pages/transfer_suscessful/transfer_suscessful_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'comfirm_tranfer_section_model.dart';
 export 'comfirm_tranfer_section_model.dart';
@@ -428,16 +428,7 @@ class _ComfirmTranferSectionWidgetState
                         EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 10.0, 0.0),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.scale,
-                            alignment: Alignment.bottomCenter,
-                            duration: Duration(milliseconds: 300),
-                            reverseDuration: Duration(milliseconds: 300),
-                            child: TransferSuscessfulWidget(),
-                          ),
-                        );
+
                       },
                       text: 'Comfirm',
                       options: FFButtonOptions(

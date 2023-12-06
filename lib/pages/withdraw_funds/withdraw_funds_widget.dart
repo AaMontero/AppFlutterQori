@@ -8,7 +8,6 @@ import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import 'package:flutter/material.dart';
 import '../../theme/aza_bank_widgets.dart';
-import '../delete_card/delete_card_widget.dart';
 import 'withdraw_funds_model.dart';
 export 'withdraw_funds_model.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -709,17 +708,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
-                                    await Navigator.push(
-                                      context,
-                                      PageTransition(
-                                        type: PageTransitionType.scale,
-                                        alignment: Alignment.bottomCenter,
-                                        duration: Duration(milliseconds: 300),
-                                        reverseDuration:
-                                        Duration(milliseconds: 300),
-                                        child: DeleteCardWidget(),
-                                      ),
-                                    );
+
                                   },
                                   child: Container(
                                     width: double.infinity,
@@ -838,17 +827,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
-                                    await Navigator.push(
-                                      context,
-                                      PageTransition(
-                                        type: PageTransitionType.scale,
-                                        alignment: Alignment.bottomCenter,
-                                        duration: Duration(milliseconds: 300),
-                                        reverseDuration:
-                                        Duration(milliseconds: 300),
-                                        child: DeleteCardWidget(),
-                                      ),
-                                    );
+
                                   },
                                   child: Container(
                                     width: double.infinity,

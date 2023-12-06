@@ -1,8 +1,5 @@
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
-import '/pages/exchangerate/exchangerate_widget.dart';
-import '/pages/interestrate/interestrate_widget.dart';
-import '/pages/searchfor_branch/searchfor_branch_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'search_page_model.dart';
