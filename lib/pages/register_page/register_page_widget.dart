@@ -883,7 +883,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          'Account Created Successfully ',
+                                          'Cuenta creada correctamente',
                                           style: AzaBankTheme.of(context)
                                               .titleSmall,
                                         ),
@@ -901,7 +901,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                         reverseDuration:
                                             Duration(milliseconds: 300),
                                         child:
-                                            NavBarPage(initialPage: 'HomePage'),
+                                            LoginPageWidget(),
                                       ),
                                     );
                                   },

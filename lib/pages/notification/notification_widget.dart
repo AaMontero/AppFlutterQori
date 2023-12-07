@@ -32,50 +32,50 @@ class NotificationWidget extends StatefulWidget {
 class _NotificationWidgetState extends State<NotificationWidget> {
   late NotificationModel _model;
   List<NotificacionObjeto> listaNotificaciones = [];
+  List<NotificacionObjeto> combinedList = [];
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  void cargarDatosDesdeFireBase() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        var email = user.email.toString();
-        CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
 
-        List<NotificacionObjeto> combinedList = []; // Lista que combina los resultados
-
-        usuarios.doc(email).collection("ahorros").get().then((QuerySnapshot querySnapshot) {
-          // Agregar elementos a la lista combinada
-          combinedList.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
+  void obtenerAhorros(String email) async {
+      CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
+      DocumentReference usuarioActivo = usuarios.doc(email);
+      usuarioActivo.collection("ahorros").get().then((QuerySnapshot querySnapshot) {
+        setState(() {
+          listaNotificaciones.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-            String concepto = 'Ahorros: ' + data['concepto'];
+            String concepto = data['concepto'];
             double monto = data['monto'];
             String fecha = data['fecha'].toString();
             return NotificacionObjeto(concepto: concepto, fecha: fecha, monto: monto);
           }));
-        }
-        ).catchError((error) {
-          print("Error al obtener datos de Firebase (ahorros): $error");
-        });
 
-        usuarios.doc(email).collection("inversiones").get().then((QuerySnapshot querySnapshot) {
-          // Agregar elementos a la lista combinada
-          combinedList.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
+        });
+      }).catchError((error) {
+        print("Error al obtener datos de Firebase: $error");
+      });
+      print(listaNotificaciones.toString());
+      usuarioActivo.collection("inversiones").get().then((QuerySnapshot querySnapshot) {
+        setState(() {
+          listaNotificaciones.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-            String concepto = 'Inversion: ' + data['concepto'];
+            String concepto = data['concepto'];
             double monto = data['monto'];
             String fecha = data['fecha'].toString();
             return NotificacionObjeto(concepto: concepto, fecha: fecha, monto: monto);
-          }
-          )
-          );
+          }));
 
-          // Actualizar el estado con la lista combinada después de ambas consultas
-          setState(() {
-            listaNotificaciones.clear();
-            listaNotificaciones.addAll(combinedList);
-            listaNotificaciones.sort((a, b) => DateTime.parse(b.fecha).compareTo(DateTime.parse(a.fecha)));
-          });
-        }).catchError((error) {
-          print("Error al obtener datos de Firebase (inversiones): $error");
         });
+      }).catchError((error) {
+        print("Error al obtener datos de Firebase: $error");
+      });
+
+
+  }
+  void cargarDatosDesdeFireBase() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        print("Advertencia: Entra a usuario no nulo");
+        var email = user.email.toString();
+        obtenerAhorros(email);
       }
     });
   }

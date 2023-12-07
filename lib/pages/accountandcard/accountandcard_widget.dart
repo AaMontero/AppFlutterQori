@@ -66,7 +66,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
     return
       Padding(
         padding: EdgeInsetsDirectional.fromSTEB(
-            0.0, 20.0, 0.0, 0.0),
+            0.0, 0.0, 0.0, 0.0),
         child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -74,7 +74,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
         child:
         Padding(
       padding: EdgeInsetsDirectional.fromSTEB(
-          20.0, 10.0, 20.0, 10.0),
+          15.0, 00.0, 15.0, 10.0),
         child: Container(
         width: double.infinity,
         height: 110.0,
@@ -393,7 +393,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment:
-              MainAxisAlignment.spaceBetween,
+              MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
@@ -405,7 +405,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                       },
                       text: 'Saldo/Trans',
                       options: FFButtonOptions(
-                        width: 200.0,
+                        width: 160.0,
                         height: 40.0,
                         padding:
                         EdgeInsetsDirectional.fromSTEB(
@@ -458,16 +458,21 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                           print('No se ha subido ninguna foto.');
                         }
                       },
-                      text: 'Agregar',
+                      text: 'Subir',
+                      iconData: Icons.camera_alt,
+
+
                       options: FFButtonOptions(
-                        width: 150.0,
+                        width: 160.0,
                         height: 40.0,
                         padding:
                         EdgeInsetsDirectional.fromSTEB(
                             0.0, 0.0, 0.0, 0.0),
+
                         iconPadding:
                         EdgeInsetsDirectional.fromSTEB(
                             0.0, 0.0, 0.0, 0.0),
+
                         color: Color(0xFFF2F1F9),
                         textStyle: AzaBankTheme.of(context)
                             .titleSmall
@@ -483,15 +488,18 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                         borderRadius:
                         BorderRadius.circular(12.0),
                       ),
+
                     ),
+
                   ],
                 ),
+
               ],
             ),
           ),
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(
-                0.0, 30.0, 0.0, 0.0),
+                0.0, 20.0, 0.0, 0.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -513,7 +521,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                       child: RichText(
                         text: TextSpan(
                           style: AzaBankTheme.of(context).bodyMedium.override(
