@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
+import '../contactos/contactos_widget.dart';
 import '/main.dart';
 import '/pages/chnage_password/chnage_password_widget.dart';
 import '/pages/login_page/login_page_widget.dart';
@@ -208,7 +209,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                                         shape: BoxShape.circle,
                                       ),
                                       child: Image.asset(
-                                        'assets/images/Avatar.png',
+                                        'assets/images/usuario.png',
                                       ),
                                     ),
                                   ),
@@ -437,6 +438,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                     ],
                   ),
                 ),
+
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -492,6 +494,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                     ),
                   ],
                 ),
+
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -567,6 +570,7 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                     ),
                   ],
                 ),
+
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -642,59 +646,79 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
                     ),
                   ],
                 ),
+
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 1.0,
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.rectangle,
-                        border: Border.all(
-                          color: Color(0xFFEFEFEF),
-                          width: 1.0,
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.scale,
+                            alignment: Alignment.bottomCenter,
+                            duration: Duration(milliseconds: 300),
+                            reverseDuration: Duration(milliseconds: 300),
+                            child: ContactosWidget(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 1.0,
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.rectangle,
+                          border: Border.all(
+                            color: Color(0xFFEFEFEF),
+                            width: 1.0,
+                          ),
                         ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                12.0, 0.0, 0.0, 0.0),
-                            child: Icon(
-                              Icons.support_agent,
-                              color: Color(0xFF4B39EF),
-                              size: 24.0,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                12.0, 0.0, 0.0, 0.0),
-                            child: Text(
-                              'Atención al cliente',
-                              style:
-                                  AzaBankTheme.of(context).bodyMedium.override(
-                                        fontFamily: 'Lexend Deca',
-                                        color: Color(0xFF090F13),
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Align(
-                              alignment: AlignmentDirectional(0.9, 0.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 0.0, 0.0, 0.0),
                               child: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Color(0xFF95A1AC),
-                                size: 18.0,
+                                Icons.support_agent,
+                                color: Color(0xFF4B39EF),
+                                size: 24.0,
                               ),
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 0.0, 0.0, 0.0),
+                              child: Text(
+                                'Contactanos',
+                                style:
+                                AzaBankTheme.of(context).bodyMedium.override(
+                                  fontFamily: 'Lexend Deca',
+                                  color: Color(0xFF090F13),
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Align(
+                                alignment: AlignmentDirectional(0.9, 0.0),
+                                child: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Color(0xFF95A1AC),
+                                  size: 18.0,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
+
                   ],
                 ),
               ],

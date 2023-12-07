@@ -139,6 +139,7 @@ class _SearchPageWidgetState extends State<SearchPageWidget> {
                             ],
                           ),
                         ),
+
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 0.0, 25.0, 0.0),
