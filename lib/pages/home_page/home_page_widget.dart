@@ -36,7 +36,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   @override
   void dispose() {
     _model.dispose();
-
     _unfocusNode.dispose();
     super.dispose();
   }
