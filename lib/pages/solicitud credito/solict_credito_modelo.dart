@@ -17,8 +17,9 @@ class SolicitCreditoModel extends AzaBankModel with ChangeNotifier {
   late FocusNode focusNode;
 
   double montoCredito = 0.0;
-  double intereses = 0.10;
-  double gastosAdministrativos = 0.0;
+  double intereses3 = 0.06;
+  double intereses6 = 0.1;
+  double gastosAdministrativos = 5;
   int cuotas = 3;
   int cuotas1 = 6;
   double resultado = 0.0;
@@ -41,9 +42,9 @@ class SolicitCreditoModel extends AzaBankModel with ChangeNotifier {
   void calcularResultados() {
     double total;
     if (cuotas == 3) {
-      total = (montoCredito * intereses + gastosAdministrativos) / cuotas;
+      total = (montoCredito * intereses3 + gastosAdministrativos) / cuotas;
     } else if (cuotas == 6) {
-      total = (montoCredito * intereses + gastosAdministrativos) / cuotas1;
+      total = (montoCredito * intereses6 + gastosAdministrativos) / cuotas1;
     } else {
       total = 0.0;
     }
@@ -66,6 +67,10 @@ class SolicitCreditoModel extends AzaBankModel with ChangeNotifier {
 
     textControllerCuotas?.addListener(() {
       cuotas = int.tryParse(textControllerCuotas!.text) ?? 3;
+      calcularResultados();
+    });
+    textControllerCuotas?.addListener(() {
+      cuotas1 = int.tryParse(textControllerCuotas!.text) ?? 6;
       calcularResultados();
     });
   }

@@ -79,9 +79,7 @@ class _CreditosWidgetState extends State<CreditosWidget> {
                     ),
                   ),
 
-                 tieneCredito
-                     ? ConCreditosWidget() // Pantalla para usuario con crédito
-                     : SinCreditosWidget(),
+
                   Column(
                     children: [
 
@@ -140,6 +138,7 @@ class _CreditosWidgetState extends State<CreditosWidget> {
 
                     ],
                   ),
+
                 ],
 
 
