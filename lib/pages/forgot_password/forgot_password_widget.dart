@@ -122,7 +122,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         5.0, 0.0, 0.0, 0.0),
                                     child: Text(
-                                      'Forgot Password',
+                                      'Olvidaste tu contraseña',
                                       style: AzaBankTheme.of(context)
                                           .headlineMedium,
                                     ),
@@ -166,7 +166,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Type your phone number ',
+                                          'Tu dirección de correo ',
                                           style: AzaBankTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -313,7 +313,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          'We texted you a code to verify your \nphone number',
+                                          'Se enviará un mensaje a tu correo',
                                           textAlign: TextAlign.center,
                                           style: AzaBankTheme.of(context)
                                               .bodyMedium
@@ -342,7 +342,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                                 curve: Curves.ease,
                                               );
                                             },
-                                            text: 'Send',
+                                            text: 'Enviar',
                                             options: FFButtonOptions(
                                               width: 290.0,
                                               height: 45.0,
@@ -423,7 +423,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         5.0, 0.0, 0.0, 0.0),
                                     child: Text(
-                                      'Forgot Password',
+                                      'Olvidaste tu contraseña',
                                       style: AzaBankTheme.of(context)
                                           .headlineMedium,
                                     ),
@@ -691,7 +691,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Text(
-                                          'We texted you a code to verify your \nphone number (+84) 0398829xxx',
+                                          'Se te enviara un mensaje a tu correo',
                                           style: AzaBankTheme.of(context)
                                               .bodyMedium
                                               .override(
