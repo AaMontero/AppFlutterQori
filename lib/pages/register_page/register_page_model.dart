@@ -4,19 +4,20 @@ import 'package:flutter/material.dart';
 class RegisterPageModel extends AzaBankModel {
   ///  State fields for stateful widgets in this page.
 
-  // State field(s) for TextField widget.
-  TextEditingController? textController1;
+  TextEditingController? textController1; //Controlller Correo Electrónico
   String? Function(BuildContext, String?)? textController1Validator;
-  // State field(s) for TextField widget.
-  TextEditingController? textController2;
+  TextEditingController? textController2; //Controller Celular
   String? Function(BuildContext, String?)? textController2Validator;
-  // State field(s) for TextField widget.
-  TextEditingController? textController3;
+  TextEditingController? textController3; //Controller Contraseña
   String? Function(BuildContext, String?)? textController3Validator;
-  TextEditingController? textController4;
+  TextEditingController? textController4; //Controller Nombres
   String? Function(BuildContext, String?)? textController4Validator;
-  TextEditingController? textController5;
+  TextEditingController? textController5; // Controller Apellidos
   String? Function(BuildContext, String?)? textController5Validator;
+  TextEditingController? textController6; //Controller Empresa
+  String? Function(BuildContext, String?)? textController6Validator;
+  TextEditingController? textController7; //Controller Cargo
+  String? Function(BuildContext, String?)? textController7Validator;
 
 
 

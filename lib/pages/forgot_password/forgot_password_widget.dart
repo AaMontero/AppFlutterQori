@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
-import '/main.dart';
 import '/pages/login_page/login_page_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'forgot_password_model.dart';
 export 'forgot_password_model.dart';
 
@@ -17,7 +19,7 @@ class ForgotPasswordWidget extends StatefulWidget {
 
 class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
   late ForgotPasswordModel _model;
-
+  String? emailIng;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
   int get pageViewCurrentIndex => _model.pageViewController != null &&
@@ -48,7 +50,37 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
     _unfocusNode.dispose();
     super.dispose();
   }
+  Future<void> cambiarPassword(String email) async {
+    try {
+      var usuariosGet = FirebaseFirestore.instance.collection('usuarios').doc(email);
+      var usuariosSnapShot = await usuariosGet.get();
+      if (usuariosSnapShot.exists) {
+        await FirebaseAuth.instance.setLanguageCode("es");
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+        Fluttertoast.showToast(
+          msg: "Se ha enviado un correo.",
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+        _model.textController1?.clear();
+      } else {
+        Fluttertoast.showToast(
+          msg: "Correo no está registrado.",
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+      }
 
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        print("Error al cambiar la contraseña: ${e.message}");
+      } else {
+        print("Error general: $e");
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -122,7 +154,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         5.0, 0.0, 0.0, 0.0),
                                     child: Text(
-                                      'Forgot Password',
+                                      'Olvidaste tu contraseña',
                                       style: AzaBankTheme.of(context)
                                           .headlineMedium,
                                     ),
@@ -166,7 +198,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Type your phone number ',
+                                          'Tu dirección de correo ',
                                           style: AzaBankTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -212,7 +244,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                                       _model.textController1,
                                                   obscureText: false,
                                                   decoration: InputDecoration(
-                                                    labelText: '(+86)',
+                                                    labelText: '',
                                                     enabledBorder:
                                                         UnderlineInputBorder(
                                                       borderSide: BorderSide(
@@ -300,6 +332,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                                   validator: _model
                                                       .textController1Validator
                                                       .asValidator(context),
+                                                  onChanged: (value) => emailIng = value,
                                                 ),
                                               ),
                                             ),
@@ -313,7 +346,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          'We texted you a code to verify your \nphone number',
+                                          'Se enviará un mensaje a tu correo',
                                           textAlign: TextAlign.center,
                                           style: AzaBankTheme.of(context)
                                               .bodyMedium
@@ -335,14 +368,9 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                         children: [
                                           FFButtonWidget(
                                             onPressed: () async {
-                                              await _model.pageViewController
-                                                  ?.nextPage(
-                                                duration:
-                                                    Duration(milliseconds: 300),
-                                                curve: Curves.ease,
-                                              );
+                                              await cambiarPassword(emailIng!);
                                             },
-                                            text: 'Send',
+                                            text: 'Enviar',
                                             options: FFButtonOptions(
                                               width: 290.0,
                                               height: 45.0,
@@ -423,906 +451,13 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         5.0, 0.0, 0.0, 0.0),
                                     child: Text(
-                                      'Forgot Password',
+                                      'Olvidaste tu contraseña',
                                       style: AzaBankTheme.of(context)
                                           .headlineMedium,
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                10.0, 0.0, 10.0, 0.0),
-                            child: Container(
-                              width: double.infinity,
-                              height: 300.0,
-                              decoration: BoxDecoration(
-                                color:
-                                    AzaBankTheme.of(context).primaryBackground,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 30.0,
-                                    color: Color(0x123629B7),
-                                    offset: Offset(0.0, -5.0),
-                                    spreadRadius: 30.0,
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    15.0, 20.0, 15.0, 0.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Type a code',
-                                          style: AzaBankTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                fontFamily: 'Poppins',
-                                                color: AzaBankTheme.of(context)
-                                                    .secondaryText,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 10.0, 0.0, 10.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        4.0, 0.0, 4.0, 0.0),
-                                                child: Container(
-                                                  width: 170.0,
-                                                  height: 50.0,
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0x12000000),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5.0),
-                                                    border: Border.all(
-                                                      color: AzaBankTheme.of(
-                                                              context)
-                                                          .orange,
-                                                    ),
-                                                  ),
-                                                  child: Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(15.0, 0.0,
-                                                                20.0, 0.0),
-                                                    child: TextFormField(
-                                                      controller: _model
-                                                          .textController2,
-                                                      obscureText: false,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        labelText: '(+86)',
-                                                        enabledBorder:
-                                                            UnderlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                            color: Color(
-                                                                0x00000000),
-                                                            width: 1.0,
-                                                          ),
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    4.0),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    4.0),
-                                                          ),
-                                                        ),
-                                                        focusedBorder:
-                                                            UnderlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                            color: Color(
-                                                                0x00000000),
-                                                            width: 1.0,
-                                                          ),
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    4.0),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    4.0),
-                                                          ),
-                                                        ),
-                                                        errorBorder:
-                                                            UnderlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                            color: Color(
-                                                                0x00000000),
-                                                            width: 1.0,
-                                                          ),
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    4.0),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    4.0),
-                                                          ),
-                                                        ),
-                                                        focusedErrorBorder:
-                                                            UnderlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                            color: Color(
-                                                                0x00000000),
-                                                            width: 1.0,
-                                                          ),
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    4.0),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    4.0),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      style:
-                                                          AzaBankTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Poppins',
-                                                                color: AzaBankTheme.of(
-                                                                        context)
-                                                                    .primaryText,
-                                                              ),
-                                                      keyboardType:
-                                                          TextInputType.phone,
-                                                      validator: _model
-                                                          .textController2Validator
-                                                          .asValidator(context),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        4.0, 0.0, 0.0, 0.0),
-                                                child: FFButtonWidget(
-                                                  onPressed: () async {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          'OTP Code sent to your email',
-                                                          style: TextStyle(
-                                                            color:
-                                                                AzaBankTheme.of(
-                                                                        context)
-                                                                    .primary3,
-                                                          ),
-                                                        ),
-                                                        duration: Duration(
-                                                            milliseconds: 4000),
-                                                        backgroundColor:
-                                                            AzaBankTheme.of(
-                                                                    context)
-                                                                .secondary,
-                                                      ),
-                                                    );
-                                                  },
-                                                  text: 'Resend',
-                                                  options: FFButtonOptions(
-                                                    width: 120.0,
-                                                    height: 52.0,
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 0.0,
-                                                                0.0, 0.0),
-                                                    iconPadding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 0.0,
-                                                                0.0, 0.0),
-                                                    color:
-                                                        AzaBankTheme.of(context)
-                                                            .primary,
-                                                    textStyle: AzaBankTheme.of(
-                                                            context)
-                                                        .titleSmall
-                                                        .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: Colors.white,
-                                                        ),
-                                                    elevation: 2.0,
-                                                    borderSide: BorderSide(
-                                                      color: Colors.transparent,
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5.0),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          'We texted you a code to verify your \nphone number (+84) 0398829xxx',
-                                          style: AzaBankTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                fontFamily: 'Poppins',
-                                                color: AzaBankTheme.of(context)
-                                                    .secondaryText,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 10.0, 0.0, 5.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Text(
-                                            'This code will expired 10 minutes after this \nmessage. If you don\'t get a message.',
-                                            style: AzaBankTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Poppins',
-                                                  color:
-                                                      AzaBankTheme.of(context)
-                                                          .secondaryText,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 10.0, 0.0, 0.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          FFButtonWidget(
-                                            onPressed: () async {
-                                              await _model.pageViewController
-                                                  ?.nextPage(
-                                                duration:
-                                                    Duration(milliseconds: 300),
-                                                curve: Curves.ease,
-                                              );
-                                            },
-                                            text: 'Change password',
-                                            options: FFButtonOptions(
-                                              width: 130.0,
-                                              height: 55.0,
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                              iconPadding: EdgeInsetsDirectional
-                                                  .fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                              color: AzaBankTheme.of(context)
-                                                  .primary,
-                                              textStyle:
-                                                  AzaBankTheme.of(context)
-                                                      .titleSmall
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color: Colors.white,
-                                                      ),
-                                              elevation: 2.0,
-                                              borderSide: BorderSide(
-                                                color: Colors.transparent,
-                                                width: 1.0,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 100.0,
-                            decoration: BoxDecoration(
-                              color: AzaBankTheme.of(context).primaryBackground,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  10.0, 0.0, 10.0, 25.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 2.0),
-                                    child: InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        await _model.pageViewController
-                                            ?.previousPage(
-                                          duration: Duration(milliseconds: 300),
-                                          curve: Curves.ease,
-                                        );
-                                      },
-                                      child: Icon(
-                                        Icons.arrow_back_ios,
-                                        color: AzaBankTheme.of(context)
-                                            .primaryText,
-                                        size: 24.0,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        5.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      'Change password',
-                                      style: AzaBankTheme.of(context)
-                                          .headlineMedium,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                10.0, 0.0, 10.0, 0.0),
-                            child: Container(
-                              width: double.infinity,
-                              height: 300.0,
-                              decoration: BoxDecoration(
-                                color:
-                                    AzaBankTheme.of(context).primaryBackground,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 30.0,
-                                    color: Color(0x123629B7),
-                                    offset: Offset(0.0, -5.0),
-                                    spreadRadius: 30.0,
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10.0, 20.0, 10.0, 0.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  4.0, 0.0, 0.0, 0.0),
-                                          child: Text(
-                                            'Type your new password',
-                                            style: AzaBankTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Poppins',
-                                                  color:
-                                                      AzaBankTheme.of(context)
-                                                          .secondaryText,
-                                                ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  4.0, 1.0, 0.0, 10.0),
-                                          child: Container(
-                                            width: 310.0,
-                                            height: 50.0,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFFE0E0E0),
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                              border: Border.all(
-                                                color: AzaBankTheme.of(context)
-                                                    .orange,
-                                              ),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      15.0, 0.0, 20.0, 0.0),
-                                              child: TextFormField(
-                                                controller:
-                                                    _model.textController3,
-                                                obscureText:
-                                                    !_model.passwordVisibility1,
-                                                decoration: InputDecoration(
-                                                  hintText: 'Email',
-                                                  enabledBorder:
-                                                      UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(4.0),
-                                                      topRight:
-                                                          Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  focusedBorder:
-                                                      UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(4.0),
-                                                      topRight:
-                                                          Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  errorBorder:
-                                                      UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(4.0),
-                                                      topRight:
-                                                          Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  focusedErrorBorder:
-                                                      UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(4.0),
-                                                      topRight:
-                                                          Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  suffixIcon: InkWell(
-                                                    onTap: () => setState(
-                                                      () => _model
-                                                              .passwordVisibility1 =
-                                                          !_model
-                                                              .passwordVisibility1,
-                                                    ),
-                                                    focusNode: FocusNode(
-                                                        skipTraversal: true),
-                                                    child: Icon(
-                                                      _model.passwordVisibility1
-                                                          ? Icons
-                                                              .visibility_outlined
-                                                          : Icons
-                                                              .visibility_off_outlined,
-                                                      color: AzaBankTheme.of(
-                                                              context)
-                                                          .orange,
-                                                      size: 22.0,
-                                                    ),
-                                                  ),
-                                                ),
-                                                style: GoogleFonts.getFont(
-                                                  'Open Sans',
-                                                  color: Color(0xFF455A64),
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                                keyboardType:
-                                                    TextInputType.phone,
-                                                validator: _model
-                                                    .textController3Validator
-                                                    .asValidator(context),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  4.0, 0.0, 0.0, 0.0),
-                                          child: Text(
-                                            'Confirm password',
-                                            style: AzaBankTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Poppins',
-                                                  color:
-                                                      AzaBankTheme.of(context)
-                                                          .secondaryText,
-                                                ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  4.0, 1.0, 0.0, 10.0),
-                                          child: Container(
-                                            width: 310.0,
-                                            height: 50.0,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFFE0E0E0),
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                              border: Border.all(
-                                                color: AzaBankTheme.of(context)
-                                                    .orange,
-                                              ),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      15.0, 0.0, 20.0, 0.0),
-                                              child: TextFormField(
-                                                controller:
-                                                    _model.textController4,
-                                                obscureText:
-                                                    !_model.passwordVisibility2,
-                                                decoration: InputDecoration(
-                                                  hintText: 'Email',
-                                                  enabledBorder:
-                                                      UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(4.0),
-                                                      topRight:
-                                                          Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  focusedBorder:
-                                                      UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(4.0),
-                                                      topRight:
-                                                          Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  errorBorder:
-                                                      UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(4.0),
-                                                      topRight:
-                                                          Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  focusedErrorBorder:
-                                                      UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1.0,
-                                                    ),
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(4.0),
-                                                      topRight:
-                                                          Radius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                  suffixIcon: InkWell(
-                                                    onTap: () => setState(
-                                                      () => _model
-                                                              .passwordVisibility2 =
-                                                          !_model
-                                                              .passwordVisibility2,
-                                                    ),
-                                                    focusNode: FocusNode(
-                                                        skipTraversal: true),
-                                                    child: Icon(
-                                                      _model.passwordVisibility2
-                                                          ? Icons
-                                                              .visibility_outlined
-                                                          : Icons
-                                                              .visibility_off_outlined,
-                                                      color: AzaBankTheme.of(
-                                                              context)
-                                                          .orange,
-                                                      size: 22.0,
-                                                    ),
-                                                  ),
-                                                ),
-                                                style: GoogleFonts.getFont(
-                                                  'Open Sans',
-                                                  color: Color(0xFF455A64),
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                                keyboardType:
-                                                    TextInputType.phone,
-                                                validator: _model
-                                                    .textController4Validator
-                                                    .asValidator(context),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 30.0, 0.0, 0.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    15.0, 0.0, 10.0, 0.0),
-                                            child: FFButtonWidget(
-                                              onPressed: () async {
-                                                await _model.pageViewController
-                                                    ?.animateToPage(
-                                                  3,
-                                                  duration: Duration(
-                                                      milliseconds: 500),
-                                                  curve: Curves.ease,
-                                                );
-                                              },
-                                              text: 'Change password',
-                                              options: FFButtonOptions(
-                                                width: 130.0,
-                                                height: 55.0,
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 0.0, 0.0, 0.0),
-                                                iconPadding:
-                                                    EdgeInsetsDirectional
-                                                        .fromSTEB(
-                                                            0.0, 0.0, 0.0, 0.0),
-                                                color: AzaBankTheme.of(context)
-                                                    .primary,
-                                                textStyle:
-                                                    AzaBankTheme.of(context)
-                                                        .titleSmall
-                                                        .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: Colors.white,
-                                                        ),
-                                                elevation: 2.0,
-                                                borderSide: BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: 1.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(5.0),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.asset(
-                                'assets/images/Illustration_3.png',
-                                width: 327.0,
-                                height: 216.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 10.0, 0.0, 0.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Change password \nsuccessfully!',
-                                  textAlign: TextAlign.center,
-                                  style: AzaBankTheme.of(context)
-                                      .displaySmall
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        color: AzaBankTheme.of(context).orange,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 10.0, 0.0, 0.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'You have successfully change password.\nPlease use the new password when Sign in.',
-                                  textAlign: TextAlign.center,
-                                  style: AzaBankTheme.of(context).titleSmall,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                20.0, 30.0, 20.0, 0.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                FFButtonWidget(
-                                  onPressed: () async {
-                                    await Navigator.push(
-                                      context,
-                                      PageTransition(
-                                        type: PageTransitionType.scale,
-                                        alignment: Alignment.bottomCenter,
-                                        duration: Duration(milliseconds: 300),
-                                        reverseDuration:
-                                            Duration(milliseconds: 300),
-                                        child:
-                                            NavBarPage(initialPage: 'HomePage'),
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'PAssword Changed Successful ',
-                                          style: AzaBankTheme.of(context)
-                                              .bodyMedium,
-                                        ),
-                                        duration: Duration(milliseconds: 4000),
-                                        backgroundColor:
-                                            AzaBankTheme.of(context).green,
-                                      ),
-                                    );
-                                  },
-                                  text: 'Continue ',
-                                  options: FFButtonOptions(
-                                    width: 130.0,
-                                    height: 55.0,
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    color: AzaBankTheme.of(context).primary,
-                                    textStyle: AzaBankTheme.of(context)
-                                        .titleSmall
-                                        .override(
-                                          fontFamily: 'Poppins',
-                                          color: Colors.white,
-                                        ),
-                                    elevation: 2.0,
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                ),
-                              ],
                             ),
                           ),
                         ],

@@ -75,7 +75,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
     return
       Padding(
         padding: EdgeInsetsDirectional.fromSTEB(
-            0.0, 20.0, 0.0, 0.0),
+            0.0, 0.0, 0.0, 0.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -83,7 +83,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                 child:
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(
-                      20.0, 10.0, 20.0, 10.0),
+                      15.0, 0.0, 15.0, 10.0),
                   child: Container(
                     width: double.infinity,
                     height: 110.0,
@@ -395,7 +395,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Column(
@@ -407,7 +407,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                                 },
                                 text: 'Inversiones',
                                 options: FFButtonOptions(
-                                  width: 200.0,
+                                  width: 160.0,
                                   height: 40.0,
                                   padding:
                                   EdgeInsetsDirectional.fromSTEB(
@@ -460,9 +460,11 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                                     print('No se ha subido ninguna foto.');
                                   }
                                 },
-                                text: 'Agregar',
+                                iconData: Icons.camera_alt,
+                                text: 'Subir',
+
                                 options: FFButtonOptions(
-                                  width: 150.0,
+                                  width: 160.0,
                                   height: 40.0,
                                   padding:
                                   EdgeInsetsDirectional.fromSTEB(
@@ -523,7 +525,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(
-                    0.0, 30.0, 0.0, 0.0),
+                    0.0, 20.0, 0.0, 0.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,

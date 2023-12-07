@@ -24,25 +24,26 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   String? nombresUsuarioActivo;
   String? apellidosUsuarioActivo;
   String? email;
+  String? cargoUsuarioActivo;
+  String? empresaUsuarioActivo;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    cargarDatosUsuario();
     _model = createModel(context, () => HomePageModel());
   }
 
   @override
   void dispose() {
     _model.dispose();
-
     _unfocusNode.dispose();
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  cargarDatosUsuario(){
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
         email = user.email.toString();
@@ -55,12 +56,18 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             setState(() {
               nombresUsuarioActivo = userData['nombres'];
               apellidosUsuarioActivo = userData['apellidos'];
+              cargoUsuarioActivo = userData['cargo'];
+              empresaUsuarioActivo = userData['empresa'];
             });
           }
         }
         );
       }
     });
+  }
+  @override
+  Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -273,7 +280,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Text(
-                                          ' 4756  **** **** 7645',
+                                          '$empresaUsuarioActivo',
                                           style: AzaBankTheme.of(context)
                                               .titleSmall
                                               .override(
@@ -291,7 +298,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Text(
-                                          '\$3.469.52',
+                                          '$cargoUsuarioActivo',
                                           style: AzaBankTheme.of(context)
                                               .headlineMedium
                                               .override(
