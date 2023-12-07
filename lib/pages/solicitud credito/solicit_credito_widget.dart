@@ -4,6 +4,7 @@ import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
 import '../../theme/form_field_controller.dart';
+import '../creditos/sincreditos_widget.dart';
 import '/main.dart';
 import 'package:flutter/material.dart';
 import 'solict_credito_modelo.dart';
@@ -25,7 +26,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
   final _focusNode = FocusNode();
 
 
-  String selectedStatus = '3';
+  String selectedStatus = '0';
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -315,7 +316,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                     value: _model.cuotas,
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        _model.cuotas = value ?? 3;
+                                                        _model.cuotas = value ?? 0;
                                                       });
                                                     },
                                                     items: [0, 3, 6].map((int cuota) {
@@ -430,7 +431,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                 onPressed: () =>{
                                                   Navigator.push(
                                                     context,
-                                                    MaterialPageRoute(builder: (context) => SolicitCreditoWidget()),
+                                                    MaterialPageRoute(builder: (context) => SinCreditosWidget()),
                                                   ),
 
                                                 },
@@ -440,7 +441,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                   height: 55.0,
                                                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                                   iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                                  color: Colors.blue, // Puedes cambiar el color según tus necesidades
+                                                  color: Colors.blue,
                                                   textStyle: AzaBankTheme.of(context).titleSmall.override(
                                                     fontFamily: 'Poppins',
                                                     color: Colors.white,
