@@ -18,6 +18,8 @@ class RegisterPageModel extends AzaBankModel {
   String? Function(BuildContext, String?)? textController6Validator;
   TextEditingController? textController7; //Controller Cargo
   String? Function(BuildContext, String?)? textController7Validator;
+  TextEditingController? textController8; //Controller Numero Cédula
+  String? Function(BuildContext, String?)? textController8Validator;
 
 
 

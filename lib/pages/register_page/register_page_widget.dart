@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
-import '/main.dart';
 import '/pages/login_page/login_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'register_page_model.dart';
@@ -30,7 +29,24 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
   String? passwordReg;
   String? cargoReg;
   String? empresaReg;
-  registrar(correo, contrasenia, nombres, apellidos, numCelular, empresa, cargo) async {
+  String? numCedulaReg;
+  DateTime selectedDate = DateTime.now();
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      locale: const Locale('es', 'ES'),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        print(selectedDate);
+      });
+    }
+  }
+  registrar(correo, contrasenia, nombres, apellidos,numIdentificacion ,numCelular, empresa, cargo, fechaNacimiento) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: correo,
@@ -50,9 +66,11 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
       "correo": correo,
       "nombres": nombres,
       "apellidos": apellidos,
+      "identificacion": numIdentificacion,
       "numero_celular": numCelular,
       "empresa": empresa,
       "cargo": cargo,
+      "fecha_nacimiento":fechaNacimiento
     };
     db.collection("usuarios").doc(correo).set(usuario).then((_) =>
         print('Documento agregado con éxito para el correo: $correo'));
@@ -620,6 +638,96 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         15.0, 0.0, 20.0, 0.0),
                                     child: TextFormField(
+                                      controller: _model.textController8,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        labelText: 'Num. Identificacion',
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        errorBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        focusedErrorBorder:
+                                        UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                      ),
+                                      style: AzaBankTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                        fontFamily: 'Poppins',
+                                        color: AzaBankTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                      validator: _model.textController8Validator
+                                          .asValidator(context),
+                                      onChanged: (value) {
+                                        numCelularReg = value;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 10.0, 0.0, 10.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    4.0, 0.0, 0.0, 0.0),
+                                child: Container(
+                                  width: 310.0,
+                                  height: 55.0,
+                                  decoration: BoxDecoration(
+                                    color: Color(0x12000000),
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    border: Border.all(
+                                      color: AzaBankTheme.of(context).orange,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        15.0, 0.0, 20.0, 0.0),
+                                    child: TextFormField(
                                       controller: _model.textController6,
                                       obscureText: false,
                                       decoration: InputDecoration(
@@ -866,6 +974,45 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                           ),
                         ),
                         Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
+                                child: Container(
+                                  width: 310.0,
+                                  height: 55.0,
+                                  decoration: BoxDecoration(
+                                    color: Color(0x12000000),
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    border: Border.all(
+                                      color: Colors.orange, // Cambia el color del borde según tus necesidades
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  child: InkWell(
+                                    onTap: () => _selectDate(context),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            'Fecha de Nacimiento  ',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          Icon(Icons.calendar_today),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               5.0, 20.0, 5.0, 0.0),
                           child: Column(
@@ -877,7 +1024,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     5.0, 0.0, 0.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    registrar(correoReg, passwordReg, nombresReg,apellidosReg, numCelularReg, empresaReg, cargoReg);
+                                    registrar(correoReg, passwordReg, nombresReg,apellidosReg,numCedulaReg, numCelularReg, empresaReg, cargoReg, selectedDate);
 
 
                                     ScaffoldMessenger.of(context).showSnackBar(
