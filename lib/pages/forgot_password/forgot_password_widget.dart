@@ -520,7 +520,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                                         enabledBorder:
                                                             UnderlineInputBorder(
                                                           borderSide:
-                                                              BorderSide(
+                                                                   BorderSide(
                                                             color: Color(
                                                                 0x00000000),
                                                             width: 1.0,
