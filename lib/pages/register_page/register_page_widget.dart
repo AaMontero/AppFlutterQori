@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'register_page_model.dart';
 export 'register_page_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 
 class RegisterPageWidget extends StatefulWidget {
@@ -30,9 +28,11 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
   String? apellidosReg;
   String? numCelularReg;
   String? passwordReg;
-  registrar(correo, contrasenia, nombres, apellidos, numCelular) async {
+  String? cargoReg;
+  String? empresaReg;
+  registrar(correo, contrasenia, nombres, apellidos, numCelular, empresa, cargo) async {
     try {
-      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: correo,
         password: contrasenia,
       );
@@ -50,7 +50,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
       "correo": correo,
       "nombres": nombres,
       "apellidos": apellidos,
-      "numero_celular": numCelular
+      "numero_celular": numCelular,
+      "empresa": empresa,
+      "cargo": cargo,
     };
     db.collection("usuarios").doc(correo).set(usuario).then((_) =>
         print('Documento agregado con éxito para el correo: $correo'));
@@ -63,6 +65,11 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
     _model.textController1 ??= TextEditingController();
     _model.textController2 ??= TextEditingController();
     _model.textController3 ??= TextEditingController();
+    _model.textController4 ??= TextEditingController();
+    _model.textController5 ??= TextEditingController();
+    _model.textController6 ??= TextEditingController();
+    _model.textController7 ??= TextEditingController();
+
   }
 
   @override
@@ -613,6 +620,186 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         15.0, 0.0, 20.0, 0.0),
                                     child: TextFormField(
+                                      controller: _model.textController6,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        labelText: 'Institución/Empresa',
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        errorBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        focusedErrorBorder:
+                                        UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                      ),
+                                      style: AzaBankTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                        fontFamily: 'Poppins',
+                                        color: AzaBankTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                      validator: _model.textController6Validator
+                                          .asValidator(context),
+                                      onChanged: (value) {
+                                        empresaReg = value;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 10.0, 0.0, 10.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    4.0, 0.0, 0.0, 0.0),
+                                child: Container(
+                                  width: 310.0,
+                                  height: 55.0,
+                                  decoration: BoxDecoration(
+                                    color: Color(0x12000000),
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    border: Border.all(
+                                      color: AzaBankTheme.of(context).orange,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        15.0, 0.0, 20.0, 0.0),
+                                    child: TextFormField(
+                                      controller: _model.textController7,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        labelText: 'Cargo',
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        errorBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        focusedErrorBorder:
+                                        UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                      ),
+                                      style: AzaBankTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                        fontFamily: 'Poppins',
+                                        color: AzaBankTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                      validator: _model.textController7Validator
+                                          .asValidator(context),
+                                      onChanged: (value) {
+                                        cargoReg = value;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 10.0, 0.0, 10.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    4.0, 0.0, 0.0, 0.0),
+                                child: Container(
+                                  width: 310.0,
+                                  height: 55.0,
+                                  decoration: BoxDecoration(
+                                    color: Color(0x12000000),
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    border: Border.all(
+                                      color: AzaBankTheme.of(context).orange,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        15.0, 0.0, 20.0, 0.0),
+                                    child: TextFormField(
                                       controller: _model.textController2,
                                       obscureText: false,
                                       decoration: InputDecoration(
@@ -690,7 +877,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     5.0, 0.0, 0.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    registrar(correoReg, passwordReg, nombresReg,apellidosReg, numCelularReg);
+                                    registrar(correoReg, passwordReg, nombresReg,apellidosReg, numCelularReg, empresaReg, cargoReg);
 
 
                                     ScaffoldMessenger.of(context).showSnackBar(
