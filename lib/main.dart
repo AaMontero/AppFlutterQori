@@ -1,4 +1,5 @@
 import 'package:aza_bank/components/firebase_notification/firebaseNotificationAPI.dart';
+import 'package:aza_bank/pages/transfer_funds/transferencia_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -111,6 +112,7 @@ class _NavBarPageState extends State<NavBarPage> {
       'Creditos': CreditosWidget(),
       'SearchPage': SearchPageWidget(),
       'Settingspage': SettingspageWidget(),
+
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
     return Scaffold(

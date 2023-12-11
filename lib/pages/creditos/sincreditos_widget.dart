@@ -104,7 +104,7 @@ class _SinCreditosWidgetState extends State<SinCreditosWidget> {
 
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 30.0, 0.0),
+                                  20.0, 0.0, 30.0, 0.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,

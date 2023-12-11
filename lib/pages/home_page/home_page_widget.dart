@@ -9,6 +9,7 @@ import '/pages/notification/notification_widget.dart';
 import '/pages/withdraw_funds/withdraw_funds_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '/pages/transfer_funds/transferencia_widget.dart';
 import 'home_page_model.dart';
 export 'home_page_model.dart';
 
@@ -381,6 +382,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 ),
                               ),
                             ),
+
                             InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -441,6 +443,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 ),
                               ),
                             ),
+
                             InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -503,6 +506,72 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           ],
                         ),
                       ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            20.0, 10.0, 20.0, 20.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                await Navigator.push(
+                                  context,
+                                    MaterialPageRoute(builder: (context) => TransferenciaWidget())
+                                );
+                              },
+                              child: Container(
+                                width: 100.0,
+                                height: 100.0,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFEEEEEE),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 30.0,
+                                      color: Color(0x123629B7),
+                                      offset: Offset(0.0, -5.0),
+                                      spreadRadius: 30.0,
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/images/tranfer-icon.svg',
+                                      width: 28.0,
+                                      height: 28.0,
+                                      fit: BoxFit.scaleDown,
+                                    ),
+                                    Text(
+                                      'Transferencia',
+                                      textAlign: TextAlign.center,
+                                      style: AzaBankTheme.of(context)
+                                          .bodySmall
+                                          .override(
+                                        fontFamily: 'Poppins',
+                                        color: AzaBankTheme.of(context)
+                                            .secondaryText,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
+
+                          ],
+                        ),
+                      ),
+
 
 
                     ],
