@@ -75,71 +75,75 @@ class _CreditosWidgetState extends State<CreditosWidget> {
                           ),
                         ),
 
+
                       ],
                     ),
                   ),
 
-
-                  Column(
-                    children: [
-
-
-                      Padding(
-                        padding:
-                        EdgeInsetsDirectional.fromSTEB(30.0, 10.0, 30.0, 50.0),
-                        child: Container(
-
-                          width: 332.0,
-                          height: 310.0,
-                          decoration: BoxDecoration(
-                            color: Color(0x12000000),
-                            borderRadius: BorderRadius.circular(5.0),
-                            border: Border.all(
-                              color: AzaBankTheme.of(context).primaryText,
-                              width: 2.0,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //crossAxisAlignment: CrossAxisAlignment.start,
-                            children:[
-                              FFButtonWidget(
-                                onPressed: () => {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => SinCreditosWidget()),
-                                  ),
-                                },
-                                text: 'Solicitud Crédito',
-                                options: FFButtonOptions(
-                                  width: 300.0,
-                                  height: 55.0,
-                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                  color: AzaBankTheme.of(context).primary,
-                                  textStyle: AzaBankTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                  ),
-                                  elevation: 2.0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(12.0),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 10.0, 0.0),
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      child: Container(
+                        width: double.infinity,
+                        height: 150.0,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFEEEEEE),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 30.0,
+                              color: Color(0x123629B7),
+                              offset: Offset(0.0, 4.0),
+                              spreadRadius: 30.0,
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          //crossAxisAlignment: CrossAxisAlignment.start,
+                          children:[
+                            FFButtonWidget(
+                              onPressed: () => {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SinCreditosWidget()),
                                 ),
+                              },
+                              text: 'Solicitud Crédito',
+                              options: FFButtonOptions(
+                                width: 300.0,
+                                height: 55.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                color: AzaBankTheme.of(context).primary,
+                                textStyle: AzaBankTheme.of(context).titleSmall.override(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                ),
+                                elevation: 2.0,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(12.0),
                               ),
+                            ),
 
-                            ],
-                          ),
+                          ],
                         ),
                       ),
+                    ),
+                  ),
 
                     ],
                   ),
 
-                ],
+
 
 
 
@@ -150,8 +154,9 @@ class _CreditosWidgetState extends State<CreditosWidget> {
           ),
 
         ),
-      ),
-    );
+
+      );
+
   }
 
 }

@@ -1,3 +1,5 @@
+import 'package:flutter_svg/svg.dart';
+
 import '../../main.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
@@ -77,61 +79,91 @@ class _SinCreditosWidgetState extends State<SinCreditosWidget> {
                     children: [
 
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 200.0, 0.0, 0.0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // Añadir el mensaje de texto
                             Text(
-                              'No tienes crédito, puedes hacer clic en el siguiente botón y llenar el siguiente formulario',
+                              'No tienes crédito.',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.red, // Puedes cambiar el color según tu preferencia
-                                fontSize: 16.0,
+                                color: Colors.red,
+                                fontSize: 30.0,
                               ),
                             ),
                             SizedBox(height: 20.0),
-                            // Añadir el botón y el icono
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                FFButtonWidget(
-                                  onPressed: () => {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => SolicitCreditoWidget()),
-                                    ),
-                                  },
-                                  text: 'Solicitud Crédito',
-                                  options: FFButtonOptions(
-                                    width: 300.0,
-                                    height: 55.0,
-                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                    iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                    color: AzaBankTheme.of(context).primary,
-                                    textStyle: AzaBankTheme.of(context).titleSmall.override(
-                                      fontFamily: 'Poppins',
-                                      color: Colors.white,
-                                    ),
-                                    elevation: 2.0,
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12.0),
+                            Text(
+                              'Puedes hacer clic en el siguiente botón y llenar el siguiente formulario',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            SizedBox(height: 50.0),
+
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 30.0, 0.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/images/flecha_abajo.svg',
+                                    width: 100.0,
+                                    height: 60.0,
+                                    fit: BoxFit.cover,
                                   ),
+                                ],
+                              ),
+                            ),
+
+
+                          ],
+                        ),
+                      ),
+
+
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 100.0, 0.0, 0.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+
+                            FFButtonWidget(
+                            onPressed: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => SolicitCreditoWidget()),
+                                  ),
+                                },
+                              text: 'Solicitud de Credito',
+                              options: FFButtonOptions(
+                                width: 300.0,
+                                height: 55.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                  color: AzaBankTheme.of(context).primary,
+                                textStyle: AzaBankTheme.of(context).titleSmall.override(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
                                 ),
-                                Icon(
-                                  Icons.info_outline,
-                                  color: Colors.blue,
-                                  size: 24.0,
+                                elevation: 2.0,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
                                 ),
-                              ],
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ],
+
                   ),
                 ],
               ),

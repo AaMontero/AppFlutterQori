@@ -2,26 +2,27 @@ import '../../theme/aza_bank_util.dart';
 import '../../theme/form_field_controller.dart';
 import 'package:flutter/material.dart';
 
-class SolicitCreditoModel extends AzaBankModel with ChangeNotifier {
-  // State field(s) for PageView widget.
+class SolicitCreditoModel extends  AzaBankModel with ChangeNotifier {
   late PageController pageViewController;
 
-  // State field(s) for TextField widget.
   TextEditingController? textController1;
-  TextEditingController? textControllerResultado1;
+  TextEditingController? textController2;
+  TextEditingController? textController3;
+  TextEditingController? textControllerResultado;
   TextEditingController? textControllerCuotas;
   String? Function(BuildContext, String?)? textController1Validator;
+  String? Function(BuildContext, String?)? textController2Validator;
+  String? Function(BuildContext, String?)? textController3Validator;
+
+  late FocusNode focusNode;
 
   late bool camposLlenos;
   late bool mostrarError;
-  late FocusNode focusNode;
 
   double montoCredito = 0.0;
-  double intereses3 = 0.06;
-  double intereses6 = 0.1;
-  double gastosAdministrativos = 5;
+  double interes = 0.0;
+  double gastosAdministrativos = 5.0;
   int cuotas = 3;
-  int cuotas1 = 6;
   double resultado = 0.0;
 
   SolicitCreditoModel() {
@@ -33,33 +34,20 @@ class SolicitCreditoModel extends AzaBankModel with ChangeNotifier {
 
   void dispose() {
     textController1?.dispose();
-    textControllerResultado1?.dispose();
     textControllerCuotas?.dispose();
+    textControllerResultado?.dispose();
     pageViewController.dispose();
     focusNode.dispose();
   }
 
   void calcularResultados() {
-    double total;
-    if (cuotas == 3) {
-      total = (montoCredito * intereses3 + gastosAdministrativos) / cuotas;
-    } else if (cuotas == 6) {
-      total = (montoCredito * intereses6 + gastosAdministrativos) / cuotas1;
-    } else {
-      total = 0.0;
-    }
-
-    resultado = total;
+    interes = (cuotas == 3) ? 0.06 : (cuotas == 6) ? 0.1 : 0.0;
+    resultado = (montoCredito * interes + gastosAdministrativos) / cuotas;
+    textControllerResultado?.text = resultado.toString();
     notifyListeners();
   }
 
   void initState(BuildContext context) {
-    textController1Validator = (context, value) {
-      camposLlenos = value?.isNotEmpty ?? false;
-      mostrarError = focusNode.hasFocus && !camposLlenos;
-      return mostrarError ? 'Llenar campo Monto Credito' : null;
-    };
-
     textController1?.addListener(() {
       montoCredito = double.tryParse(textController1!.text) ?? 0.0;
       calcularResultados();
@@ -69,9 +57,11 @@ class SolicitCreditoModel extends AzaBankModel with ChangeNotifier {
       cuotas = int.tryParse(textControllerCuotas!.text) ?? 3;
       calcularResultados();
     });
-    textControllerCuotas?.addListener(() {
-      cuotas1 = int.tryParse(textControllerCuotas!.text) ?? 6;
-      calcularResultados();
-    });
+
+    textController1Validator = (context, value) {
+      camposLlenos = value?.isNotEmpty ?? false;
+      mostrarError = focusNode.hasFocus && !camposLlenos;
+      return mostrarError ? 'Llenar campo Monto Crédito' : null;
+    };
   }
 }
