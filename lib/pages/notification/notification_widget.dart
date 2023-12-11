@@ -43,11 +43,10 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           listaNotificaciones.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data = document.data() as Map<String, dynamic>;
             String concepto = data['concepto'];
-            double monto = data['monto'];
+            double monto = double.parse(data['monto'].toString());
             String fecha = data['fecha'].toString();
             return NotificacionObjeto(concepto: concepto, fecha: fecha, monto: monto);
           }));
-
         });
       }).catchError((error) {
         print("Error al obtener datos de Firebase: $error");
@@ -58,7 +57,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           listaNotificaciones.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data = document.data() as Map<String, dynamic>;
             String concepto = data['concepto'];
-            double monto = data['monto'];
+            double monto = double.parse(data['monto'].toString());
             String fecha = data['fecha'].toString();
             return NotificacionObjeto(concepto: concepto, fecha: fecha, monto: monto);
           }));
@@ -217,7 +216,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
       key: scaffoldKey,
       backgroundColor: AzaBankTheme.of(context).secondaryBackground,
       body: SafeArea(
-        child: SingleChildScrollView(
+
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -281,7 +280,9 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                   ],
                 ),
               ),
-              ListView.builder(
+              Expanded(
+
+                  child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: listaNotificaciones.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -291,10 +292,11 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                     listaNotificaciones[index].fecha,
                   );
                 },
-              ),
+              )),
+
             ],
           ),
-        ),
+
       ),
     );
   }
