@@ -90,7 +90,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
   Widget widgetNoticacion(concepto, monto, fecha){

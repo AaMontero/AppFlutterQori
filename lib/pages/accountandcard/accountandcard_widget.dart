@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:image_picker/image_picker.dart';
 import '/components/add_card_info_section/add_card_info_section_widget.dart';
 import '../../theme/aza_bank_theme.dart';
@@ -10,7 +11,6 @@ import 'accountandcard_model.dart';
 export 'accountandcard_model.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
-
 
 class AhorroAporte {
   String concepto;
@@ -23,10 +23,12 @@ class AhorroAporte {
     required this.fecha,
     required this.monto,
   });
-  String toString(){
+
+  String toString() {
     return "Objeto Ahorro" + this.concepto + this.fecha + this.monto.toString();
   }
 }
+
 class AccountandcardWidget extends StatefulWidget {
   const AccountandcardWidget({Key? key}) : super(key: key);
 
@@ -43,6 +45,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
   late AccountandcardModel _model;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+
   int get pageViewCurrentIndex => _model.pageViewController != null &&
           _model.pageViewController!.hasClients &&
           _model.pageViewController!.page != null
@@ -62,262 +65,213 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
     _unfocusNode.dispose();
     super.dispose();
   }
-  Widget widgetTransaccion(String fechaTransaccion, double montoTransaccion, String concepto){
-    return
-      Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(
-            0.0, 0.0, 0.0, 0.0),
-        child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-        Expanded(
-        child:
-        Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(
-          15.0, 00.0, 15.0, 10.0),
-        child: Container(
-        width: double.infinity,
-        height: 110.0,
-        decoration: BoxDecoration(
-          color: Color(0xFFEEEEEE),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 30.0,
-              color: Color(0x123629B7),
-              offset: Offset(0.0, 4.0),
-              spreadRadius: 30.0,
-            )
-          ],
-          borderRadius:
-          BorderRadius.circular(15.0),
-        ),
-        child: Padding(
-          padding:
-          EdgeInsetsDirectional.fromSTEB(
-              5.0, 5.0, 5.0, 5.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment:
-            MainAxisAlignment.spaceAround,
-            children: [
-              Padding(
-                padding: EdgeInsetsDirectional
-                    .fromSTEB(
-                    10.0, 0.0, 10.0, 0.0),
-                child: Row(
-                  mainAxisSize:
-                  MainAxisSize.max,
-                  mainAxisAlignment:
-                  MainAxisAlignment
-                      .spaceBetween,
+
+  Widget widgetTransaccion(
+      String fechaTransaccion, double montoTransaccion, String concepto) {
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+              child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(15.0, 00.0, 15.0, 10.0),
+            child: Container(
+              width: double.infinity,
+              height: 110.0,
+              decoration: BoxDecoration(
+                color: Color(0xFFEEEEEE),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 30.0,
+                    color: Color(0x123629B7),
+                    offset: Offset(0.0, 4.0),
+                    spreadRadius: 30.0,
+                  )
+                ],
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Column(
-                      mainAxisSize:
-                      MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Fecha: ',
-                          style:
-                          AzaBankTheme.of(
-                              context)
-                              .titleMedium
-                              .override(
-                            fontFamily:
-                            'Poppins',
-                            color: Colors
-                                .black,
-                            fontWeight:
-                            FontWeight
-                                .w600,
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                'Fecha: ',
+                                style: AzaBankTheme.of(context)
+                                    .titleMedium
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                '$fechaTransaccion',
+                                style: AzaBankTheme.of(context)
+                                    .titleMedium
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.black,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    Column(
-                      mainAxisSize:
-                      MainAxisSize.max,
-                      children: [
-                        Text(
-                          '$fechaTransaccion',
-                          style:
-                          AzaBankTheme.of(
-                              context)
-                              .titleMedium
-                              .override(
-                            fontFamily:
-                            'Poppins',
-                            color: Colors
-                                .black,
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                'Monto Transacción: ',
+                                style: AzaBankTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.black,
+                                    ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                '\$$montoTransaccion',
+                                style: AzaBankTheme.of(context)
+                                    .titleMedium
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: AzaBankTheme.of(context).primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                'Concepto',
+                                style: AzaBankTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.black,
+                                    ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                '$concepto',
+                                style: AzaBankTheme.of(context)
+                                    .titleMedium
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: AzaBankTheme.of(context).primary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsetsDirectional
-                    .fromSTEB(
-                    10.0, 0.0, 10.0, 0.0),
-                child: Row(
-                  mainAxisSize:
-                  MainAxisSize.max,
-                  mainAxisAlignment:
-                  MainAxisAlignment
-                      .spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisSize:
-                      MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Monto Transacción: ',
-                          style:
-                          AzaBankTheme.of(
-                              context)
-                              .titleSmall
-                              .override(
-                            fontFamily:
-                            'Poppins',
-                            color: Colors
-                                .black,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisSize:
-                      MainAxisSize.max,
-                      children: [
-                        Text(
-                          '\$$montoTransaccion',
-                          style:
-                          AzaBankTheme.of(
-                              context)
-                              .titleMedium
-                              .override(
-                            fontFamily:
-                            'Poppins',
-                            color: AzaBankTheme.of(
-                                context)
-                                .primary,
-                            fontWeight:
-                            FontWeight
-                                .bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional
-                    .fromSTEB(
-                    10.0, 0.0, 10.0, 0.0),
-                child: Row(
-                  mainAxisSize:
-                  MainAxisSize.max,
-                  mainAxisAlignment:
-                  MainAxisAlignment
-                      .spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisSize:
-                      MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Concepto',
-                          style:
-                          AzaBankTheme.of(
-                              context)
-                              .titleSmall
-                              .override(
-                            fontFamily:
-                            'Poppins',
-                            color: Colors
-                                .black,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisSize:
-                      MainAxisSize.max,
-                      children: [
-                        Text(
-                          '$concepto',
-                          style:
-                          AzaBankTheme.of(
-                              context)
-                              .titleMedium
-                              .override(
-                            fontFamily:
-                            'Poppins',
-                            color: AzaBankTheme.of(
-                                context)
-                                .primary,
-                            fontWeight:
-                            FontWeight
-                                .w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          )),
+        ],
       ),
-    )
-        ),
-            ],
-        ),
-      );
+    );
   }
 
-  getImageGaleria() async  {
+  getImageGaleria() async {
     final ImagePicker picker = ImagePicker();
     final XFile? image =
-      await picker.pickImage(source: ImageSource.gallery,
-      imageQuality: 40);
-      String now = DateTime.now().toString();
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 40);
+    String now = DateTime.now().toString();
 
     var path = '$email/ahorros/$now.jpg';
-    if(image!= null){
+    if (image != null) {
       file = File(image.path);
-      print("El path es el siguiente:"+ file.toString());
+      print("El path es el siguiente:" + file.toString());
       var refStorage = firebase_storage.FirebaseStorage.instance.ref(path);
       await refStorage.putFile(file!);
       url = await refStorage.getDownloadURL();
-    }else{
-      print ("La imagen es nula");
+    } else {
+      print("La imagen es nula");
     }
 
-    setState(() {
-
-    });
+    setState(() {});
   }
-  void cargarDatosDesdeFireBase(){
+
+  void cargarDatosDesdeFireBase() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
         email = user.email.toString();
-        CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
+        CollectionReference usuarios =
+            FirebaseFirestore.instance.collection('usuarios');
 
-        usuarios.doc(email).collection("ahorros").get().then((QuerySnapshot querySnapshot) {
+        usuarios
+            .doc(email)
+            .collection("ahorros")
+            .get()
+            .then((QuerySnapshot querySnapshot) {
           // Limpia la lista antes de agregar nuevos elementos
           setState(() {
             listaAportes.clear();
-            listaAportes.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+            listaAportes
+                .addAll(querySnapshot.docs.map((DocumentSnapshot document) {
+              Map<String, dynamic> data =
+                  document.data() as Map<String, dynamic>;
               String concepto = data['concepto'];
-              double monto = data['monto'];
+              double monto = double.parse(data['monto'].toString());
               String fecha = data['fecha'].toString();
-              return AhorroAporte(concepto: concepto, fecha: fecha, monto: monto);
+              return AhorroAporte(
+                  concepto: concepto, fecha: fecha, monto: monto);
             }));
-            saldoTotal = listaAportes.map((aporte) => aporte.monto).fold(0.0, (a, b) => a !+ b);
+            saldoTotal = listaAportes
+                .map((aporte) => aporte.monto)
+                .fold(0.0, (a, b) => a! + b);
           });
         }).catchError((error) {
           print("Error al obtener datos de Firebase: $error");
@@ -325,6 +279,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -381,614 +336,222 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                       scrollDirection: Axis.horizontal,
                       children: [
                         ListView.builder(
-                          itemCount: 1,
-                         itemBuilder: (BuildContext context, int index) {
-      return Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(
-                0.0, 20.0, 0.0, 10.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment:
-              MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    FFButtonWidget(
-                      onPressed: () {
-                        print('Button pressed ...');
-                      },
-                      text: 'Saldo/Trans',
-                      options: FFButtonOptions(
-                        width: 160.0,
-                        height: 40.0,
-                        padding:
-                        EdgeInsetsDirectional.fromSTEB(
-                            0.0, 0.0, 0.0, 0.0),
-                        iconPadding:
-                        EdgeInsetsDirectional.fromSTEB(
-                            0.0, 0.0, 0.0, 0.0),
-                        color: AzaBankTheme.of(context)
-                            .primary,
-                        textStyle: AzaBankTheme.of(context)
-                            .bodyMedium
-                            .override(
-                          fontFamily: 'Poppins',
-                          color: Colors.white,
-                        ),
-                        elevation: 2.0,
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1.0,
-                        ),
-                        borderRadius:
-                        BorderRadius.circular(12.0),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    FFButtonWidget(
-                      onPressed: () async {
-                        await getImageGaleria();
-                        print("Entra al metodo");
-                        if (file != null) {
-                          await Image.file(file!);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Foto Subida Correctamente',
-                                style: AzaBankTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Poppins',
-                                  color: AzaBankTheme.of(context).primary3,
-                                ),
-                              ),
-                              duration: Duration(milliseconds: 3000),
-                              backgroundColor: AzaBankTheme.of(context).green,
-                            ),
-                          );
-                        } else {
-                          print('No se ha subido ninguna foto.');
-                        }
-                      },
-                      text: 'Subir',
-                      iconData: Icons.camera_alt,
-
-
-                      options: FFButtonOptions(
-                        width: 160.0,
-                        height: 40.0,
-                        padding:
-                        EdgeInsetsDirectional.fromSTEB(
-                            0.0, 0.0, 0.0, 0.0),
-
-                        iconPadding:
-                        EdgeInsetsDirectional.fromSTEB(
-                            0.0, 0.0, 0.0, 0.0),
-
-                        color: Color(0xFFF2F1F9),
-                        textStyle: AzaBankTheme.of(context)
-                            .titleSmall
-                            .override(
-                          fontFamily: 'Poppins',
-                          color: Colors.black,
-                        ),
-                        elevation: 2.0,
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1.0,
-                        ),
-                        borderRadius:
-                        BorderRadius.circular(12.0),
-                      ),
-
-                    ),
-
-                  ],
-                ),
-
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(
-                0.0, 20.0, 0.0, 0.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment:
-                  MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 100.0,
-                      height: 100.0,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: Image.asset(
-                        'assets/images/dinero_icon.webp',
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
-                      child: RichText(
-                        text: TextSpan(
-                          style: AzaBankTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Poppins',
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: 'Saldo Actual: ',
-                              style: TextStyle(
-                                color: AzaBankTheme.of(context).primary,  // Color azul
-                              ),
-                            ),
-                            TextSpan(
-                              text: '\$$saldoTotal',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 30.0// Color negro
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: listaAportes.length,
-            itemBuilder: (BuildContext context, int index) {
-              return widgetTransaccion(
-                listaAportes[index].fecha,
-                listaAportes[index].monto,
-                listaAportes[index].concepto,
-              );
-            },
-          ),
-        ],
-      );
-    }
-
-                        ),
-
-                        SingleChildScrollView(
-                          primary: false,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10.0, 20.0, 0.0, 10.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
+                            itemCount: 1,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 20.0, 0.0, 10.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        FFButtonWidget(
-                                          onPressed: () async {
-                                            await _model.pageViewController
-                                                ?.animateToPage(
-                                              0,
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              curve: Curves.ease,
-                                            );
-                                          },
-                                          text: 'Account',
-                                          options: FFButtonOptions(
-                                            width: 150.0,
-                                            height: 40.0,
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 0.0),
-                                            iconPadding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 0.0),
-                                            color: Color(0xFFF2F1F9),
-                                            textStyle: AzaBankTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Poppins',
-                                                  color:
-                                                      AzaBankTheme.of(context)
-                                                          .secondaryText,
+                                        Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            FFButtonWidget(
+                                              onPressed: () {
+                                                print('Button pressed ...');
+                                              },
+                                              text: 'Saldo/Trans',
+                                              options: FFButtonOptions(
+                                                width: 160.0,
+                                                height: 40.0,
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        0.0, 0.0, 0.0, 0.0),
+                                                iconPadding:
+                                                    EdgeInsetsDirectional
+                                                        .fromSTEB(
+                                                            0.0, 0.0, 0.0, 0.0),
+                                                color: AzaBankTheme.of(context)
+                                                    .primary,
+                                                textStyle:
+                                                    AzaBankTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          color: Colors.white,
+                                                        ),
+                                                elevation: 2.0,
+                                                borderSide: BorderSide(
+                                                  color: Colors.transparent,
+                                                  width: 1.0,
                                                 ),
-                                            elevation: 2.0,
-                                            borderSide: BorderSide(
-                                              color: Colors.transparent,
-                                              width: 1.0,
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
+                                              ),
                                             ),
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
+                                          ],
+                                        ),
+                                        Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            FFButtonWidget(
+                                              onPressed: () async {
+                                                await getImageGaleria();
+                                                print("Entra al metodo");
+                                                if (file != null) {
+                                                  await Image.file(file!);
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Foto Subida Correctamente',
+                                                        style:
+                                                            AzaBankTheme.of(
+                                                                    context)
+                                                                .titleSmall
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  color: AzaBankTheme.of(
+                                                                          context)
+                                                                      .primary3,
+                                                                ),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 3000),
+                                                      backgroundColor:
+                                                          AzaBankTheme.of(
+                                                                  context)
+                                                              .green,
+                                                    ),
+                                                  );
+                                                } else {
+                                                  print(
+                                                      'No se ha subido ninguna foto.');
+                                                }
+                                              },
+                                              text: 'Subir',
+                                              iconData: Icons.camera_alt,
+                                              options: FFButtonOptions(
+                                                width: 160.0,
+                                                height: 40.0,
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        0.0, 0.0, 0.0, 0.0),
+                                                iconPadding:
+                                                    EdgeInsetsDirectional
+                                                        .fromSTEB(
+                                                            0.0, 0.0, 0.0, 0.0),
+                                                color: Color(0xFFF2F1F9),
+                                                textStyle:
+                                                    AzaBankTheme.of(context)
+                                                        .titleSmall
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          color: Colors.black,
+                                                        ),
+                                                elevation: 2.0,
+                                                borderSide: BorderSide(
+                                                  color: Colors.transparent,
+                                                  width: 1.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                    Column(
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 20.0, 0.0, 0.0),
+                                    child: Row(
                                       mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        FFButtonWidget(
-                                          onPressed: () {
-                                            print('Button pressed ...');
-                                          },
-                                          text: 'Cards',
-
-                                          options: FFButtonOptions(
-                                            width: 150.0,
-                                            height: 40.0,
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 0.0),
-                                            iconPadding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 0.0),
-                                            color: AzaBankTheme.of(context)
-                                                .primary,
-                                            textStyle: AzaBankTheme.of(context)
-                                                .titleSmall
-                                                .override(
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.white,
-                                                ),
-                                            elevation: 2.0,
-                                            borderSide: BorderSide(
-                                              color: Colors.transparent,
-                                              width: 1.0,
+                                        Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: 100.0,
+                                              height: 100.0,
+                                              clipBehavior: Clip.antiAlias,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Image.asset(
+                                                'assets/images/dinero_icon.webp',
+                                              ),
                                             ),
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      0.0, 10.0, 0.0, 10.0),
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  style:
+                                                      AzaBankTheme.of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Poppins',
+                                                            fontSize: 25.0,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: 'Saldo Actual: ',
+                                                      style: TextStyle(
+                                                        color: AzaBankTheme.of(
+                                                                context)
+                                                            .primary, // Color azul
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: '\$$saldoTotal',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize:
+                                                              30.0 // Color negro
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 20.0, 0.0, 0.0),
-                                child: InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 215.0,
-                                    decoration: BoxDecoration(
-                                      color: AzaBankTheme.of(context)
-                                          .primaryBackground,
-                                      image: DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: Image.asset(
-                                          'assets/images/fqvhn_1.png',
-                                        ).image,
-                                      ),
-                                      borderRadius: BorderRadius.circular(25.0),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          25.0, 25.0, 25.0, 25.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Text(
-                                                'John Smith',
-                                                style: AzaBankTheme.of(context)
-                                                    .displaySmall
-                                                    .override(
-                                                      fontFamily: 'Poppins',
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 33.0, 0.0, 0.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Text(
-                                                  'Amazon Platinium',
-                                                  style: AzaBankTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 10.0, 0.0, 0.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Text(
-                                                  ' 4756  **** **** 7645',
-                                                  style:
-                                                      AzaBankTheme.of(context)
-                                                          .titleSmall
-                                                          .override(
-                                                            fontFamily:
-                                                                'Poppins',
-                                                            color: Colors.white,
-                                                          ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 15.0, 0.0, 0.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Text(
-                                                  '\$3.469.52',
-                                                  style:
-                                                      AzaBankTheme.of(context)
-                                                          .headlineMedium
-                                                          .override(
-                                                            fontFamily:
-                                                                'Poppins',
-                                                            color: Colors.white,
-                                                          ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
                                   ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 20.0, 0.0, 0.0),
-                                child: InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 215.0,
-                                    decoration: BoxDecoration(
-                                      color: AzaBankTheme.of(context)
-                                          .primaryBackground,
-                                      image: DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: Image.asset(
-                                          'assets/images/mmfwi_2.png',
-                                        ).image,
-                                      ),
-                                      borderRadius: BorderRadius.circular(25.0),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          25.0, 25.0, 25.0, 25.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Text(
-                                                'John Smith',
-                                                style: AzaBankTheme.of(context)
-                                                    .displaySmall
-                                                    .override(
-                                                      fontFamily: 'Poppins',
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 33.0, 0.0, 0.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Text(
-                                                  'Amazon Platinium',
-                                                  style: AzaBankTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 10.0, 0.0, 0.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Text(
-                                                  ' 4756  **** **** 7645',
-                                                  style:
-                                                      AzaBankTheme.of(context)
-                                                          .titleSmall
-                                                          .override(
-                                                            fontFamily:
-                                                                'Poppins',
-                                                            color: Colors.white,
-                                                          ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 15.0, 0.0, 0.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Text(
-                                                  '\$3.469.52',
-                                                  style:
-                                                      AzaBankTheme.of(context)
-                                                          .headlineMedium
-                                                          .override(
-                                                            fontFamily:
-                                                                'Poppins',
-                                                            color: Colors.white,
-                                                          ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 50.0, 0.0, 0.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    FFButtonWidget(
-                                      onPressed: () async {
-                                        await showModalBottomSheet(
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          barrierColor: Color(0x00000000000),
-                                          context: context,
-                                          builder: (bottomSheetContext) {
-                                            return GestureDetector(
-                                              onTap: () => FocusScope.of(
-                                                      context)
-                                                  .requestFocus(_unfocusNode),
-                                              child: Padding(
-                                                padding: MediaQuery.of(
-                                                        bottomSheetContext)
-                                                    .viewInsets,
-                                                child: Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.65,
-                                                  child:
-                                                      AddCardInfoSectionWidget(),
-                                                ),
-                                              ),
+                                  Container(
+                                    child: Column(
+                                      children: [
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          itemCount: listaAportes.length,
+                                          itemBuilder: (BuildContext context, int index) {
+                                            return widgetTransaccion(
+                                              listaAportes[index].fecha,
+                                              listaAportes[index].monto,
+                                              listaAportes[index].concepto,
                                             );
                                           },
-                                        ).then((value) => setState(() {}));
-
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Card Added successfully ',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            duration:
-                                                Duration(milliseconds: 4000),
-                                            backgroundColor:
-                                                AzaBankTheme.of(context).orange,
-                                          ),
-                                        );
-                                      },
-                                      text: 'Add Card',
-                                      options: FFButtonOptions(
-                                        width: 130.0,
-                                        height: 55.0,
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 0.0, 0.0),
-                                        iconPadding:
-                                            EdgeInsetsDirectional.fromSTEB(
-                                                0.0, 0.0, 0.0, 0.0),
-                                        color: AzaBankTheme.of(context).primary,
-                                        textStyle: AzaBankTheme.of(context)
-                                            .titleSmall
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              color: Colors.white,
-                                            ),
-                                        elevation: 2.0,
-                                        borderSide: BorderSide(
-                                          color: Colors.transparent,
-                                          width: 1.0,
                                         ),
-                                        borderRadius:
-                                            BorderRadius.circular(12.0),
-                                      ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                                  )
+
+                                ],
+                              );
+                            }),
+
                       ],
                     ),
                   ),

@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
@@ -31,9 +33,30 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     _model.textController1 ??= TextEditingController();
     _model.textController2 ??= TextEditingController();
   }
-  Future<bool> logearSesionCorreoPass(correoPar, passwordPar) async {
-
+  Future<void> actualizarTokenEnFirestore(String email, String fcmToken) async {
+    print("Entra al metodo futuro");
     try {
+      print("Entra en el try");
+      DocumentReference usuariosCollection = FirebaseFirestore.instance.collection('usuarios').doc(email);
+      DocumentSnapshot usuariosSnapshot = await usuariosCollection.get();
+      if (usuariosSnapshot.exists) {
+        await usuariosCollection.update({'token': fcmToken});
+        print('Token actualizado correctamente en Firestore.');
+      } else {
+        print('No se encontró un usuario con el correo electrónico proporcionado.');
+      }
+    } catch (error) {
+      print('Error al actualizar el token en Firestore: $error');
+    }
+  }
+
+
+  Future<bool> logearSesionCorreoPass(correoPar, passwordPar) async {
+    final firebaseMessaging = FirebaseMessaging.instance;
+    final fCMToken = await firebaseMessaging.getToken();
+    print('El token que llega a logear es: $fCMToken');
+    try {
+      actualizarTokenEnFirestore(correoPar, fCMToken!);
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: correoPar,
           password: passwordPar
