@@ -34,10 +34,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   Future<bool> logearSesionCorreoPass(correoPar, passwordPar) async {
 
     try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: correoPar,
           password: passwordPar
       );
+
       return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -59,6 +60,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(

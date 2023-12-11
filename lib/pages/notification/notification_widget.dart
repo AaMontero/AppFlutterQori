@@ -95,7 +95,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   }
   Widget widgetNoticacion(concepto, monto, fecha){
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+      padding: EdgeInsetsDirectional.fromSTEB(10.0, 12.0, 20.0, 0.0),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
         height: 70.0,
