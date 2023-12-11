@@ -41,7 +41,7 @@ class SolicitCreditoModel extends  AzaBankModel with ChangeNotifier {
   }
 
   void calcularResultados() {
-    interes = (cuotas == 3) ? 0.06 : (cuotas == 6) ? 0.1 : 0.0;
+    interes = (cuotas == 3) ? 1.06 : (cuotas == 6) ? 1.1 : 0.0;
     resultado = (montoCredito * interes + gastosAdministrativos) / cuotas;
     textControllerResultado?.text = resultado.toString();
     notifyListeners();

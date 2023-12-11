@@ -298,13 +298,13 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                         _model.calcularResultados();
                                                       });
                                                     },
-                                                    items: [0, 3, 6].map((int cuotas) {
+                                                    items: [3, 6].map((int cuotas) {
                                                       return DropdownMenuItem<int>(
                                                         value: cuotas,
                                                         child: Padding(
                                                           padding: EdgeInsets.symmetric(vertical: 8.0),
                                                           child: Text(
-                                                            cuotas == 0 ? '0' : cuotas.toString(),
+                                                            cuotas == 3 ? '3' : cuotas.toString(),
                                                             style: TextStyle(
                                                               color: AzaBankTheme.of(context).primaryText,
                                                               fontFamily: 'Poppins',
