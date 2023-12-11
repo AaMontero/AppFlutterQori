@@ -1,4 +1,6 @@
+import 'package:aza_bank/components/firebase_notification/firebaseNotificationAPI.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'theme/aza_bank_theme.dart';
@@ -15,6 +17,7 @@ void main() async {
 
   await AzaBankTheme.initialize();
   await Firebase.initializeApp();
+  await firebaseNotificationAPI().initNotifications();
   runApp(MyApp());
 }
 
@@ -57,17 +60,15 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: _themeMode,
-      home: WelcomePageWidget(),
+      home: FirebaseAuth.instance.currentUser == null? WelcomePageWidget(): NavBarPage(),
     );
   }
 }
 
 class NavBarPage extends StatefulWidget {
   NavBarPage({Key? key, this.initialPage, this.page}) : super(key: key);
-
   final String? initialPage;
   final Widget? page;
-
   @override
   _NavBarPageState createState() => _NavBarPageState();
 }
@@ -75,6 +76,7 @@ class NavBarPage extends StatefulWidget {
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
   String _currentPageName = 'HomePage';
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   late Widget? _currentPage;
 
   @override
@@ -95,6 +97,15 @@ class _NavBarPageState extends State<NavBarPage> {
 
   @override
   Widget build(BuildContext context) {
+    firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
     final tabs = {
       'HomePage': HomePageWidget(),
       'Creditos': CreditosWidget(),
