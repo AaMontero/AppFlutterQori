@@ -8,6 +8,8 @@ class ComfirmTranferModel extends AzaBankModel {
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
 
+
+
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {}

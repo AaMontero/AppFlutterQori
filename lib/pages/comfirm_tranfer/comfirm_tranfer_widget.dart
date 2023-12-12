@@ -1,5 +1,4 @@
 import 'package:aza_bank/pages/transfer_funds/transferencia_widget.dart';
-
 import '/components/comfirm_tranfer_section/comfirm_tranfer_section_widget.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
@@ -10,7 +9,16 @@ import 'comfirm_tranfer_model.dart';
 export 'comfirm_tranfer_model.dart';
 
 class ComfirmTranferWidget extends StatefulWidget {
-  const ComfirmTranferWidget({Key? key}) : super(key: key);
+   final String opcionSeleccionada;
+   final String montoTransferencia;
+   final TextEditingController cuentaDestinoController;
+
+   const ComfirmTranferWidget({
+     Key? key,
+     required this.opcionSeleccionada,
+     required this.montoTransferencia,
+     required this.cuentaDestinoController,
+   }) : super(key: key);
 
   @override
   _ComfirmTranferWidgetState createState() => _ComfirmTranferWidgetState();
@@ -21,6 +29,9 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+
+
+
 
   @override
   void initState() {
@@ -33,11 +44,13 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
     _model.dispose();
 
     _unfocusNode.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -64,15 +77,9 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                         highlightColor: Colors.transparent,
                         onTap: () async {
 
-                            await Navigator.push(
+                            Navigator.push(
                               context,
-                              PageTransition(
-                                type: PageTransitionType.scale,
-                                alignment: Alignment.bottomCenter,
-                                duration: Duration(milliseconds: 300),
-                                reverseDuration: Duration(milliseconds: 300),
-                                child: NavBarPage(initialPage: 'homePage'),
-                              ),
+                                MaterialPageRoute(builder: (context) => TransferenciaWidget()),
                             );
                           },
 
@@ -137,7 +144,7 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  'From Account',
+                                  'Monto Transferencia',
                                   style: AzaBankTheme.of(context).bodySmall.override(
                                     fontFamily: 'Poppins',
                                     color: AzaBankTheme.of(context).secondaryText,
@@ -149,7 +156,7 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  '809678856757',
+                                  '\$ ${widget.montoTransferencia}',
                                   style: AzaBankTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',
                                     color: AzaBankTheme.of(context).secondaryText,
@@ -174,7 +181,7 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  'Beneficiary',
+                                  'Cuenta Destino',
                                   style: AzaBankTheme.of(context).bodySmall.override(
                                     fontFamily: 'Poppins',
                                     color: AzaBankTheme.of(context).secondaryText,
@@ -186,7 +193,7 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  'Adonis Justin Mark',
+                                  widget.cuentaDestinoController.text,
                                   style: AzaBankTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',
                                     color: AzaBankTheme.of(context).secondaryText,
@@ -211,7 +218,7 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  'Beneficiary Account',
+                                  'Propetario Cuenta Destino',
                                   style: AzaBankTheme.of(context).bodySmall.override(
                                     fontFamily: 'Poppins',
                                     color: AzaBankTheme.of(context).secondaryText,
@@ -223,7 +230,7 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  '78687868686',
+                                  'Anthony Montero',
                                   style: AzaBankTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',
                                     color: AzaBankTheme.of(context).secondaryText,
@@ -248,7 +255,7 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  'Beneficiary Bank',
+                                  'Banco',
                                   style: AzaBankTheme.of(context).bodySmall.override(
                                     fontFamily: 'Poppins',
                                     color: AzaBankTheme.of(context).secondaryText,
@@ -260,86 +267,10 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  'GTBank ',
+                                  widget.opcionSeleccionada!,
                                   style: AzaBankTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',
                                     color: AzaBankTheme.of(context).secondaryText,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        indent: 20.0,
-                        endIndent: 20.0,
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 0.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text(
-                                  'Amount',
-                                  style: AzaBankTheme.of(context).bodySmall.override(
-                                    fontFamily: 'Poppins',
-                                    color: AzaBankTheme.of(context).secondaryText,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text(
-                                  '\$ 5000',
-                                  style: AzaBankTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    color: AzaBankTheme.of(context).secondaryText,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        indent: 20.0,
-                        endIndent: 20.0,
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 0.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text(
-                                  'Note',
-                                  style: AzaBankTheme.of(context).bodySmall.override(
-                                    fontFamily: 'Poppins',
-                                    color: AzaBankTheme.of(context).secondaryText,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text(
-                                  'From Jimy',
-                                  style: AzaBankTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    color: AzaBankTheme.of(context).secondaryText,
-                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],

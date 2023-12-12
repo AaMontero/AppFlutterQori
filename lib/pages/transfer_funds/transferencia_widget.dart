@@ -68,7 +68,6 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
     _unfocusNode.dispose();
     montoController.dispose();
     montoController.text = '\$0.00';
-
     cuentaDestinoController.dispose();
     super.dispose();
   }
@@ -189,6 +188,34 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional
+                                          .fromSTEB(
+                                          0.0, 0.0, 0.0, 5.0),
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style:
+                                          AzaBankTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                            fontFamily:
+                                            'Poppins',
+                                            fontSize: 20.0,
+                                            fontWeight:
+                                            FontWeight.w600,
+                                          ),
+                                          children: [
+                                            TextSpan(text: 'Nombre Completo ',
+                                              style: TextStyle(
+                                                color: AzaBankTheme.of(
+                                                    context)
+                                                    .primary, // Color azul
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                               Padding (
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 0.0, 5.0),
@@ -224,34 +251,8 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
                                   ),
                                 ),
                               ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional
-                                          .fromSTEB(
-                                          0.0, 0.0, 0.0, 5.0),
-                                      child: RichText(
-                                        text: TextSpan(
-                                          style:
-                                          AzaBankTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                            fontFamily:
-                                            'Poppins',
-                                            fontSize: 20.0,
-                                            fontWeight:
-                                            FontWeight.w600,
-                                          ),
-                                          children: [
-                                            TextSpan(text: 'Nombre: ',
-                                              style: TextStyle(
-                                                color: AzaBankTheme.of(
-                                                    context)
-                                                    .primary, // Color azul
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
+
+
                                         ],
                                     ),
 
@@ -305,7 +306,6 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
                           child: DropdownButton<String>(
                             value: opcionSeleccionada,
                             icon: const Icon(Icons.arrow_downward),
-
                             iconSize: 24,
                             elevation: 16,
                             style: const TextStyle(color: Colors.black),
@@ -326,7 +326,7 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
                           ),
                         ),
                         SizedBox(height: 20),
-                        //Text(
+                                               //Text(
                           //'Opción seleccionada: $opcionSeleccionada',
                           //style: TextStyle(fontSize: 16),
                         //),
@@ -352,11 +352,15 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
                                 milliseconds: 300),
                             reverseDuration: Duration(
                                 milliseconds: 300),
-                            child: ComfirmTranferWidget(),
+                            child: ComfirmTranferWidget(
+                              opcionSeleccionada: opcionSeleccionada,
+                              montoTransferencia: montoController.text,
+                              cuentaDestinoController: cuentaDestinoController,
+                            ),
                           ),
                         );
                       },
-                      text: 'Comfirm',
+                      text: 'Continuar',
                       options: FFButtonOptions(
                         width: 130.0,
                         height: 55.0,
