@@ -244,7 +244,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
       print(url);
       Map<String, dynamic> nuevaNotificacion = {
         'concepto': 'Inversion',
-        'estado': false,
+        'estado': true,
         'fecha' : fechaFormateada,
         'identificacion': identificacion,
         'urlImagen': url

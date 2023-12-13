@@ -241,7 +241,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
       url = await refStorage.getDownloadURL();
       Map<String, dynamic> nuevaNotificacion = {
         'concepto': 'Ahorros',
-        'estado': false,
+        'estado': true,
         'fecha' : fechaFormateada,
         'identificacion': identificacion,
         'urlImagen': url
