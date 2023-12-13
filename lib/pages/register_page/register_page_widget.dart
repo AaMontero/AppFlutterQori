@@ -72,8 +72,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
       "cargo": cargo,
       "fecha_nacimiento":fechaNacimiento
     };
-    db.collection("usuarios").doc(correo).set(usuario).then((_) =>
-        print('Documento agregado con éxito para el correo: $correo'));
+    db.collection("usuarios").doc(numIdentificacion).set(usuario).then((_) =>
+        print('Documento agregado con éxito para el Identificador $numIdentificacion'));
   }
 
   @override
