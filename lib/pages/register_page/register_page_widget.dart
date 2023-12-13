@@ -88,7 +88,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
           "cargo": cargo,
           "fecha_nacimiento": fechaNacimiento
         };
-        db.collection("usuarios").doc(correo).set(usuario).then((_) =>
+        db.collection("usuarios").doc(numIdentificacion).set(usuario).then((_) =>
             print('Documento agregado con éxito para el correo: $correo'));
       } on FirebaseAuthException catch (e) {
         if (e.code == 'Contraseña debil') {
