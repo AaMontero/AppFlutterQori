@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
@@ -30,7 +29,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => LoginPageModel());
-
     _model.textController1 ??= TextEditingController();
     _model.textController2 ??= TextEditingController();
   }
@@ -38,14 +36,23 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     print("Entra al metodo futuro");
     try {
       print("Entra en el try");
-      DocumentReference usuariosCollection = FirebaseFirestore.instance.collection('usuarios').doc(email);
-      DocumentSnapshot usuariosSnapshot = await usuariosCollection.get();
-      if (usuariosSnapshot.exists) {
-        await usuariosCollection.update({'token': fcmToken});
-        print('Token actualizado correctamente en Firestore.');
-      } else {
-        print('No se encontró un usuario con el correo electrónico proporcionado.');
+      CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
+      QuerySnapshot querySnapshot = await usuarios.where('correo', isEqualTo: email).get();
+      if(querySnapshot.docs.isNotEmpty){
+        print("Esta entrando a la parte del token");
+        DocumentSnapshot document = querySnapshot.docs.first;
+        DocumentReference usuariosCollection = document.reference;
+        DocumentSnapshot usuariosSnapshot = await usuariosCollection.get();
+        if (usuariosSnapshot.exists) {
+          await usuariosCollection.update({'token': fcmToken});
+          print('Token actualizado correctamente en Firestore.');
+        } else {
+          print('No se encontró un usuario con el correo electrónico proporcionado.');
+        }
+      }else{
+
       }
+
     } catch (error) {
       print('Error al actualizar el token en Firestore: $error');
     }
