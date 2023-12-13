@@ -51,7 +51,11 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
 
   final TextEditingController montoController = TextEditingController();
   final TextEditingController cuentaDestinoController = TextEditingController();
+  final TextEditingController propietarioController = TextEditingController();
+
     final NumberFormat currencyFormat = NumberFormat("#,##0.00", "es_ES");
+
+
 
 
   @override
@@ -69,6 +73,7 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
     montoController.dispose();
     montoController.text = '\$0.00';
     cuentaDestinoController.dispose();
+    propietarioController.dispose();
     super.dispose();
   }
 
@@ -278,6 +283,16 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
                   ),
 
                   Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(
+                        15.0, 0.0, 10.0, 0.0),
+                    child: TextField(
+                      controller: propietarioController,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(labelText: 'Propietario'),
+                    ),
+                  ),
+
+                  Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(
                         0.0, 20.0, 0.0, 0.0),
                     child: Container(
@@ -356,6 +371,8 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
                               opcionSeleccionada: opcionSeleccionada,
                               montoTransferencia: montoController.text,
                               cuentaDestinoController: cuentaDestinoController,
+                              propietarioController: propietarioController,
+
                             ),
                           ),
                         );

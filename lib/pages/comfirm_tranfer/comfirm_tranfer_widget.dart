@@ -3,6 +3,7 @@ import '/components/comfirm_tranfer_section/comfirm_tranfer_section_widget.dart'
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
+
 import '/main.dart';
 import 'package:flutter/material.dart';
 import 'comfirm_tranfer_model.dart';
@@ -12,12 +13,14 @@ class ComfirmTranferWidget extends StatefulWidget {
    final String opcionSeleccionada;
    final String montoTransferencia;
    final TextEditingController cuentaDestinoController;
+   final TextEditingController propietarioController;
 
    const ComfirmTranferWidget({
      Key? key,
      required this.opcionSeleccionada,
      required this.montoTransferencia,
      required this.cuentaDestinoController,
+     required this.propietarioController,
    }) : super(key: key);
 
   @override
@@ -29,9 +32,6 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
-
-
-
 
   @override
   void initState() {
@@ -230,7 +230,7 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  'Anthony Montero',
+                                  widget.propietarioController.text,
                                   style: AzaBankTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',
                                     color: AzaBankTheme.of(context).secondaryText,

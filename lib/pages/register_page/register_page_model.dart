@@ -34,6 +34,11 @@ class RegisterPageModel extends AzaBankModel {
     textController1?.dispose();
     textController2?.dispose();
     textController3?.dispose();
+    textController4?.dispose();
+    textController5?.dispose();
+    textController6?.dispose();
+    textController7?.dispose();
+    textController8?.dispose();
   }
 
   /// Additional helper methods are added here.

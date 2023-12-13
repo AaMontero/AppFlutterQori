@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'register_page_model.dart';
 export 'register_page_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 
 
 class RegisterPageWidget extends StatefulWidget {
@@ -31,6 +31,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
   String? empresaReg;
   String? numCedulaReg;
   DateTime selectedDate = DateTime.now();
+
+
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -46,35 +49,57 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
       });
     }
   }
-  registrar(correo, contrasenia, nombres, apellidos,numIdentificacion ,numCelular, empresa, cargo, fechaNacimiento) async {
+  bool isValidEmail(String email) {
+
+    final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+$');
+    return emailRegex.hasMatch(email);
+  }
+  registrar(String correo, String contrasenia, String nombres, String apellidos,
+      String numIdentificacion, String numCelular, String empresa, String cargo,
+      DateTime fechaNacimiento) async {
+    // Validaciones
+    if (correo.isEmpty || !isValidEmail(correo)) {
+      print('Correo electrónico no válido');
+      return;
+    }
+
+    if (contrasenia.length < 6) {
+      print(
+          'La contraseña es demasiado corta. Debe tener al menos 6 caracteres.');
+      return;
+    }
+
+
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: correo,
         password: contrasenia,
       );
+      final usuario = <String, dynamic>{
+        "correo": correo,
+        "nombres": nombres,
+        "apellidos": apellidos,
+        "identificacion": numIdentificacion,
+        "numero_celular": numCelular,
+        "empresa": empresa,
+        "cargo": cargo,
+        "fecha_nacimiento": fechaNacimiento
+      };
+      db.collection("usuarios").doc(correo).set(usuario).then((_) =>
+          print('Documento agregado con éxito para el correo: $correo'));
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+      if (e.code == 'Contraseña debil') {
+        print('La contraseña proporcionada es demasiado débil.');
+      } else if (e.code == 'correo ya en uso') {
+        print('La cuenta ya existe para ese correo electrónico.');
+      } else {
+        print('Error en FirebaseAuth: $e');
       }
     } catch (e) {
-      print(e);
+      print('Error al registrar: $e');
     }
-
-    final usuario = <String, dynamic>{
-      "correo": correo,
-      "nombres": nombres,
-      "apellidos": apellidos,
-      "identificacion": numIdentificacion,
-      "numero_celular": numCelular,
-      "empresa": empresa,
-      "cargo": cargo,
-      "fecha_nacimiento":fechaNacimiento
-    };
-    db.collection("usuarios").doc(correo).set(usuario).then((_) =>
-        print('Documento agregado con éxito para el correo: $correo'));
   }
+
 
   @override
   void initState() {
@@ -87,14 +112,23 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
     _model.textController5 ??= TextEditingController();
     _model.textController6 ??= TextEditingController();
     _model.textController7 ??= TextEditingController();
-
+    _model.textController8 ??= TextEditingController();
   }
 
   @override
   void dispose() {
     _model.dispose();
-
+    _model.textController1?.dispose();
+    _model.textController2?.dispose();
+    _model.textController3?.dispose();
+    _model.textController4?.dispose();
+    _model.textController5?.dispose();
+    _model.textController6?.dispose();
+    _model.textController7?.dispose();
+    _model.textController8?.dispose();
     _unfocusNode.dispose();
+
+
     super.dispose();
   }
 
@@ -104,7 +138,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: AzaBankTheme.of(context).primary,
+        backgroundColor: AzaBankTheme
+            .of(context)
+            .primary,
         body: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -113,11 +149,13 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                 width: double.infinity,
                 height: 100.0,
                 decoration: BoxDecoration(
-                  color: AzaBankTheme.of(context).primary,
+                  color: AzaBankTheme
+                      .of(context)
+                      .primary,
                 ),
                 child: Padding(
                   padding:
-                      EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 25.0),
+                  EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 25.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -125,7 +163,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                     children: [
                       Padding(
                         padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 2.0),
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 2.0),
                         child: InkWell(
                           splashColor: Colors.transparent,
                           focusColor: Colors.transparent,
@@ -152,15 +190,18 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                       ),
                       Padding(
                         padding:
-                            EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
+                        EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                         child: Text(
                           'Registro',
                           style:
-                              AzaBankTheme.of(context).headlineMedium.override(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                          AzaBankTheme
+                              .of(context)
+                              .headlineMedium
+                              .override(
+                            fontFamily: 'Poppins',
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
@@ -174,7 +215,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                 width: double.infinity,
                 height: 100.0,
                 decoration: BoxDecoration(
-                  color: AzaBankTheme.of(context).secondaryBackground,
+                  color: AzaBankTheme
+                      .of(context)
+                      .secondaryBackground,
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(0.0),
                     bottomRight: Radius.circular(0.0),
@@ -184,7 +227,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                 ),
                 child: Padding(
                   padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 20.0),
+                  EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 20.0),
                   child: SingleChildScrollView(
                     primary: false,
                     child: Column(
@@ -200,12 +243,15 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                             children: [
                               Text(
                                 'Bienvenido',
-                                style: AzaBankTheme.of(context)
+                                style: AzaBankTheme
+                                    .of(context)
                                     .displaySmall
                                     .override(
-                                      fontFamily: 'Poppins',
-                                      color: AzaBankTheme.of(context).primary1,
-                                    ),
+                                  fontFamily: 'Poppins',
+                                  color: AzaBankTheme
+                                      .of(context)
+                                      .primary1,
+                                ),
                               ),
                             ],
                           ),
@@ -215,7 +261,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                           children: [
                             Text(
                               'Crear una cuenta nueva',
-                              style: AzaBankTheme.of(context).bodyMedium,
+                              style: AzaBankTheme
+                                  .of(context)
+                                  .bodyMedium,
                             ),
                           ],
                         ),
@@ -235,96 +283,111 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 40.0, 0.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    4.0, 0.0, 0.0, 0.0),
-                                child: Container(
-                                  width: 310.0,
-                                  height: 55.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0x12000000),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: AzaBankTheme.of(context).orange,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  child: Padding(
+                        Form(
+                          autovalidateMode: AutovalidateMode.always,
+                              child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 40.0, 0.0, 10.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        15.0, 0.0, 20.0, 0.0),
-                                    child: TextFormField(
-                                      controller: _model.textController1,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Correo Electrónico',
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                            UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
+                                        4.0, 0.0, 0.0, 0.0),
+                                    child: Container(
+                                      width: 310.0,
+                                      height: 55.0,
+                                      decoration: BoxDecoration(
+                                        color: Color(0x12000000),
+                                        borderRadius: BorderRadius.circular(5.0),
+                                        border: Border.all(
+                                          color: AzaBankTheme
+                                              .of(context)
+                                              .orange,
+                                          width: 2.0,
                                         ),
                                       ),
-                                      style: AzaBankTheme.of(context)
-                                          .bodyMedium
-                                          .override(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            15.0, 0.0, 20.0, 0.0),
+                                        child: TextFormField(
+                                          controller: _model.textController1,
+                                          obscureText: false,
+                                          decoration: InputDecoration(
+                                            labelText: 'Correo Electrónico',
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1.0,
+                                              ),
+                                              borderRadius: const BorderRadius.only(
+                                                topLeft: Radius.circular(4.0),
+                                                topRight: Radius.circular(4.0),
+                                              ),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1.0,
+                                              ),
+                                              borderRadius: const BorderRadius.only(
+                                                topLeft: Radius.circular(4.0),
+                                                topRight: Radius.circular(4.0),
+                                              ),
+                                            ),
+                                            errorBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1.0,
+                                              ),
+                                              borderRadius: const BorderRadius.only(
+                                                topLeft: Radius.circular(4.0),
+                                                topRight: Radius.circular(4.0),
+                                              ),
+                                            ),
+                                            focusedErrorBorder:
+                                            UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1.0,
+                                              ),
+                                              borderRadius: const BorderRadius.only(
+                                                topLeft: Radius.circular(4.0),
+                                                topRight: Radius.circular(4.0),
+                                              ),
+                                            ),
+                                          ),
+                                          style: AzaBankTheme
+                                              .of(context)
+                                              .bodyMedium
+                                              .override(
                                             fontFamily: 'Poppins',
-                                            color: AzaBankTheme.of(context)
+                                            color: AzaBankTheme
+                                                .of(context)
                                                 .primaryText,
                                           ),
-                                      validator: _model.textController1Validator
-                                          .asValidator(context),
-                                      onChanged: (value) {
-                                        correoReg = value;
-                                      },
+                                          validator: (value) {
+                                            if (value == null || value.isEmpty) {
+                                              return 'Por favor, ingresa un correo electrónico';
+                                            }
+                                            if (!isValidEmail(value)) {
+                                              return 'Correo electrónico no válido';
+                                            }
+                                            return null;
+                                          },
+                                          onChanged: (value) {
+                                            correoReg = value;
+                                          },
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
                         ),
+
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 10.0, 0.0, 10.0),
@@ -342,7 +405,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     color: Color(0x12000000),
                                     borderRadius: BorderRadius.circular(5.0),
                                     border: Border.all(
-                                      color: AzaBankTheme.of(context).orange,
+                                      color: AzaBankTheme
+                                          .of(context)
+                                          .orange,
                                       width: 2.0,
                                     ),
                                   ),
@@ -385,7 +450,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           ),
                                         ),
                                         focusedErrorBorder:
-                                            UnderlineInputBorder(
+                                        UnderlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
                                             width: 1.0,
@@ -396,33 +461,45 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           ),
                                         ),
                                         suffixIcon: InkWell(
-                                          onTap: () => setState(
-                                            () => _model.passwordVisibility =
+                                          onTap: () =>
+                                              setState(
+                                                    () =>
+                                                _model.passwordVisibility =
                                                 !_model.passwordVisibility,
-                                          ),
+                                              ),
                                           focusNode:
-                                              FocusNode(skipTraversal: true),
+                                          FocusNode(skipTraversal: true),
                                           child: Icon(
                                             _model.passwordVisibility
                                                 ? Icons.visibility_outlined
                                                 : Icons.visibility_off_outlined,
-                                            color: AzaBankTheme.of(context)
+                                            color: AzaBankTheme
+                                                .of(context)
                                                 .primaryText,
                                             size: 22.0,
                                           ),
                                         ),
                                       ),
-                                      style: AzaBankTheme.of(context)
+                                      style: AzaBankTheme
+                                          .of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Poppins',
-                                            color: AzaBankTheme.of(context)
-                                                .primaryText,
-                                          ),
+                                        fontFamily: 'Poppins',
+                                        color: AzaBankTheme
+                                            .of(context)
+                                            .primaryText,
+                                      ),
                                       keyboardType:
-                                          TextInputType.visiblePassword,
-                                      validator: _model.textController3Validator
-                                          .asValidator(context),
+                                      TextInputType.visiblePassword,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Por favor, ingresa una contraseña';
+                                        }
+                                        if (value.length < 6) {
+                                          return 'La contraseña debe tener al menos 6 caracteres';
+                                        }
+                                        return null;
+                                      },
                                       onChanged: (value) {
                                         passwordReg = value;
                                       },
@@ -450,7 +527,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     color: Color(0x12000000),
                                     borderRadius: BorderRadius.circular(5.0),
                                     border: Border.all(
-                                      color: AzaBankTheme.of(context).orange,
+                                      color: AzaBankTheme
+                                          .of(context)
+                                          .orange,
                                       width: 2.0,
                                     ),
                                   ),
@@ -493,7 +572,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           ),
                                         ),
                                         focusedErrorBorder:
-                                            UnderlineInputBorder(
+                                        UnderlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
                                             width: 1.0,
@@ -504,13 +583,15 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           ),
                                         ),
                                       ),
-                                      style: AzaBankTheme.of(context)
+                                      style: AzaBankTheme
+                                          .of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Poppins',
-                                            color: AzaBankTheme.of(context)
-                                                .primaryText,
-                                          ),
+                                        fontFamily: 'Poppins',
+                                        color: AzaBankTheme
+                                            .of(context)
+                                            .primaryText,
+                                      ),
                                       validator: _model.textController4Validator
                                           .asValidator(context),
                                       onChanged: (value) {
@@ -540,7 +621,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     color: Color(0x12000000),
                                     borderRadius: BorderRadius.circular(5.0),
                                     border: Border.all(
-                                      color: AzaBankTheme.of(context).orange,
+                                      color: AzaBankTheme
+                                          .of(context)
+                                          .orange,
                                       width: 2.0,
                                     ),
                                   ),
@@ -583,7 +666,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           ),
                                         ),
                                         focusedErrorBorder:
-                                            UnderlineInputBorder(
+                                        UnderlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
                                             width: 1.0,
@@ -594,13 +677,15 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           ),
                                         ),
                                       ),
-                                      style: AzaBankTheme.of(context)
+                                      style: AzaBankTheme
+                                          .of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Poppins',
-                                            color: AzaBankTheme.of(context)
-                                                .primaryText,
-                                          ),
+                                        fontFamily: 'Poppins',
+                                        color: AzaBankTheme
+                                            .of(context)
+                                            .primaryText,
+                                      ),
                                       validator: _model.textController5Validator
                                           .asValidator(context),
                                       onChanged: (value) {
@@ -630,7 +715,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     color: Color(0x12000000),
                                     borderRadius: BorderRadius.circular(5.0),
                                     border: Border.all(
-                                      color: AzaBankTheme.of(context).orange,
+                                      color: AzaBankTheme
+                                          .of(context)
+                                          .orange,
                                       width: 2.0,
                                     ),
                                   ),
@@ -684,11 +771,13 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           ),
                                         ),
                                       ),
-                                      style: AzaBankTheme.of(context)
+                                      style: AzaBankTheme
+                                          .of(context)
                                           .bodyMedium
                                           .override(
                                         fontFamily: 'Poppins',
-                                        color: AzaBankTheme.of(context)
+                                        color: AzaBankTheme
+                                            .of(context)
                                             .primaryText,
                                       ),
                                       validator: _model.textController8Validator
@@ -720,7 +809,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     color: Color(0x12000000),
                                     borderRadius: BorderRadius.circular(5.0),
                                     border: Border.all(
-                                      color: AzaBankTheme.of(context).orange,
+                                      color: AzaBankTheme
+                                          .of(context)
+                                          .orange,
                                       width: 2.0,
                                     ),
                                   ),
@@ -774,11 +865,13 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           ),
                                         ),
                                       ),
-                                      style: AzaBankTheme.of(context)
+                                      style: AzaBankTheme
+                                          .of(context)
                                           .bodyMedium
                                           .override(
                                         fontFamily: 'Poppins',
-                                        color: AzaBankTheme.of(context)
+                                        color: AzaBankTheme
+                                            .of(context)
                                             .primaryText,
                                       ),
                                       validator: _model.textController6Validator
@@ -810,7 +903,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     color: Color(0x12000000),
                                     borderRadius: BorderRadius.circular(5.0),
                                     border: Border.all(
-                                      color: AzaBankTheme.of(context).orange,
+                                      color: AzaBankTheme
+                                          .of(context)
+                                          .orange,
                                       width: 2.0,
                                     ),
                                   ),
@@ -864,11 +959,13 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           ),
                                         ),
                                       ),
-                                      style: AzaBankTheme.of(context)
+                                      style: AzaBankTheme
+                                          .of(context)
                                           .bodyMedium
                                           .override(
                                         fontFamily: 'Poppins',
-                                        color: AzaBankTheme.of(context)
+                                        color: AzaBankTheme
+                                            .of(context)
                                             .primaryText,
                                       ),
                                       validator: _model.textController7Validator
@@ -900,7 +997,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     color: Color(0x12000000),
                                     borderRadius: BorderRadius.circular(5.0),
                                     border: Border.all(
-                                      color: AzaBankTheme.of(context).orange,
+                                      color: AzaBankTheme
+                                          .of(context)
+                                          .orange,
                                       width: 2.0,
                                     ),
                                   ),
@@ -943,7 +1042,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           ),
                                         ),
                                         focusedErrorBorder:
-                                            UnderlineInputBorder(
+                                        UnderlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
                                             width: 1.0,
@@ -954,13 +1053,15 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           ),
                                         ),
                                       ),
-                                      style: AzaBankTheme.of(context)
+                                      style: AzaBankTheme
+                                          .of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Poppins',
-                                            color: AzaBankTheme.of(context)
-                                                .primaryText,
-                                          ),
+                                        fontFamily: 'Poppins',
+                                        color: AzaBankTheme
+                                            .of(context)
+                                            .primaryText,
+                                      ),
                                       validator: _model.textController2Validator
                                           .asValidator(context),
                                       onChanged: (value) {
@@ -974,13 +1075,15 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0,
+                              0.0, 10.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    4.0, 0.0, 0.0, 0.0),
                                 child: Container(
                                   width: 310.0,
                                   height: 55.0,
@@ -988,14 +1091,16 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     color: Color(0x12000000),
                                     borderRadius: BorderRadius.circular(5.0),
                                     border: Border.all(
-                                      color: Colors.orange, // Cambia el color del borde según tus necesidades
+                                      color: Colors.orange,
+                                      // Cambia el color del borde según tus necesidades
                                       width: 2.0,
                                     ),
                                   ),
                                   child: InkWell(
                                     onTap: () => _selectDate(context),
                                     child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 20.0, 0.0),
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          15.0, 0.0, 20.0, 0.0),
                                       child: Row(
                                         children: [
                                           Text(
@@ -1024,19 +1129,42 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     5.0, 0.0, 0.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    registrar(correoReg, passwordReg, nombresReg,apellidosReg,numCedulaReg, numCelularReg, empresaReg, cargoReg, selectedDate);
-
-
+                                    if (correoReg != null &&
+                                        passwordReg != null &&
+                                        nombresReg != null &&
+                                        apellidosReg != null &&
+                                        numCedulaReg != null &&
+                                        numCelularReg != null &&
+                                        empresaReg != null &&
+                                        cargoReg != null &&
+                                        selectedDate != null) {
+                                      registrar(
+                                        correoReg!,
+                                        passwordReg!,
+                                        nombresReg!,
+                                        apellidosReg!,
+                                        numCedulaReg!,
+                                        numCelularReg!,
+                                        empresaReg!,
+                                        cargoReg!,
+                                        selectedDate,
+                                      );
+                                    } else {
+                                      print("Algunas de las variables requeridas son nulas.");
+                                    }
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
                                           'Cuenta creada correctamente',
-                                          style: AzaBankTheme.of(context)
+                                          style: AzaBankTheme
+                                              .of(context)
                                               .titleSmall,
                                         ),
                                         duration: Duration(milliseconds: 4000),
                                         backgroundColor:
-                                            AzaBankTheme.of(context).green,
+                                        AzaBankTheme
+                                            .of(context)
+                                            .green,
                                       ),
                                     );
                                     await Navigator.push(
@@ -1046,9 +1174,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                         alignment: Alignment.bottomCenter,
                                         duration: Duration(milliseconds: 300),
                                         reverseDuration:
-                                            Duration(milliseconds: 300),
+                                        Duration(milliseconds: 300),
                                         child:
-                                            LoginPageWidget(),
+                                        LoginPageWidget(),
                                       ),
                                     );
                                   },
@@ -1060,13 +1188,16 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                         0.0, 0.0, 0.0, 0.0),
                                     iconPadding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 0.0, 0.0),
-                                    color: AzaBankTheme.of(context).primary,
-                                    textStyle: AzaBankTheme.of(context)
+                                    color: AzaBankTheme
+                                        .of(context)
+                                        .primary,
+                                    textStyle: AzaBankTheme
+                                        .of(context)
                                         .titleSmall
                                         .override(
-                                          fontFamily: 'Poppins',
-                                          color: Colors.white,
-                                        ),
+                                      fontFamily: 'Poppins',
+                                      color: Colors.white,
+                                    ),
                                     elevation: 2.0,
                                     borderSide: BorderSide(
                                       color: Colors.transparent,
@@ -1088,7 +1219,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                             children: [
                               Text(
                                 '¿Tienes una cuenta?',
-                                style: AzaBankTheme.of(context).bodyMedium,
+                                style: AzaBankTheme
+                                    .of(context)
+                                    .bodyMedium,
                               ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
@@ -1106,21 +1239,24 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                         alignment: Alignment.bottomCenter,
                                         duration: Duration(milliseconds: 300),
                                         reverseDuration:
-                                            Duration(milliseconds: 300),
+                                        Duration(milliseconds: 300),
                                         child: LoginPageWidget(),
                                       ),
                                     );
                                   },
                                   child: Text(
                                     'Inicia Sesión',
-                                    style: AzaBankTheme.of(context)
+                                    style: AzaBankTheme
+                                        .of(context)
                                         .bodyMedium
                                         .override(
-                                          fontFamily: 'Poppins',
-                                          color:
-                                              AzaBankTheme.of(context).orange,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      fontFamily: 'Poppins',
+                                      color:
+                                      AzaBankTheme
+                                          .of(context)
+                                          .orange,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -1138,4 +1274,5 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
       ),
     );
   }
+
 }
