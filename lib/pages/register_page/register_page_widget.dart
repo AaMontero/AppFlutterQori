@@ -33,12 +33,11 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
   DateTime selectedDate = DateTime.now();
 
 
-
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1900),
       lastDate: DateTime(2101),
       locale: const Locale('es', 'ES'),
     );
@@ -49,244 +48,250 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
       });
     }
   }
-  bool isValidEmail(String email) {
 
+  bool isValidEmail(String email) {
     final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+$');
     return emailRegex.hasMatch(email);
   }
-  registrar(String correo, String contrasenia, String nombres, String apellidos,
-      String numIdentificacion, String numCelular, String empresa, String cargo,
-      DateTime fechaNacimiento) async {
-    // Validaciones
-    if (correo.isEmpty || !isValidEmail(correo)) {
-      print('Correo electrónico no válido');
-      return;
-    }
-
-    if (contrasenia.length < 6) {
-      print(
-          'La contraseña es demasiado corta. Debe tener al menos 6 caracteres.');
-      return;
-    }
 
 
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: correo,
-        password: contrasenia,
-      );
-      final usuario = <String, dynamic>{
-        "correo": correo,
-        "nombres": nombres,
-        "apellidos": apellidos,
-        "identificacion": numIdentificacion,
-        "numero_celular": numCelular,
-        "empresa": empresa,
-        "cargo": cargo,
-        "fecha_nacimiento": fechaNacimiento
-      };
-      db.collection("usuarios").doc(correo).set(usuario).then((_) =>
-          print('Documento agregado con éxito para el correo: $correo'));
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'Contraseña debil') {
-        print('La contraseña proporcionada es demasiado débil.');
-      } else if (e.code == 'correo ya en uso') {
-        print('La cuenta ya existe para ese correo electrónico.');
-      } else {
-        print('Error en FirebaseAuth: $e');
+
+
+
+    registrar(correo, contrasenia, nombres, apellidos, numIdentificacion,
+        numCelular, empresa, cargo, fechaNacimiento) async {
+      print(numIdentificacion);
+      // Validaciones
+      if (correo.isEmpty || !isValidEmail(correo)) {
+        print('Correo electrónico no válido');
+        return;
       }
-    } catch (e) {
-      print('Error al registrar: $e');
+
+      if (contrasenia.length < 6) {
+        print(
+            'La contraseña es demasiado corta. Debe tener al menos 6 caracteres.');
+        return;
+      }
+
+      try {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: correo,
+          password: contrasenia,
+        );
+        final usuario = <String, dynamic>{
+          "correo": correo,
+          "nombres": nombres,
+          "apellidos": apellidos,
+          "identificacion": numIdentificacion,
+          "numero_celular": numCelular,
+          "empresa": empresa,
+          "cargo": cargo,
+          "fecha_nacimiento": fechaNacimiento
+        };
+        db.collection("usuarios").doc(correo).set(usuario).then((_) =>
+            print('Documento agregado con éxito para el correo: $correo'));
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'Contraseña debil') {
+          print('La contraseña proporcionada es demasiado débil.');
+        } else if (e.code == 'correo ya en uso') {
+          print('La cuenta ya existe para ese correo electrónico.');
+        } else {
+          print('Error en FirebaseAuth: $e');
+        }
+      } catch (e) {
+        print('Error al registrar: $e');
+      }
+
+
     }
-  }
 
 
-  @override
-  void initState() {
-    super.initState();
-    _model = createModel(context, () => RegisterPageModel());
-    _model.textController1 ??= TextEditingController();
-    _model.textController2 ??= TextEditingController();
-    _model.textController3 ??= TextEditingController();
-    _model.textController4 ??= TextEditingController();
-    _model.textController5 ??= TextEditingController();
-    _model.textController6 ??= TextEditingController();
-    _model.textController7 ??= TextEditingController();
-    _model.textController8 ??= TextEditingController();
-  }
+    @override
+    void initState() {
+      super.initState();
+      _model = createModel(context, () => RegisterPageModel());
+      _model.textController1 ??= TextEditingController();
+      _model.textController2 ??= TextEditingController();
+      _model.textController3 ??= TextEditingController();
+      _model.textController4 ??= TextEditingController();
+      _model.textController5 ??= TextEditingController();
+      _model.textController6 ??= TextEditingController();
+      _model.textController7 ??= TextEditingController();
+      _model.textController8 ??= TextEditingController();
+    }
 
-  @override
-  void dispose() {
-    _model.dispose();
-    _model.textController1?.dispose();
-    _model.textController2?.dispose();
-    _model.textController3?.dispose();
-    _model.textController4?.dispose();
-    _model.textController5?.dispose();
-    _model.textController6?.dispose();
-    _model.textController7?.dispose();
-    _model.textController8?.dispose();
-    _unfocusNode.dispose();
+    @override
+    void dispose() {
+      _model.dispose();
+      _model.textController1?.dispose();
+      _model.textController2?.dispose();
+      _model.textController3?.dispose();
+      _model.textController4?.dispose();
+      _model.textController5?.dispose();
+      _model.textController6?.dispose();
+      _model.textController7?.dispose();
+      _model.textController8?.dispose();
+      _unfocusNode.dispose();
 
 
-    super.dispose();
-  }
+      super.dispose();
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-      child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: AzaBankTheme
-            .of(context)
-            .primary,
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                height: 100.0,
-                decoration: BoxDecoration(
-                  color: AzaBankTheme
-                      .of(context)
-                      .primary,
-                ),
-                child: Padding(
-                  padding:
-                  EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 25.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 2.0),
-                        child: InkWell(
-                          splashColor: Colors.transparent,
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: () async {
-                            await Navigator.push(
-                              context,
-                              PageTransition(
-                                type: PageTransitionType.scale,
-                                alignment: Alignment.bottomCenter,
-                                duration: Duration(milliseconds: 300),
-                                reverseDuration: Duration(milliseconds: 300),
-                                child: LoginPageWidget(),
-                              ),
-                            );
-                          },
-                          child: Icon(
-                            Icons.arrow_back_ios,
-                            color: Colors.white,
-                            size: 24.0,
+    @override
+    Widget build(BuildContext context) {
+      return GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+        child: Scaffold(
+          key: scaffoldKey,
+          backgroundColor: AzaBankTheme
+              .of(context)
+              .primary,
+          body: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  height: 100.0,
+                  decoration: BoxDecoration(
+                    color: AzaBankTheme
+                        .of(context)
+                        .primary,
+                  ),
+                  child: Padding(
+                    padding:
+                    EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 25.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 2.0),
+                          child: InkWell(
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () async {
+                              await Navigator.push(
+                                context,
+                                PageTransition(
+                                  type: PageTransitionType.scale,
+                                  alignment: Alignment.bottomCenter,
+                                  duration: Duration(milliseconds: 300),
+                                  reverseDuration: Duration(milliseconds: 300),
+                                  child: LoginPageWidget(),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.white,
+                              size: 24.0,
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding:
-                        EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
-                        child: Text(
-                          'Registro',
-                          style:
-                          AzaBankTheme
-                              .of(context)
-                              .headlineMedium
-                              .override(
-                            fontFamily: 'Poppins',
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
+                        Padding(
+                          padding:
+                          EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
+                          child: Text(
+                            'Registro',
+                            style:
+                            AzaBankTheme
+                                .of(context)
+                                .headlineMedium
+                                .override(
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 6,
-              child: Container(
-                width: double.infinity,
-                height: 100.0,
-                decoration: BoxDecoration(
-                  color: AzaBankTheme
-                      .of(context)
-                      .secondaryBackground,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(0.0),
-                    bottomRight: Radius.circular(0.0),
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
+              Expanded(
+                flex: 6,
+                child: Container(
+                  width: double.infinity,
+                  height: 100.0,
+                  decoration: BoxDecoration(
+                    color: AzaBankTheme
+                        .of(context)
+                        .secondaryBackground,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(0.0),
+                      bottomRight: Radius.circular(0.0),
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0),
+                    ),
                   ),
-                ),
-                child: Padding(
-                  padding:
-                  EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 20.0),
-                  child: SingleChildScrollView(
-                    primary: false,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 20.0, 0.0, 0.0),
-                          child: Row(
+                  child: Padding(
+                    padding:
+                    EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 20.0),
+                    child: SingleChildScrollView(
+                      primary: false,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 20.0, 0.0, 0.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Bienvenido',
+                                  style: AzaBankTheme
+                                      .of(context)
+                                      .displaySmall
+                                      .override(
+                                    fontFamily: 'Poppins',
+                                    color: AzaBankTheme
+                                        .of(context)
+                                        .primary1,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
                             mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Bienvenido',
+                                'Crear una cuenta nueva',
                                 style: AzaBankTheme
                                     .of(context)
-                                    .displaySmall
-                                    .override(
-                                  fontFamily: 'Poppins',
-                                  color: AzaBankTheme
-                                      .of(context)
-                                      .primary1,
+                                    .bodyMedium,
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 30.0, 0.0, 20.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/Illustration_2.png',
+                                  width: 213.0,
+                                  height: 165.0,
+                                  fit: BoxFit.cover,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Text(
-                              'Crear una cuenta nueva',
-                              style: AzaBankTheme
-                                  .of(context)
-                                  .bodyMedium,
+                              ],
                             ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 30.0, 0.0, 20.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/Illustration_2.png',
-                                width: 213.0,
-                                height: 165.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ],
                           ),
-                        ),
-                        Form(
-                          autovalidateMode: AutovalidateMode.always,
-                              child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                          Form(
+                            autovalidateMode: AutovalidateMode.always,
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 40.0, 0.0, 10.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -300,7 +305,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                       height: 55.0,
                                       decoration: BoxDecoration(
                                         color: Color(0x12000000),
-                                        borderRadius: BorderRadius.circular(5.0),
+                                        borderRadius: BorderRadius.circular(
+                                            5.0),
                                         border: Border.all(
                                           color: AzaBankTheme
                                               .of(context)
@@ -321,7 +327,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                 color: Color(0x00000000),
                                                 width: 1.0,
                                               ),
-                                              borderRadius: const BorderRadius.only(
+                                              borderRadius: const BorderRadius
+                                                  .only(
                                                 topLeft: Radius.circular(4.0),
                                                 topRight: Radius.circular(4.0),
                                               ),
@@ -331,7 +338,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                 color: Color(0x00000000),
                                                 width: 1.0,
                                               ),
-                                              borderRadius: const BorderRadius.only(
+                                              borderRadius: const BorderRadius
+                                                  .only(
                                                 topLeft: Radius.circular(4.0),
                                                 topRight: Radius.circular(4.0),
                                               ),
@@ -341,7 +349,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                 color: Color(0x00000000),
                                                 width: 1.0,
                                               ),
-                                              borderRadius: const BorderRadius.only(
+                                              borderRadius: const BorderRadius
+                                                  .only(
                                                 topLeft: Radius.circular(4.0),
                                                 topRight: Radius.circular(4.0),
                                               ),
@@ -352,7 +361,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                 color: Color(0x00000000),
                                                 width: 1.0,
                                               ),
-                                              borderRadius: const BorderRadius.only(
+                                              borderRadius: const BorderRadius
+                                                  .only(
                                                 topLeft: Radius.circular(4.0),
                                                 topRight: Radius.circular(4.0),
                                               ),
@@ -368,7 +378,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                 .primaryText,
                                           ),
                                           validator: (value) {
-                                            if (value == null || value.isEmpty) {
+                                            if (value == null ||
+                                                value.isEmpty) {
                                               return 'Por favor, ingresa un correo electrónico';
                                             }
                                             if (!isValidEmail(value)) {
@@ -386,893 +397,934 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                 ],
                               ),
                             ),
-                        ),
+                          ),
 
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    4.0, 0.0, 0.0, 0.0),
-                                child: Container(
-                                  width: 310.0,
-                                  height: 55.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0x12000000),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: AzaBankTheme
-                                          .of(context)
-                                          .orange,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        15.0, 0.0, 20.0, 0.0),
-                                    child: TextFormField(
-                                      controller: _model.textController3,
-                                      obscureText: !_model.passwordVisibility,
-                                      decoration: InputDecoration(
-                                        labelText: 'Contraseña',
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                        UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        suffixIcon: InkWell(
-                                          onTap: () =>
-                                              setState(
-                                                    () =>
-                                                _model.passwordVisibility =
-                                                !_model.passwordVisibility,
-                                              ),
-                                          focusNode:
-                                          FocusNode(skipTraversal: true),
-                                          child: Icon(
-                                            _model.passwordVisibility
-                                                ? Icons.visibility_outlined
-                                                : Icons.visibility_off_outlined,
-                                            color: AzaBankTheme
-                                                .of(context)
-                                                .primaryText,
-                                            size: 22.0,
-                                          ),
-                                        ),
-                                      ),
-                                      style: AzaBankTheme
-                                          .of(context)
-                                          .bodyMedium
-                                          .override(
-                                        fontFamily: 'Poppins',
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 10.0, 0.0, 10.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      4.0, 0.0, 0.0, 0.0),
+                                  child: Container(
+                                    width: 310.0,
+                                    height: 55.0,
+                                    decoration: BoxDecoration(
+                                      color: Color(0x12000000),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      border: Border.all(
                                         color: AzaBankTheme
                                             .of(context)
-                                            .primaryText,
+                                            .orange,
+                                        width: 2.0,
                                       ),
-                                      keyboardType:
-                                      TextInputType.visiblePassword,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Por favor, ingresa una contraseña';
-                                        }
-                                        if (value.length < 6) {
-                                          return 'La contraseña debe tener al menos 6 caracteres';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {
-                                        passwordReg = value;
-                                      },
                                     ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    4.0, 0.0, 0.0, 0.0),
-                                child: Container(
-                                  width: 310.0,
-                                  height: 55.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0x12000000),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: AzaBankTheme
-                                          .of(context)
-                                          .orange,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        15.0, 0.0, 20.0, 0.0),
-                                    child: TextFormField(
-                                      controller: _model.textController4,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Nombres',
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                        UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                      style: AzaBankTheme
-                                          .of(context)
-                                          .bodyMedium
-                                          .override(
-                                        fontFamily: 'Poppins',
-                                        color: AzaBankTheme
-                                            .of(context)
-                                            .primaryText,
-                                      ),
-                                      validator: _model.textController4Validator
-                                          .asValidator(context),
-                                      onChanged: (value) {
-                                        nombresReg = value;
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    4.0, 0.0, 0.0, 0.0),
-                                child: Container(
-                                  width: 310.0,
-                                  height: 55.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0x12000000),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: AzaBankTheme
-                                          .of(context)
-                                          .orange,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        15.0, 0.0, 20.0, 0.0),
-                                    child: TextFormField(
-                                      controller: _model.textController5,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Apellidos',
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                        UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                      style: AzaBankTheme
-                                          .of(context)
-                                          .bodyMedium
-                                          .override(
-                                        fontFamily: 'Poppins',
-                                        color: AzaBankTheme
-                                            .of(context)
-                                            .primaryText,
-                                      ),
-                                      validator: _model.textController5Validator
-                                          .asValidator(context),
-                                      onChanged: (value) {
-                                        apellidosReg = value;
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    4.0, 0.0, 0.0, 0.0),
-                                child: Container(
-                                  width: 310.0,
-                                  height: 55.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0x12000000),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: AzaBankTheme
-                                          .of(context)
-                                          .orange,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        15.0, 0.0, 20.0, 0.0),
-                                    child: TextFormField(
-                                      controller: _model.textController8,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Num. Identificacion',
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                        UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                      style: AzaBankTheme
-                                          .of(context)
-                                          .bodyMedium
-                                          .override(
-                                        fontFamily: 'Poppins',
-                                        color: AzaBankTheme
-                                            .of(context)
-                                            .primaryText,
-                                      ),
-                                      validator: _model.textController8Validator
-                                          .asValidator(context),
-                                      onChanged: (value) {
-                                        numCelularReg = value;
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    4.0, 0.0, 0.0, 0.0),
-                                child: Container(
-                                  width: 310.0,
-                                  height: 55.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0x12000000),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: AzaBankTheme
-                                          .of(context)
-                                          .orange,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        15.0, 0.0, 20.0, 0.0),
-                                    child: TextFormField(
-                                      controller: _model.textController6,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Institución/Empresa',
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                        UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                      style: AzaBankTheme
-                                          .of(context)
-                                          .bodyMedium
-                                          .override(
-                                        fontFamily: 'Poppins',
-                                        color: AzaBankTheme
-                                            .of(context)
-                                            .primaryText,
-                                      ),
-                                      validator: _model.textController6Validator
-                                          .asValidator(context),
-                                      onChanged: (value) {
-                                        empresaReg = value;
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    4.0, 0.0, 0.0, 0.0),
-                                child: Container(
-                                  width: 310.0,
-                                  height: 55.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0x12000000),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: AzaBankTheme
-                                          .of(context)
-                                          .orange,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        15.0, 0.0, 20.0, 0.0),
-                                    child: TextFormField(
-                                      controller: _model.textController7,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Cargo',
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                        UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                      style: AzaBankTheme
-                                          .of(context)
-                                          .bodyMedium
-                                          .override(
-                                        fontFamily: 'Poppins',
-                                        color: AzaBankTheme
-                                            .of(context)
-                                            .primaryText,
-                                      ),
-                                      validator: _model.textController7Validator
-                                          .asValidator(context),
-                                      onChanged: (value) {
-                                        cargoReg = value;
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    4.0, 0.0, 0.0, 0.0),
-                                child: Container(
-                                  width: 310.0,
-                                  height: 55.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0x12000000),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: AzaBankTheme
-                                          .of(context)
-                                          .orange,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        15.0, 0.0, 20.0, 0.0),
-                                    child: TextFormField(
-                                      controller: _model.textController2,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Número Celular',
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                        UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                      style: AzaBankTheme
-                                          .of(context)
-                                          .bodyMedium
-                                          .override(
-                                        fontFamily: 'Poppins',
-                                        color: AzaBankTheme
-                                            .of(context)
-                                            .primaryText,
-                                      ),
-                                      validator: _model.textController2Validator
-                                          .asValidator(context),
-                                      onChanged: (value) {
-                                        numCelularReg = value;
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0,
-                              0.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    4.0, 0.0, 0.0, 0.0),
-                                child: Container(
-                                  width: 310.0,
-                                  height: 55.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0x12000000),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: Colors.orange,
-                                      // Cambia el color del borde según tus necesidades
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  child: InkWell(
-                                    onTap: () => _selectDate(context),
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           15.0, 0.0, 20.0, 0.0),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            'Fecha de Nacimiento  ',
-                                            style: TextStyle(fontSize: 16),
+                                      child: TextFormField(
+                                        controller: _model.textController3,
+                                        obscureText: !_model.passwordVisibility,
+                                        decoration: InputDecoration(
+                                          labelText: 'Contraseña',
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
                                           ),
-                                          Icon(Icons.calendar_today),
-                                        ],
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          errorBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedErrorBorder:
+                                          UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          suffixIcon: InkWell(
+                                            onTap: () =>
+                                                setState(
+                                                      () =>
+                                                  _model.passwordVisibility =
+                                                  !_model.passwordVisibility,
+                                                ),
+                                            focusNode:
+                                            FocusNode(skipTraversal: true),
+                                            child: Icon(
+                                              _model.passwordVisibility
+                                                  ? Icons.visibility_outlined
+                                                  : Icons
+                                                  .visibility_off_outlined,
+                                              color: AzaBankTheme
+                                                  .of(context)
+                                                  .primaryText,
+                                              size: 22.0,
+                                            ),
+                                          ),
+                                        ),
+                                        style: AzaBankTheme
+                                            .of(context)
+                                            .bodyMedium
+                                            .override(
+                                          fontFamily: 'Poppins',
+                                          color: AzaBankTheme
+                                              .of(context)
+                                              .primaryText,
+                                        ),
+                                        keyboardType:
+                                        TextInputType.visiblePassword,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Por favor, ingresa una contraseña';
+                                          }
+                                          if (value.length < 6) {
+                                            return 'La contraseña debe tener al menos 6 caracteres';
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (value) {
+                                          passwordReg = value;
+                                        },
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 20.0, 5.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    5.0, 0.0, 0.0, 0.0),
-                                child: FFButtonWidget(
-                                  onPressed: () async {
-                                    if (correoReg != null &&
-                                        passwordReg != null &&
-                                        nombresReg != null &&
-                                        apellidosReg != null &&
-                                        numCedulaReg != null &&
-                                        numCelularReg != null &&
-                                        empresaReg != null &&
-                                        cargoReg != null &&
-                                        selectedDate != null) {
-                                      registrar(
-                                        correoReg!,
-                                        passwordReg!,
-                                        nombresReg!,
-                                        apellidosReg!,
-                                        numCedulaReg!,
-                                        numCelularReg!,
-                                        empresaReg!,
-                                        cargoReg!,
-                                        selectedDate,
-                                      );
-                                    } else {
-                                      print("Algunas de las variables requeridas son nulas.");
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'Cuenta creada correctamente',
-                                          style: AzaBankTheme
-                                              .of(context)
-                                              .titleSmall,
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 10.0, 0.0, 10.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      4.0, 0.0, 0.0, 0.0),
+                                  child: Container(
+                                    width: 310.0,
+                                    height: 55.0,
+                                    decoration: BoxDecoration(
+                                      color: Color(0x12000000),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      border: Border.all(
+                                        color: AzaBankTheme
+                                            .of(context)
+                                            .orange,
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          15.0, 0.0, 20.0, 0.0),
+                                      child: TextFormField(
+                                        controller: _model.textController4,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Nombres',
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          errorBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedErrorBorder:
+                                          UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
                                         ),
-                                        duration: Duration(milliseconds: 4000),
-                                        backgroundColor:
+                                        style: AzaBankTheme
+                                            .of(context)
+                                            .bodyMedium
+                                            .override(
+                                          fontFamily: 'Poppins',
+                                          color: AzaBankTheme
+                                              .of(context)
+                                              .primaryText,
+                                        ),
+                                        validator: _model
+                                            .textController4Validator
+                                            .asValidator(context),
+                                        onChanged: (value) {
+                                          nombresReg = value;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 10.0, 0.0, 10.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      4.0, 0.0, 0.0, 0.0),
+                                  child: Container(
+                                    width: 310.0,
+                                    height: 55.0,
+                                    decoration: BoxDecoration(
+                                      color: Color(0x12000000),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      border: Border.all(
+                                        color: AzaBankTheme
+                                            .of(context)
+                                            .orange,
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          15.0, 0.0, 20.0, 0.0),
+                                      child: TextFormField(
+                                        controller: _model.textController5,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Apellidos',
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          errorBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedErrorBorder:
+                                          UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                        ),
+                                        style: AzaBankTheme
+                                            .of(context)
+                                            .bodyMedium
+                                            .override(
+                                          fontFamily: 'Poppins',
+                                          color: AzaBankTheme
+                                              .of(context)
+                                              .primaryText,
+                                        ),
+                                        validator: _model
+                                            .textController5Validator
+                                            .asValidator(context),
+                                        onChanged: (value) {
+                                          apellidosReg = value;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 10.0, 0.0, 10.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      4.0, 0.0, 0.0, 0.0),
+                                  child: Container(
+                                    width: 310.0,
+                                    height: 55.0,
+                                    decoration: BoxDecoration(
+                                      color: Color(0x12000000),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      border: Border.all(
+                                        color: AzaBankTheme
+                                            .of(context)
+                                            .orange,
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          15.0, 0.0, 20.0, 0.0),
+                                      child: TextFormField(
+                                        controller: _model.textController8,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Num. Identificacion',
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          errorBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedErrorBorder:
+                                          UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                        ),
+                                        style: AzaBankTheme
+                                            .of(context)
+                                            .bodyMedium
+                                            .override(
+                                          fontFamily: 'Poppins',
+                                          color: AzaBankTheme
+                                              .of(context)
+                                              .primaryText,
+                                        ),
+                                        validator: _model
+                                            .textController8Validator
+                                            .asValidator(context),
+                                        onChanged: (value) {
+                                          numCedulaReg = value;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 10.0, 0.0, 10.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      4.0, 0.0, 0.0, 0.0),
+                                  child: Container(
+                                    width: 310.0,
+                                    height: 55.0,
+                                    decoration: BoxDecoration(
+                                      color: Color(0x12000000),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      border: Border.all(
+                                        color: AzaBankTheme
+                                            .of(context)
+                                            .orange,
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          15.0, 0.0, 20.0, 0.0),
+                                      child: TextFormField(
+                                        controller: _model.textController6,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Institución/Empresa',
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          errorBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedErrorBorder:
+                                          UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                        ),
+                                        style: AzaBankTheme
+                                            .of(context)
+                                            .bodyMedium
+                                            .override(
+                                          fontFamily: 'Poppins',
+                                          color: AzaBankTheme
+                                              .of(context)
+                                              .primaryText,
+                                        ),
+                                        validator: _model
+                                            .textController6Validator
+                                            .asValidator(context),
+                                        onChanged: (value) {
+                                          empresaReg = value;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 10.0, 0.0, 10.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      4.0, 0.0, 0.0, 0.0),
+                                  child: Container(
+                                    width: 310.0,
+                                    height: 55.0,
+                                    decoration: BoxDecoration(
+                                      color: Color(0x12000000),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      border: Border.all(
+                                        color: AzaBankTheme
+                                            .of(context)
+                                            .orange,
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          15.0, 0.0, 20.0, 0.0),
+                                      child: TextFormField(
+                                        controller: _model.textController7,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Cargo',
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          errorBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedErrorBorder:
+                                          UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                        ),
+                                        style: AzaBankTheme
+                                            .of(context)
+                                            .bodyMedium
+                                            .override(
+                                          fontFamily: 'Poppins',
+                                          color: AzaBankTheme
+                                              .of(context)
+                                              .primaryText,
+                                        ),
+                                        validator: _model
+                                            .textController7Validator
+                                            .asValidator(context),
+                                        onChanged: (value) {
+                                          cargoReg = value;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 10.0, 0.0, 10.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      4.0, 0.0, 0.0, 0.0),
+                                  child: Container(
+                                    width: 310.0,
+                                    height: 55.0,
+                                    decoration: BoxDecoration(
+                                      color: Color(0x12000000),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      border: Border.all(
+                                        color: AzaBankTheme
+                                            .of(context)
+                                            .orange,
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          15.0, 0.0, 20.0, 0.0),
+                                      child: TextFormField(
+                                        controller: _model.textController2,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Número Celular',
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          errorBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedErrorBorder:
+                                          UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                        ),
+                                        style: AzaBankTheme
+                                            .of(context)
+                                            .bodyMedium
+                                            .override(
+                                          fontFamily: 'Poppins',
+                                          color: AzaBankTheme
+                                              .of(context)
+                                              .primaryText,
+                                        ),
+                                        validator: _model
+                                            .textController2Validator
+                                            .asValidator(context),
+                                        onChanged: (value) {
+                                          numCelularReg = value;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0,
+                                0.0, 10.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      4.0, 0.0, 0.0, 0.0),
+                                  child: Container(
+                                    width: 310.0,
+                                    height: 55.0,
+                                    decoration: BoxDecoration(
+                                      color: Color(0x12000000),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      border: Border.all(
+                                        color: Colors.orange,
+                                        // Cambia el color del borde según tus necesidades
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () => _selectDate(context),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            15.0, 0.0, 20.0, 0.0),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              'Fecha de Nacimiento  ',
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                            Icon(Icons.calendar_today),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                5.0, 20.0, 5.0, 0.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      5.0, 0.0, 0.0, 0.0),
+                                  child: FFButtonWidget(
+                                    onPressed: () async {
+                                      if (correoReg != null &&
+                                          passwordReg != null &&
+                                          nombresReg != null &&
+                                          apellidosReg != null &&
+                                          numCedulaReg != null &&
+                                          numCelularReg != null &&
+                                          empresaReg != null &&
+                                          cargoReg != null &&
+                                          selectedDate != null) {
+                                        registrar(
+                                          correoReg!,
+                                          passwordReg!,
+                                          nombresReg!,
+                                          apellidosReg!,
+                                          numCedulaReg!,
+                                          numCelularReg!,
+                                          empresaReg!,
+                                          cargoReg!,
+                                          selectedDate,
+                                        );
+                                      } else {
+                                        print(
+                                            "Algunas de las variables requeridas son nulas.");
+                                      }
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Cuenta creada correctamente',
+                                            style: AzaBankTheme
+                                                .of(context)
+                                                .titleSmall,
+                                          ),
+                                          duration: Duration(
+                                              milliseconds: 4000),
+                                          backgroundColor:
+                                          AzaBankTheme
+                                              .of(context)
+                                              .green,
+                                        ),
+                                      );
+                                      await Navigator.push(
+                                        context,
+                                        PageTransition(
+                                          type: PageTransitionType.scale,
+                                          alignment: Alignment.bottomCenter,
+                                          duration: Duration(milliseconds: 300),
+                                          reverseDuration:
+                                          Duration(milliseconds: 300),
+                                          child:
+                                          LoginPageWidget(),
+                                        ),
+                                      );
+                                    },
+                                    text: 'Registro',
+                                    options: FFButtonOptions(
+                                      width: 130.0,
+                                      height: 55.0,
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 0.0, 0.0),
+                                      iconPadding: EdgeInsetsDirectional
+                                          .fromSTEB(
+                                          0.0, 0.0, 0.0, 0.0),
+                                      color: AzaBankTheme
+                                          .of(context)
+                                          .primary,
+                                      textStyle: AzaBankTheme
+                                          .of(context)
+                                          .titleSmall
+                                          .override(
+                                        fontFamily: 'Poppins',
+                                        color: Colors.white,
+                                      ),
+                                      elevation: 2.0,
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 30.0, 0.0, 0.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '¿Tienes una cuenta?',
+                                  style: AzaBankTheme
+                                      .of(context)
+                                      .bodyMedium,
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      3.0, 0.0, 0.0, 0.0),
+                                  child: InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      await Navigator.push(
+                                        context,
+                                        PageTransition(
+                                          type: PageTransitionType.scale,
+                                          alignment: Alignment.bottomCenter,
+                                          duration: Duration(milliseconds: 300),
+                                          reverseDuration:
+                                          Duration(milliseconds: 300),
+                                          child: LoginPageWidget(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Inicia Sesión',
+                                      style: AzaBankTheme
+                                          .of(context)
+                                          .bodyMedium
+                                          .override(
+                                        fontFamily: 'Poppins',
+                                        color:
                                         AzaBankTheme
                                             .of(context)
-                                            .green,
+                                            .orange,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    );
-                                    await Navigator.push(
-                                      context,
-                                      PageTransition(
-                                        type: PageTransitionType.scale,
-                                        alignment: Alignment.bottomCenter,
-                                        duration: Duration(milliseconds: 300),
-                                        reverseDuration:
-                                        Duration(milliseconds: 300),
-                                        child:
-                                        LoginPageWidget(),
-                                      ),
-                                    );
-                                  },
-                                  text: 'Registro',
-                                  options: FFButtonOptions(
-                                    width: 130.0,
-                                    height: 55.0,
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    color: AzaBankTheme
-                                        .of(context)
-                                        .primary,
-                                    textStyle: AzaBankTheme
-                                        .of(context)
-                                        .titleSmall
-                                        .override(
-                                      fontFamily: 'Poppins',
-                                      color: Colors.white,
-                                    ),
-                                    elevation: 2.0,
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 30.0, 0.0, 0.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '¿Tienes una cuenta?',
-                                style: AzaBankTheme
-                                    .of(context)
-                                    .bodyMedium,
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    3.0, 0.0, 0.0, 0.0),
-                                child: InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    await Navigator.push(
-                                      context,
-                                      PageTransition(
-                                        type: PageTransitionType.scale,
-                                        alignment: Alignment.bottomCenter,
-                                        duration: Duration(milliseconds: 300),
-                                        reverseDuration:
-                                        Duration(milliseconds: 300),
-                                        child: LoginPageWidget(),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    'Inicia Sesión',
-                                    style: AzaBankTheme
-                                        .of(context)
-                                        .bodyMedium
-                                        .override(
-                                      fontFamily: 'Poppins',
-                                      color:
-                                      AzaBankTheme
-                                          .of(context)
-                                          .orange,
-                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
-}
+
+

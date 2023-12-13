@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../components/add_card_info_section/add_card_info_section_widget.dart';
 import '../../main.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
@@ -41,7 +39,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
   File? file;
   String? url;
   String? email;
-  double? saldoTotal;
+  double? saldoTotal = 0;
   List<InversionAporte> listaAportes = [];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -247,37 +245,42 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
   }
 
   void cargarDatosDesdeFireBase() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user != null) {
         email = user.email.toString();
         CollectionReference usuarios =
             FirebaseFirestore.instance.collection('usuarios');
+        QuerySnapshot querySnapshot = await usuarios.where('correo', isEqualTo: email).get();
+        if(querySnapshot.docs.isNotEmpty){
 
-        usuarios
-            .doc(email)
-            .collection("inversiones")
-            .get()
-            .then((QuerySnapshot querySnapshot) {
-          // Limpia la lista antes de agregar nuevos elementos
-          setState(() {
-            listaAportes.clear();
-            listaAportes
-                .addAll(querySnapshot.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data =
-                  document.data() as Map<String, dynamic>;
-              String concepto = data['concepto'];
-              double monto = double.parse(data['monto'].toString());
-              String fecha = data['fecha'].toString();
-              return InversionAporte(
-                  concepto: concepto, fecha: fecha, monto: monto);
-            }));
-            saldoTotal = listaAportes
-                .map((aporte) => aporte.monto)
-                .fold(0.0, (a, b) => a! + b);
+          DocumentSnapshot document = querySnapshot.docs.first;
+          DocumentReference doc= document.reference;
+          doc.collection("inversiones")
+              .get()
+              .then((QuerySnapshot querySnapshot) {
+            // Limpia la lista antes de agregar nuevos elementos
+            setState(() {
+              listaAportes.clear();
+              listaAportes
+                  .addAll(querySnapshot.docs.map((DocumentSnapshot document) {
+                Map<String, dynamic> data =
+                document.data() as Map<String, dynamic>;
+                String concepto = data['concepto'];
+                double monto = double.parse(data['monto'].toString());
+                String fecha = data['fecha'].toString();
+                return InversionAporte(
+                    concepto: concepto, fecha: fecha, monto: monto);
+              }));
+              saldoTotal = listaAportes
+                  .map((aporte) => aporte.monto)
+                  .fold(0.0, (a, b) => a! + b);
+            });
+          }).catchError((error) {
+            print("Error al obtener datos de Firebase: $error");
           });
-        }).catchError((error) {
-          print("Error al obtener datos de Firebase: $error");
-        });
+        }else{
+          print('No se pudieron cargar los datos');
+        }
       }
     });
   }

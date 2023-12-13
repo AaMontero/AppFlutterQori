@@ -24,7 +24,6 @@ class NotificacionObjeto {
 }
 class NotificationWidget extends StatefulWidget {
   const NotificationWidget({Key? key}) : super(key: key);
-
   @override
   _NotificationWidgetState createState() => _NotificationWidgetState();
 }
@@ -37,35 +36,41 @@ class _NotificationWidgetState extends State<NotificationWidget> {
 
   void obtenerAhorros(String email) async {
       CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
-      DocumentReference usuarioActivo = usuarios.doc(email);
-      usuarioActivo.collection("ahorros").get().then((QuerySnapshot querySnapshot) {
-        setState(() {
-          listaNotificaciones.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
-            Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-            String concepto = data['concepto'];
-            double monto = double.parse(data['monto'].toString());
-            String fecha = data['fecha'].toString();
-            return NotificacionObjeto(concepto: concepto, fecha: fecha, monto: monto);
-          }));
+      QuerySnapshot querySnapshot = await usuarios.where('correo', isEqualTo: email).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        print("Aviso: Se encontro un elemento con esa cedula en Ahorros");
+        DocumentSnapshot document = querySnapshot.docs.first;
+        DocumentReference usuarioActivo = document.reference;
+        usuarioActivo.collection("ahorros").get().then((QuerySnapshot querySnapshot) {
+          setState(() {
+            listaNotificaciones.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
+              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+              String concepto = data['concepto'];
+              double monto = double.parse(data['monto'].toString());
+              String fecha = data['fecha'].toString();
+              return NotificacionObjeto(concepto: concepto, fecha: fecha, monto: monto);
+            }));
+          });
+        }).catchError((error) {
+          print("Error al obtener datos de Firebase: $error");
         });
-      }).catchError((error) {
-        print("Error al obtener datos de Firebase: $error");
-      });
-      print(listaNotificaciones.toString());
-      usuarioActivo.collection("inversiones").get().then((QuerySnapshot querySnapshot) {
-        setState(() {
-          listaNotificaciones.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
-            Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-            String concepto = data['concepto'];
-            double monto = double.parse(data['monto'].toString());
-            String fecha = data['fecha'].toString();
-            return NotificacionObjeto(concepto: concepto, fecha: fecha, monto: monto);
-          }));
+        print(listaNotificaciones.toString());
+        usuarioActivo.collection("inversiones").get().then((QuerySnapshot querySnapshot) {
+          setState(() {
+            listaNotificaciones.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
+              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+              String concepto = data['concepto'];
+              double monto = double.parse(data['monto'].toString());
+              String fecha = data['fecha'].toString();
+              return NotificacionObjeto(concepto: concepto, fecha: fecha, monto: monto);
+            }));
 
+          });
+        }).catchError((error) {
+          print("Error al obtener datos de Firebase: $error");
         });
-      }).catchError((error) {
-        print("Error al obtener datos de Firebase: $error");
-      });
+      }
+
 
 
   }
@@ -75,6 +80,8 @@ class _NotificationWidgetState extends State<NotificationWidget> {
         print("Advertencia: Entra a usuario no nulo");
         var email = user.email.toString();
         obtenerAhorros(email);
+      }else{
+        print("Advertencia: No encuentra al usuario, es nulo");
       }
     });
   }
@@ -293,7 +300,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                   );
                 },
               )),
-
             ],
           ),
 

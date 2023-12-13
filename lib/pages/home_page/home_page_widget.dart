@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
@@ -44,25 +45,39 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     super.dispose();
   }
 
-  cargarDatosUsuario(){
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+  cargarDatosUsuario() async {
+    final preferences = await SharedPreferences.getInstance();
+
+
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user != null) {
         email = user.email.toString();
         CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
-        usuarios.doc(email).get().then((value) {
-          if (value.exists) {
-            // Obtener los datos del documento
-            Map<String, dynamic> userData = value.data() as Map<String,
-                dynamic>;
-            setState(() {
-              nombresUsuarioActivo = userData['nombres'];
-              apellidosUsuarioActivo = userData['apellidos'];
-              cargoUsuarioActivo = userData['cargo'];
-              empresaUsuarioActivo = userData['empresa'];
-            });
-          }
+
+        QuerySnapshot querySnapshot = await usuarios.where('correo', isEqualTo: email).get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+
+          DocumentSnapshot document = querySnapshot.docs.first;
+
+          Map<String, dynamic> userData = document.data() as Map<String,
+              dynamic>;
+
+          setState(() {
+
+            nombresUsuarioActivo = userData['nombres'];
+            apellidosUsuarioActivo = userData['apellidos'];
+            cargoUsuarioActivo = userData['cargo'];
+            empresaUsuarioActivo = userData['empresa'];
+          });
+          preferences.setString('nombres', userData['nombres']);
+          preferences.setString('apellidos', userData['apellidos']);
+          preferences.setString('correo', userData['correo']);
+          preferences.setString('empresa', userData['empresa']);
+          preferences.setString('cargo', userData['cargo']);
+          preferences.setString('fechaNacimiendo', userData['fechaNacimiento']);
+          preferences.setString('identificacion', userData['identificacion']);
         }
-        );
       }
     });
   }
