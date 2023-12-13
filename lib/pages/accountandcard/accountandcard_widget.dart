@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:image_picker/image_picker.dart';
-import '/components/add_card_info_section/add_card_info_section_widget.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
@@ -42,10 +40,12 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
   String? email;
   List<AhorroAporte> listaAportes = [];
   double? saldoTotal =0;
+  String? identificacion;
   late AccountandcardModel _model;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
-
+  late CollectionReference coleccionUsuarios;
+  late CollectionReference coleccionNotificaciones;
   int get pageViewCurrentIndex => _model.pageViewController != null &&
           _model.pageViewController!.hasClients &&
           _model.pageViewController!.page != null
@@ -228,15 +228,27 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
     final ImagePicker picker = ImagePicker();
     final XFile? image =
         await picker.pickImage(source: ImageSource.gallery, imageQuality: 40);
-    String now = DateTime.now().toString();
 
-    var path = '$email/ahorros/$now.jpg';
+    DateTime nowDate = DateTime.now();
+    String now = nowDate.toString();
+    String fechaFormateada = DateFormat('dd-MM-yyyy').format(nowDate);
+    var path = '$identificacion/ahorros/$now.jpg';
     if (image != null) {
       file = File(image.path);
       print("El path es el siguiente:" + file.toString());
       var refStorage = firebase_storage.FirebaseStorage.instance.ref(path);
       await refStorage.putFile(file!);
       url = await refStorage.getDownloadURL();
+      Map<String, dynamic> nuevaNotificacion = {
+        'concepto': 'Ahorros',
+        'estado': true,
+        'fecha' : fechaFormateada,
+        'identificacion': identificacion,
+        'urlImagen': url
+      };
+      coleccionNotificaciones.add(nuevaNotificacion)
+          .then((DocumentReference doc) =>
+          print('Elemento agregado con id: ${doc.id}'));
     } else {
       print("La imagen es nula");
     }
@@ -245,6 +257,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
   }
 
   void cargarDatosDesdeFireBase() {
+    coleccionNotificaciones = FirebaseFirestore.instance.collection('notificaciones');
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user != null) {
         email = user.email.toString();
@@ -254,6 +267,9 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
             if(querySnapshot.docs.isNotEmpty){
               DocumentSnapshot document = querySnapshot.docs.first;
               DocumentReference doc= document.reference;
+              Map<String, dynamic> userData = document.data() as Map<String,
+                  dynamic>;
+              this.identificacion = userData["identificacion"];
               doc
                   .collection("ahorros")
                   .get()

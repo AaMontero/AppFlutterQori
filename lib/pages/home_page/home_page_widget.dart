@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '/main.dart';
@@ -53,16 +52,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       if (user != null) {
         email = user.email.toString();
         CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
-
         QuerySnapshot querySnapshot = await usuarios.where('correo', isEqualTo: email).get();
-
         if (querySnapshot.docs.isNotEmpty) {
-
           DocumentSnapshot document = querySnapshot.docs.first;
-
           Map<String, dynamic> userData = document.data() as Map<String,
               dynamic>;
-
           setState(() {
 
             nombresUsuarioActivo = userData['nombres'];
