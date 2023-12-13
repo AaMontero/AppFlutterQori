@@ -10,18 +10,15 @@ import 'withdraw_funds_model.dart';
 export 'withdraw_funds_model.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
-
 class InversionAporte {
   String concepto;
   String fecha;
   double monto;
-
   InversionAporte({
     required this.concepto,
     required this.fecha,
     required this.monto,
   });
-
   String toString() {
     return "Objeto Ahorro" + this.concepto + this.fecha + this.monto.toString();
   }
@@ -39,10 +36,14 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
   File? file;
   String? url;
   String? email;
+  String? identificacion;
   double? saldoTotal = 0;
   List<InversionAporte> listaAportes = [];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+  late CollectionReference coleccionUsuarios;
+  late CollectionReference coleccionNotificaciones;
+
 
   int get pageViewCurrentIndex => _model.pageViewController != null &&
           _model.pageViewController!.hasClients &&
@@ -68,7 +69,6 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
     super.dispose();
   }
 
-  @override
   Widget widgetTransaccion(
       String fechaTransaccion, double montoTransaccion, String concepto) {
     return Padding(
@@ -228,16 +228,31 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
   }
 
   getImageGaleria() async {
+
     final ImagePicker picker = ImagePicker();
     final XFile? image =
         await picker.pickImage(source: ImageSource.gallery, imageQuality: 40);
-    String now = DateTime.now().toString();
-    var path = '$email/inversiones/$now.jpg';
+    DateTime nowDate = DateTime.now();
+    String now = nowDate.toString();
+    String fechaFormateada = DateFormat('dd-MM-yyyy').format(nowDate);
+    var path = '$identificacion/inversiones/$now.jpg';
     if (image != null) {
       file = File(image.path);
       var refStorage = firebase_storage.FirebaseStorage.instance.ref(path);
       await refStorage.putFile(file!);
       url = await refStorage.getDownloadURL();
+      print(url);
+      Map<String, dynamic> nuevaNotificacion = {
+        'concepto': 'Inversion',
+        'estado': false,
+        'fecha' : fechaFormateada,
+        'identificacion': identificacion,
+        'urlImagen': url
+
+      };
+      coleccionNotificaciones.add(nuevaNotificacion)
+          .then((DocumentReference doc) =>
+      print('Elemento agregado con id: ${doc.id}'));
     } else {
       print("La imagen es nula");
     }
@@ -245,20 +260,21 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
   }
 
   void cargarDatosDesdeFireBase() {
+    coleccionNotificaciones = FirebaseFirestore.instance.collection('notificaciones');
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user != null) {
         email = user.email.toString();
-        CollectionReference usuarios =
-            FirebaseFirestore.instance.collection('usuarios');
-        QuerySnapshot querySnapshot = await usuarios.where('correo', isEqualTo: email).get();
+        coleccionUsuarios = FirebaseFirestore.instance.collection('usuarios');
+        QuerySnapshot querySnapshot = await coleccionUsuarios.where('correo', isEqualTo: email).get();
         if(querySnapshot.docs.isNotEmpty){
-
           DocumentSnapshot document = querySnapshot.docs.first;
           DocumentReference doc= document.reference;
+          Map<String, dynamic> userData = document.data() as Map<String,
+              dynamic>;
+          this.identificacion = userData["identificacion"];
           doc.collection("inversiones")
               .get()
               .then((QuerySnapshot querySnapshot) {
-            // Limpia la lista antes de agregar nuevos elementos
             setState(() {
               listaAportes.clear();
               listaAportes
@@ -412,7 +428,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                                                 await getImageGaleria();
 
                                                 if (file != null) {
-                                                  await Image.file(file!);
+                                                  Image.file(file!);
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
                                                     SnackBar(
