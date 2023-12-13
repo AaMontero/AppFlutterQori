@@ -41,7 +41,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
   String? url;
   String? email;
   List<AhorroAporte> listaAportes = [];
-  double? saldoTotal;
+  double? saldoTotal =0;
   late AccountandcardModel _model;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -245,37 +245,42 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
   }
 
   void cargarDatosDesdeFireBase() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user != null) {
         email = user.email.toString();
         CollectionReference usuarios =
             FirebaseFirestore.instance.collection('usuarios');
-
-        usuarios
-            .doc(email)
-            .collection("ahorros")
-            .get()
-            .then((QuerySnapshot querySnapshot) {
-          // Limpia la lista antes de agregar nuevos elementos
-          setState(() {
-            listaAportes.clear();
-            listaAportes
-                .addAll(querySnapshot.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data =
-                  document.data() as Map<String, dynamic>;
-              String concepto = data['concepto'];
-              double monto = double.parse(data['monto'].toString());
-              String fecha = data['fecha'].toString();
-              return AhorroAporte(
-                  concepto: concepto, fecha: fecha, monto: monto);
-            }));
-            saldoTotal = listaAportes
-                .map((aporte) => aporte.monto)
-                .fold(0.0, (a, b) => a! + b);
-          });
-        }).catchError((error) {
-          print("Error al obtener datos de Firebase: $error");
-        });
+            QuerySnapshot querySnapshot = await usuarios.where('correo', isEqualTo: email).get();
+            if(querySnapshot.docs.isNotEmpty){
+              DocumentSnapshot document = querySnapshot.docs.first;
+              DocumentReference doc= document.reference;
+              doc
+                  .collection("ahorros")
+                  .get()
+                  .then((QuerySnapshot querySnapshot) {
+                // Limpia la lista antes de agregar nuevos elementos
+                setState(() {
+                  listaAportes.clear();
+                  listaAportes
+                      .addAll(querySnapshot.docs.map((DocumentSnapshot document) {
+                    Map<String, dynamic> data =
+                    document.data() as Map<String, dynamic>;
+                    String concepto = data['concepto'];
+                    double monto = double.parse(data['monto'].toString());
+                    String fecha = data['fecha'].toString();
+                    return AhorroAporte(
+                        concepto: concepto, fecha: fecha, monto: monto);
+                  }));
+                  saldoTotal = listaAportes
+                      .map((aporte) => aporte.monto)
+                      .fold(0.0, (a, b) => a! + b);
+                });
+              }).catchError((error) {
+                print("Error al obtener datos de Firebase: $error");
+              });
+            }else{
+              print('No se pudieron cargar los datos');
+            }
       }
     });
   }

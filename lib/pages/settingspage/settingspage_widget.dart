@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
@@ -26,32 +27,27 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
   String? nombresUsuarioActivo;
   String? email;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  void cargarDatosDesdeFireBase(){
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        email = user.email.toString();
-        CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
-        usuarios.doc(email).get().then((value) {
-          if (value.exists) {
-            // Obtener los datos del documento
-            Map<String, dynamic> userData = value.data() as Map<String,
-                dynamic>;
-            setState(() {
-              nombresUsuarioActivo = userData['nombres'];
-            });
-          }
-        }
-        );
-
-      }
-    });
+  Future<void> cargarSharedPreferences() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? nombresPref = prefs.getString('nombres') ?? "";
+      String? correoPref = prefs.getString("correo")??"";
+      setState(() {
+        nombresUsuarioActivo = nombresPref;
+        email=correoPref;
+      });
+      print("nombresUsuarioActivo: $nombresUsuarioActivo");
+    } catch (error) {
+      print("Error al cargar datos desde Firebase: $error");
+    }
   }
 
 
   @override
   void initState() {
+    cargarSharedPreferences();
     super.initState();
-    cargarDatosDesdeFireBase();
+
     _model = createModel(context, () => SettingspageModel());
   }
 

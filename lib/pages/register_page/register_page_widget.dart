@@ -35,7 +35,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1900),
       lastDate: DateTime(2101),
       locale: const Locale('es', 'ES'),
     );
@@ -47,6 +47,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
     }
   }
   registrar(correo, contrasenia, nombres, apellidos,numIdentificacion ,numCelular, empresa, cargo, fechaNacimiento) async {
+    print(numIdentificacion);
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: correo,
@@ -694,7 +695,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                       validator: _model.textController8Validator
                                           .asValidator(context),
                                       onChanged: (value) {
-                                        numCelularReg = value;
+                                        numCedulaReg = value;
                                       },
                                     ),
                                   ),
