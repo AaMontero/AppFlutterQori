@@ -53,26 +53,28 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
     final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+$');
     return emailRegex.hasMatch(email);
   }
-
-
-
-
-
     registrar(correo, contrasenia, nombres, apellidos, numIdentificacion,
         numCelular, empresa, cargo, fechaNacimiento) async {
       print(numIdentificacion);
       // Validaciones
       if (correo.isEmpty || !isValidEmail(correo)) {
-        print('Correo electrónico no válido');
+        showValidationError('Correo electrónico no válido');
+        return;
+      }
+      if (!correo.contains('@')) {
+        showValidationError('El correo electrónico debe contener el carácter "@"');
         return;
       }
 
       if (contrasenia.length < 6) {
-        print(
-            'La contraseña es demasiado corta. Debe tener al menos 6 caracteres.');
+        showValidationError('La contraseña es demasiado corta. Debe tener al menos 6 caracteres.');
         return;
       }
 
+      if (numIdentificacion.length < 10) {
+        showValidationError('Cedula debe tener 10 dijitos');
+        return;
+      }
       try {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: correo,
@@ -143,9 +145,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
         onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: Scaffold(
           key: scaffoldKey,
-          backgroundColor: AzaBankTheme
-              .of(context)
-              .primary,
+          backgroundColor: AzaBankTheme.of(context).primary,
           body: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -288,114 +288,102 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
-                          Form(
-                            autovalidateMode: AutovalidateMode.always,
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 40.0, 0.0, 10.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        4.0, 0.0, 0.0, 0.0),
-                                    child: Container(
-                                      width: 310.0,
-                                      height: 55.0,
-                                      decoration: BoxDecoration(
-                                        color: Color(0x12000000),
-                                        borderRadius: BorderRadius.circular(
-                                            5.0),
-                                        border: Border.all(
-                                          color: AzaBankTheme
-                                              .of(context)
-                                              .orange,
-                                          width: 2.0,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            15.0, 0.0, 20.0, 0.0),
-                                        child: TextFormField(
-                                          controller: _model.textController1,
-                                          obscureText: false,
-                                          decoration: InputDecoration(
-                                            labelText: 'Correo Electrónico',
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1.0,
-                                              ),
-                                              borderRadius: const BorderRadius
-                                                  .only(
-                                                topLeft: Radius.circular(4.0),
-                                                topRight: Radius.circular(4.0),
-                                              ),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1.0,
-                                              ),
-                                              borderRadius: const BorderRadius
-                                                  .only(
-                                                topLeft: Radius.circular(4.0),
-                                                topRight: Radius.circular(4.0),
-                                              ),
-                                            ),
-                                            errorBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1.0,
-                                              ),
-                                              borderRadius: const BorderRadius
-                                                  .only(
-                                                topLeft: Radius.circular(4.0),
-                                                topRight: Radius.circular(4.0),
-                                              ),
-                                            ),
-                                            focusedErrorBorder:
-                                            UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1.0,
-                                              ),
-                                              borderRadius: const BorderRadius
-                                                  .only(
-                                                topLeft: Radius.circular(4.0),
-                                                topRight: Radius.circular(4.0),
-                                              ),
-                                            ),
-                                          ),
-                                          style: AzaBankTheme
-                                              .of(context)
-                                              .bodyMedium
-                                              .override(
-                                            fontFamily: 'Poppins',
-                                            color: AzaBankTheme
-                                                .of(context)
-                                                .primaryText,
-                                          ),
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Por favor, ingresa un correo electrónico';
-                                            }
-                                            if (!isValidEmail(value)) {
-                                              return 'Correo electrónico no válido';
-                                            }
-                                            return null;
-                                          },
-                                          onChanged: (value) {
-                                            correoReg = value;
-                                          },
-                                        ),
+
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 40.0, 0.0, 10.0),
+                            child:
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      4.0, 0.0, 0.0, 0.0),
+                                  child: Container(
+                                    width: 310.0,
+                                    height: 55.0,
+                                    decoration: BoxDecoration(
+                                      color: Color(0x12000000),
+                                      borderRadius: BorderRadius.circular(
+                                          5.0),
+                                      border: Border.all(
+                                        color: AzaBankTheme
+                                            .of(context)
+                                            .orange,
+                                        width: 2.0,
                                       ),
                                     ),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          15.0, 0.0, 20.0, 0.0),
+                                      child: TextFormField(
+                                        validator: (value){
+                                          if(value!.isEmpty || !isValidEmail(value)){
+                                            return 'correo no valido';
+                                          }
+                                          return null;
+                                        },
+                                        controller: _model.textController1,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Correo Electrónico',
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          errorBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                          focusedErrorBorder:
+                                          UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(4.0),
+                                              topRight: Radius.circular(4.0),
+                                            ),
+                                          ),
+                                        ),
+                                        style: AzaBankTheme.of(context).bodyMedium.override(
+                                          fontFamily: 'Poppins',
+                                          color: AzaBankTheme.of(context).primaryText,
+                                        ),
+
+                                        onChanged: (value) {
+                                          correoReg = value;
+                                        },
+                                      ),
+
+                                    ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
 
@@ -426,6 +414,12 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           15.0, 0.0, 20.0, 0.0),
                                       child: TextFormField(
+                                        validator: (value){
+                                          if (value!.isEmpty || value.length < 6) {
+                                            return 'La contraseña es demasiado corta. Debe tener al menos 6 caracteres';
+                                          }
+                                          return null;
+                                        },
                                         controller: _model.textController3,
                                         obscureText: !_model.passwordVisibility,
                                         decoration: InputDecoration(
@@ -489,33 +483,17 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                   ? Icons.visibility_outlined
                                                   : Icons
                                                   .visibility_off_outlined,
-                                              color: AzaBankTheme
-                                                  .of(context)
-                                                  .primaryText,
+                                              color: AzaBankTheme.of(context).primaryText,
                                               size: 22.0,
                                             ),
                                           ),
                                         ),
-                                        style: AzaBankTheme
-                                            .of(context)
-                                            .bodyMedium
-                                            .override(
+                                        style: AzaBankTheme.of(context).bodyMedium.override(
                                           fontFamily: 'Poppins',
-                                          color: AzaBankTheme
-                                              .of(context)
-                                              .primaryText,
+                                          color: AzaBankTheme.of(context).primaryText,
                                         ),
                                         keyboardType:
                                         TextInputType.visiblePassword,
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Por favor, ingresa una contraseña';
-                                          }
-                                          if (value.length < 6) {
-                                            return 'La contraseña debe tener al menos 6 caracteres';
-                                          }
-                                          return null;
-                                        },
                                         onChanged: (value) {
                                           passwordReg = value;
                                         },
@@ -751,6 +729,12 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           15.0, 0.0, 20.0, 0.0),
                                       child: TextFormField(
+                                        validator: (value){
+                                          if (value!.isEmpty || value.length < 10) {
+                                            return 'N° Cedula debe tener 10 dijitos';
+                                          }
+                                          return null;
+                                        },
                                         controller: _model.textController8,
                                         obscureText: false,
                                         decoration: InputDecoration(
@@ -810,9 +794,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                               .of(context)
                                               .primaryText,
                                         ),
-                                        validator: _model
-                                            .textController8Validator
-                                            .asValidator(context),
                                         onChanged: (value) {
                                           numCedulaReg = value;
                                         },
@@ -1164,17 +1145,33 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                5.0, 20.0, 5.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(5.0, 20.0, 5.0, 0.0),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      5.0, 0.0, 0.0, 0.0),
+                                  padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                                   child: FFButtonWidget(
                                     onPressed: () async {
+                                      // Validaciones de campos
+                                      if (!isValidEmail(correoReg!)) {
+                                        showValidationError('Correo electrónico no válido');
+                                        return;
+                                      }
+
+                                      if (passwordReg!.length < 6) {
+                                        // Muestra un mensaje de error para la contraseña
+                                        showValidationError('La contraseña debe tener al menos 6 caracteres');
+                                        return;
+                                      }
+                                      if (numCedulaReg!.length < 10) {
+                                        // Muestra un mensaje de error para la contraseña
+                                        showValidationError('Cedula debe tener 10 dijitos');
+                                        return;
+                                      }
+
+
                                       if (correoReg != null &&
                                           passwordReg != null &&
                                           nombresReg != null &&
@@ -1195,56 +1192,50 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           cargoReg!,
                                           selectedDate,
                                         );
-                                      } else {
-                                        print(
-                                            "Algunas de las variables requeridas son nulas.");
-                                      }
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Cuenta creada correctamente',
-                                            style: AzaBankTheme
-                                                .of(context)
-                                                .titleSmall,
+
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Cuenta creada correctamente',
+                                              style: AzaBankTheme.of(context).titleSmall,
+                                            ),
+                                            duration: Duration(milliseconds: 4000),
+                                            backgroundColor: AzaBankTheme.of(context).green,
                                           ),
-                                          duration: Duration(
-                                              milliseconds: 4000),
-                                          backgroundColor:
-                                          AzaBankTheme
-                                              .of(context)
-                                              .green,
-                                        ),
-                                      );
-                                      await Navigator.push(
-                                        context,
-                                        PageTransition(
-                                          type: PageTransitionType.scale,
-                                          alignment: Alignment.bottomCenter,
-                                          duration: Duration(milliseconds: 300),
-                                          reverseDuration:
-                                          Duration(milliseconds: 300),
-                                          child:
-                                          LoginPageWidget(),
-                                        ),
-                                      );
+                                        );
+
+                                        await Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            type: PageTransitionType.scale,
+                                            alignment: Alignment.bottomCenter,
+                                            duration: Duration(milliseconds: 300),
+                                            reverseDuration: Duration(milliseconds: 300),
+                                            child: LoginPageWidget(),
+                                          ),
+                                        );
+                                      } else {
+                                        // Muestra algún mensaje indicando que no todos los campos están llenos.
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Por favor, completa todos los campos',
+                                              style: AzaBankTheme.of(context).titleSmall,
+                                            ),
+                                            duration: Duration(milliseconds: 4000),
+                                            backgroundColor: AzaBankTheme.of(context).error,
+                                          ),
+                                        );
+                                      }
                                     },
                                     text: 'Registro',
                                     options: FFButtonOptions(
                                       width: 130.0,
                                       height: 55.0,
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 0.0),
-                                      iconPadding: EdgeInsetsDirectional
-                                          .fromSTEB(
-                                          0.0, 0.0, 0.0, 0.0),
-                                      color: AzaBankTheme
-                                          .of(context)
-                                          .primary,
-                                      textStyle: AzaBankTheme
-                                          .of(context)
-                                          .titleSmall
-                                          .override(
+                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                      iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                      color: AzaBankTheme.of(context).primary,
+                                      textStyle: AzaBankTheme.of(context).titleSmall.override(
                                         fontFamily: 'Poppins',
                                         color: Colors.white,
                                       ),
@@ -1260,6 +1251,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
+
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 30.0, 0.0, 0.0),
@@ -1324,6 +1316,19 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
         ),
       );
     }
+
+  void showValidationError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: AzaBankTheme.of(context).titleSmall,
+        ),
+        duration: Duration(milliseconds: 4000),
+        backgroundColor: AzaBankTheme.of(context).error,
+      ),
+    );
+  }
   }
 
 
