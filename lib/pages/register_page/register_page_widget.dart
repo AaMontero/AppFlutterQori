@@ -30,7 +30,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
   String? cargoReg;
   String? empresaReg;
   String? numCedulaReg;
-  DateTime selectedDate = DateTime.now();
+  DateTime? selectedDate = DateTime.now();
 
 
   Future<void> _selectDate(BuildContext context) async {
@@ -320,7 +320,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                       child: TextFormField(
                                         validator: (value){
                                           if(value!.isEmpty || !isValidEmail(value)){
-                                            return 'correo no valido';
+                                            return 'Correo no valido';
                                           }
                                           return null;
                                         },
@@ -504,6 +504,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
+
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -603,6 +604,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
+
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -702,6 +704,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
+
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -804,6 +807,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
+
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -903,6 +907,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
+
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -1002,6 +1007,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
+
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -1101,6 +1107,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
+
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0,
                                 0.0, 10.0),
@@ -1144,6 +1151,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
+
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(5.0, 20.0, 5.0, 0.0),
                             child: Column(
@@ -1155,32 +1163,50 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                   child: FFButtonWidget(
                                     onPressed: () async {
                                       // Validaciones de campos
-                                      if (!isValidEmail(correoReg!)) {
-                                        showValidationError('Correo electrónico no válido');
+                                      if (correoReg == null || !isValidEmail(correoReg!)) {
+                                        showValidationError('Correo electrónico no válido, debe tener "@"');
                                         return;
                                       }
 
-                                      if (passwordReg!.length < 6) {
+                                      if (passwordReg == null || passwordReg!.length < 6) {
                                         // Muestra un mensaje de error para la contraseña
                                         showValidationError('La contraseña debe tener al menos 6 caracteres');
                                         return;
                                       }
-                                      if (numCedulaReg!.length < 10) {
+                                      if (numCedulaReg == null || numCedulaReg!.length < 10) {
                                         // Muestra un mensaje de error para la contraseña
                                         showValidationError('Cedula debe tener 10 dijitos');
                                         return;
                                       }
 
-
-                                      if (correoReg != null &&
-                                          passwordReg != null &&
-                                          nombresReg != null &&
-                                          apellidosReg != null &&
-                                          numCedulaReg != null &&
-                                          numCelularReg != null &&
-                                          empresaReg != null &&
-                                          cargoReg != null &&
-                                          selectedDate != null) {
+                                        //Validar todos los campos
+                                      if (correoReg == null ||
+                                          passwordReg == null ||
+                                          nombresReg == null ||
+                                          apellidosReg == null ||
+                                          numCedulaReg == null ||
+                                          numCelularReg == null ||
+                                          empresaReg == null ||
+                                          cargoReg == null ||
+                                          selectedDate == null) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Por favor, completa todos los campos',
+                                              style: AzaBankTheme
+                                                  .of(context)
+                                                  .titleSmall,
+                                            ),
+                                            duration: Duration(
+                                                milliseconds: 4000),
+                                            backgroundColor: AzaBankTheme
+                                                .of(context)
+                                                .error,
+                                          ),
+                                        );
+                                        return;
+                                      }
                                         registrar(
                                           correoReg!,
                                           passwordReg!,
@@ -1214,19 +1240,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                             child: LoginPageWidget(),
                                           ),
                                         );
-                                      } else {
-                                        // Muestra algún mensaje indicando que no todos los campos están llenos.
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Por favor, completa todos los campos',
-                                              style: AzaBankTheme.of(context).titleSmall,
-                                            ),
-                                            duration: Duration(milliseconds: 4000),
-                                            backgroundColor: AzaBankTheme.of(context).error,
-                                          ),
-                                        );
-                                      }
+
                                     },
                                     text: 'Registro',
                                     options: FFButtonOptions(
