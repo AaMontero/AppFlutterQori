@@ -27,6 +27,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   String? email;
   String? cargoUsuarioActivo;
   String? empresaUsuarioActivo;
+  String? identificacionUsuarioActivo;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
 
@@ -64,16 +65,19 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             cargoUsuarioActivo = userData['cargo'];
             empresaUsuarioActivo = userData['empresa'];
           });
+
           preferences.setString('nombres', userData['nombres']);
           preferences.setString('apellidos', userData['apellidos']);
           preferences.setString('correo', userData['correo']);
           preferences.setString('empresa', userData['empresa']);
           preferences.setString('cargo', userData['cargo']);
-          preferences.setString('fechaNacimiendo', userData['fechaNacimiento']);
           preferences.setString('identificacion', userData['identificacion']);
+
         }
       }
     });
+    identificacionUsuarioActivo = preferences.getString('identificacion') ?? "";
+    print("La identificacion que llega a inicio es: " +identificacionUsuarioActivo!);
   }
   @override
   Widget build(BuildContext context) {

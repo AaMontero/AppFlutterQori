@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
@@ -26,19 +24,29 @@ class _SettingspageWidgetState extends State<SettingspageWidget> {
   late SettingspageModel _model;
   String? nombresUsuarioActivo;
   String? email;
+  String? identificacion;
+  String? apellidos;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   Future<void> cargarSharedPreferences() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       String? nombresPref = prefs.getString('nombres') ?? "";
       String? correoPref = prefs.getString("correo")??"";
+      String? identificacionShared = prefs.getString("identificacion") ?? "";
+      String? apellidosPref = prefs.getString('apellidos') ?? "";
       setState(() {
         nombresUsuarioActivo = nombresPref;
         email=correoPref;
+        apellidos = apellidosPref;
+        identificacion = identificacionShared;
       });
       print("nombresUsuarioActivo: $nombresUsuarioActivo");
+      print("Shared id $identificacion");
+      print("Shared email $email");
+      print("Shared apellidos $apellidos");
+
     } catch (error) {
-      print("Error al cargar datos desde Firebase: $error");
+      print("Error al cargar los datos de shared Preferences: $error");
     }
   }
 
