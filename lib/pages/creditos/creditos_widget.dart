@@ -19,10 +19,8 @@ class _CreditosWidgetState extends State<CreditosWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
 
-
-
-  bool tieneCredito = false;
-  String? identificacionUsuarioActivo = "";
+  bool? tieneCredito;
+  String? identificacionUsuarioActivo;
 
 
   late CreditosModel _model;
@@ -30,8 +28,8 @@ class _CreditosWidgetState extends State<CreditosWidget> {
   @override
   void initState() {
     super.initState();
-    cargarSharedPreferences();
-    _model = createModel(context, () => CreditosModel());
+        _model = createModel(context, () => CreditosModel());
+        cargarSharedPreferences();
   }
 
   @override
@@ -49,15 +47,21 @@ class _CreditosWidgetState extends State<CreditosWidget> {
       });
     } catch (error) {
       print("Error al cargar datos desde Firebase: $error");
+      setState(() {
+        tieneCredito = false;
+      });
+      return;
     }
     QuerySnapshot querySnapshot =
       await FirebaseFirestore.instance.collection("usuarios")
           .doc(identificacionUsuarioActivo).collection("creditos")
-          .where("estado", whereIn: ["activo", "Moroso"]).get();
-    if(querySnapshot.docs.length > 0){
-      tieneCredito = true;
-    }else{
-      tieneCredito = false;
+          .get();
+    bool tieneCreditoLocal = querySnapshot.docs.length > 0;
+
+    if (tieneCredito != tieneCreditoLocal) {
+      setState(() {
+        tieneCredito = tieneCreditoLocal;
+      });
     }
     print("La longitud de la cadena es: "+ querySnapshot.docs.length.toString());
     print("Valor de verdad de tiene Credito:" + tieneCredito.toString());
@@ -65,15 +69,17 @@ class _CreditosWidgetState extends State<CreditosWidget> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-    });
-    if(tieneCredito){
+    return _buildContent();
+    }
+   Widget _buildContent(){
+    if(tieneCredito==null) {
+      return CircularProgressIndicator();
+    } else if(tieneCredito!){
       return ConCreditosWidget();
     }else {
       return SinCreditosWidget();
     }
   }
-
 }
 
 
