@@ -14,7 +14,6 @@ class AhorroAporte {
   String concepto;
   String fecha;
   double monto;
-
   // Constructor
   AhorroAporte({
     required this.concepto,
