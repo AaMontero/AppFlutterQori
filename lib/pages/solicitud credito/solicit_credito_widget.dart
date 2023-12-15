@@ -51,7 +51,6 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
 
     _model.textControllerResultado ??= TextEditingController();
     _model.textControllerCuotas ??= TextEditingController();
-    _model.textControllerResultado ??= TextEditingController();
     _model.pageViewController ??= PageController(initialPage: 0);
 
 

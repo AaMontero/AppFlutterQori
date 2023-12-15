@@ -73,18 +73,33 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
       return true;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+      if (e.code == 'Usuario no encontrado') {
+        print('No se encontró ningún usuario para ese correo electrónico.');
+      } else if (e.code == 'contraseña incorrecta') {
+        print('contraseña incorrecta');
       }
     }
     return false;
   }
-  void navigateToSecondSplashScreen() {
-    Navigator.of(context).pushReplacementNamed(
-        MaterialPageRoute(builder: (context) => SplashScreem1()) as String);
+
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    return emailRegex.hasMatch(email);
   }
+  void showValidationError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: AzaBankTheme.of(context).titleSmall,
+        ),
+        duration: Duration(milliseconds: 4000),
+        backgroundColor: AzaBankTheme.of(context).error,
+      ),
+    );
+  }
+
+
 
   @override
   void dispose() {
@@ -295,6 +310,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             ],
                           ),
                         ),
+
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 5.0, 0.0, 0.0),
@@ -403,6 +419,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             ],
                           ),
                         ),
+
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 10.0, 0.0, 0.0),
@@ -441,6 +458,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             ],
                           ),
                         ),
+
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               5.0, 20.0, 5.0, 0.0),
@@ -449,10 +467,23 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    8.0, 0.0, 0.0, 0.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 0.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
+
+                                    //Validaciones
+                                    if (correo == null || !isValidEmail(correo!)) {
+                                      showValidationError('Correo electrónico no válido');
+                                      return;
+                                    }
+
+                                    if (password == null || password!.length < 6) {
+                                      // Muestra un mensaje de error para la contraseña
+                                      showValidationError('Contraseña incorrecta');
+                                      return;
+                                    }
+
+
                                     print("Credenciales: " + correo!);
                                     print("Credenciales: " + password!);
                                     if(await logearSesionCorreoPass(correo, password)){
@@ -477,7 +508,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                           reverseDuration:
                                           Duration(milliseconds: 300),
                                           child:
-                                          NavBarPage(initialPage: 'Creditos'),
+                                          NavBarPage(initialPage: 'HomePage'),
 
                                         ),
                                       );
@@ -576,4 +607,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       ),
     );
   }
+
+
 }

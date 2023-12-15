@@ -190,7 +190,7 @@ class _ConCreditosWidgetState extends State<ConCreditosWidget> {
                                     ),
                                     SizedBox(height: 10.0),
                                     Text(
-                                      'Cuotas:     ',
+                                      'Cuotas Restantes:     ',
                                       style: AzaBankTheme.of(context)
                                           .bodyMedium
                                           .override(

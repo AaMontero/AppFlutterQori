@@ -48,6 +48,16 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
       });
     }
   }
+  Future<bool> isCorreoRepetido(String correo) async {
+    try {
+      CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
+      QuerySnapshot querySnapshot = await usuarios.where('correo', isEqualTo: correo).get();
+      return querySnapshot.docs.isNotEmpty;
+    } catch (error) {
+      print('Error al verificar si el correo está repetido: $error');
+      return false;
+    }
+  }
 
   bool isValidEmail(String email) {
     final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+$');
@@ -1162,6 +1172,11 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                                   child: FFButtonWidget(
                                     onPressed: () async {
+                                      bool isRepetido = await isCorreoRepetido(correoReg!);
+                                      if (isRepetido) {
+                                        showValidationError('Correo repetido');
+                                        return;
+                                      }
                                       // Validaciones de campos
                                       if (correoReg == null || !isValidEmail(correoReg!)) {
                                         showValidationError('Correo electrónico no válido, debe tener "@"');

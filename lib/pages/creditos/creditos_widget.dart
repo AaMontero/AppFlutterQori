@@ -19,7 +19,7 @@ class CreditosWidget extends StatefulWidget {
 class _CreditosWidgetState extends State<CreditosWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
-  bool tieneCredito = false;
+  bool tieneCredito = true;
 
 
   @override
