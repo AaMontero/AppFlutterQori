@@ -1,5 +1,6 @@
 import 'package:aza_bank/components/firebase_notification/firebaseNotificationAPI.dart';
 import 'package:aza_bank/pages/splash%20screen/splash_screem.dart';
+import 'package:aza_bank/pages/splash%20screen/splash_screem1.dart';
 //import 'package:aza_bank/pages/transfer_funds/transferencia_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -52,7 +53,10 @@ class _MyAppState extends State<MyApp> {
       initialRoute: "splash",
       routes: {
         "splash":(context)=>SplashScreem(),
-        "HomePAge":(context)=>HomePageWidget(),
+        "welcomepage":(context)=>WelcomePageWidget(),
+
+
+
       },
       localizationsDelegates: [
         FFLocalizationsDelegate(),

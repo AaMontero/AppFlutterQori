@@ -13,10 +13,10 @@ class _SplashScreemState extends State<SplashScreem> {
 @override
   void initState() {
     super.initState();
-    var d = const Duration(seconds: 4);
+    var d = const Duration(seconds: 3);
     Future.delayed(d,(){
       Navigator.pushAndRemoveUntil(
-      context as BuildContext,
+      context,
       MaterialPageRoute(builder: (context) => WelcomePageWidget()),
 
       (route) => false);
