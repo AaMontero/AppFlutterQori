@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
+import '../splash screen/splash_screem1.dart';
 import '/main.dart';
 import '/pages/forgot_password/forgot_password_widget.dart';
 import '/pages/register_page/register_page_widget.dart';
@@ -80,6 +81,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     }
     return false;
   }
+  void navigateToSecondSplashScreen() {
+    Navigator.of(context).pushReplacementNamed(
+        MaterialPageRoute(builder: (context) => SplashScreem1()) as String);
+  }
+
   @override
   void dispose() {
     _model.dispose();
@@ -90,6 +96,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
@@ -449,23 +456,18 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                     print("Credenciales: " + correo!);
                                     print("Credenciales: " + password!);
                                     if(await logearSesionCorreoPass(correo, password)){
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Login Successful',
-                                            style: AzaBankTheme.of(context)
-                                                .titleSmall
-                                                .override(
-                                              fontFamily: 'Poppins',
-                                              color: AzaBankTheme.of(context)
-                                                  .primary3,
-                                            ),
-                                          ),
-                                          duration: Duration(milliseconds: 4000),
-                                          backgroundColor:
-                                          AzaBankTheme.of(context).green,
+
+                                      await Navigator.push(
+                                        context,
+                                        PageTransition(
+                                          type: PageTransitionType.scale,
+                                          alignment: Alignment.bottomCenter,
+                                          duration: Duration(milliseconds: 200),
+                                          reverseDuration: Duration(milliseconds: 200),
+                                          child: SplashScreem1(),
                                         ),
                                       );
+
                                       await Navigator.push(
                                         context,
                                         PageTransition(
@@ -475,13 +477,14 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                           reverseDuration:
                                           Duration(milliseconds: 300),
                                           child:
-                                          NavBarPage(initialPage: 'HomePage'),
+                                          NavBarPage(initialPage: 'Creditos'),
+
                                         ),
                                       );
+
                                     }else{
                                       print("No se pudo acceder a la cuenta");
                                     }
-
 
                                   },
                                   text: 'Ingresar',
@@ -544,6 +547,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                         child: RegisterPageWidget(),
                                       ),
                                     );
+
                                   },
                                   child: Text(
                                     'Registrarse',

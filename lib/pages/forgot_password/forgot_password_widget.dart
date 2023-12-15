@@ -328,7 +328,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                                             .primaryText,
                                                       ),
                                                   keyboardType:
-                                                      TextInputType.phone,
+                                                      TextInputType.text,
                                                   validator: _model
                                                       .textController1Validator
                                                       .asValidator(context),
