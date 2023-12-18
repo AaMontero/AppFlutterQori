@@ -1,4 +1,5 @@
 import 'package:aza_bank/components/firebase_notification/firebaseNotificationAPI.dart';
+import 'package:aza_bank/pages/onboarding_widget.dart';
 import 'package:aza_bank/pages/splash%20screen/splash_screem.dart';
 import 'package:aza_bank/pages/splash%20screen/splash_screem1.dart';
 //import 'package:aza_bank/pages/transfer_funds/transferencia_model.dart';
@@ -15,6 +16,8 @@ import 'package:aza_bank/pages/creditos/creditos_widget.dart';
 import 'package:aza_bank/pages/search_page/search_page_widget.dart';
 import 'package:aza_bank/pages/settingspage/settingspage_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AzaBankTheme.initialize();
@@ -31,6 +34,7 @@ class MyApp extends StatefulWidget {
   static _MyAppState of(BuildContext context) =>
       context.findAncestorStateOfType<_MyAppState>()!;
 }
+
 
 class _MyAppState extends State<MyApp> {
   Locale? _locale;
@@ -50,10 +54,12 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'AzaBank',
       debugShowCheckedModeBanner: false,
-      initialRoute: "splash",
+      initialRoute: "splash" ,
       routes: {
+
         "splash":(context)=>SplashScreem(),
         "welcomepage":(context)=>WelcomePageWidget(),
+
 
 
 
