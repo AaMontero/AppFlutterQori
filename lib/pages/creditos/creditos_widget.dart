@@ -53,7 +53,7 @@ class _CreditosWidgetState extends State<CreditosWidget> {
     QuerySnapshot querySnapshot =
       await FirebaseFirestore.instance.collection("usuarios")
           .doc(identificacionUsuarioActivo).collection("creditos")
-          .where("estado", whereIn: ["activo", "Moroso"]).get();
+          .get();
     if(querySnapshot.docs.length > 0){
       tieneCredito = true;
     }else{
