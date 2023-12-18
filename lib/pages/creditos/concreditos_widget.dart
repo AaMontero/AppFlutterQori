@@ -1,24 +1,104 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
-import '../../theme/aza_bank_widgets.dart';
 import 'package:flutter/material.dart';
-import '/pages/solicitud credito/solicit_credito_widget.dart';
 
 class ConCreditosWidget extends StatefulWidget {
   const ConCreditosWidget({Key? key}) : super(key: key);
 
   @override
   State<ConCreditosWidget> createState() => _ConCreditosWidgetState();
-
 }
-
 
 class _ConCreditosWidgetState extends State<ConCreditosWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
   bool tieneCredito = false;
+  String? identificacionUsuarioActivo;
+  String? nombresUsuarioActivo;
+  String? apellidosUsuarioActivo;
+  String? fechaPagoM;
+  String? vencimientoM;
+  int? cuotasRestantesM;
+  String? tipoDeCobroM;
+  String? estadoM;
+  double? saldoM;
+  String? nombreCompletoM;
+  double? montoM;
 
+  Future<void> cargarDatosCreditoActivo() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? identificacionShared = prefs.getString('identificacion') ?? "";
+      String? nombresShared = prefs.getString("nombres") ?? "";
+      String? apellidosShared = prefs.getString("apellidos") ?? "";
+      setState(() {
+        identificacionUsuarioActivo = identificacionShared;
+        nombresUsuarioActivo = nombresShared;
+        apellidosUsuarioActivo = apellidosShared;
+      });
+    } catch (error) {
+      print("Error al cargar datos desde Firebase: $error");
+      setState(() {
+        tieneCredito = false;
+      });
+      return;
+    }
+    CollectionReference coleccionReference = await FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(identificacionUsuarioActivo)
+        .collection("creditos");
+    QuerySnapshot creditosSnapshot = await coleccionReference.limit(1).get();
+    if (creditosSnapshot.docs.isNotEmpty) {
+      DocumentSnapshot primerCredito = creditosSnapshot.docs.first;
+      Map<String, dynamic> datosCredito =
+      primerCredito.data() as Map<String, dynamic>;
+      String fechaVencimiento = datosCredito['fecha_vencimiento'];
+      String estado = datosCredito['estado'];
+      setState(() {
+        vencimientoM = fechaVencimiento;
+        estadoM = estado;
+
+      });
+      CollectionReference cuotasCollection =
+      primerCredito.reference.collection("cuotas");
+      QuerySnapshot cuotasSnapshot = await cuotasCollection.get();
+      List<Map<String, dynamic>> cuotas = [];
+      cuotasSnapshot.docs.forEach((cuota) {
+        Map<String, dynamic> datosCuota = cuota.data() as Map<String, dynamic>;
+        DateTime fechaPago =
+        DateFormat('dd-MM-yyyy').parse(datosCuota['fecha_pago']);
+        datosCuota['fecha_pago'] = fechaPago;
+        cuotas.add(datosCuota);
+      });
+      cuotas.sort((a, b) => a['fecha_pago'].compareTo(b['fecha_pago']));
+      int cuotasRestantes = 0;
+      cuotas.forEach((elemento) {
+        if (elemento['estado'] == 'pendiente' || elemento['estado'] == 'atrasado') {
+          cuotasRestantes+=1;
+        }
+      });
+    Map<String, dynamic> cuota1 =
+    cuotas.firstWhere((element) => element['estado'] == 'pendiente');
+    DateTime fechaPrimeracuota = cuota1['fecha_pago'];
+    String? fechaPrimeracuotaString =
+    DateFormat('dd-MM-yyyy').format(fechaPrimeracuota);
+    setState(() {
+    fechaPagoM = fechaPrimeracuotaString;
+    montoM = double.parse(cuota1['monto_pago']);
+    cuotasRestantesM = cuotasRestantes;
+    saldoM = cuotasRestantesM! * montoM!;
+    });
+  }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cargarDatosCreditoActivo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +106,9 @@ class _ConCreditosWidgetState extends State<ConCreditosWidget> {
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: AzaBankTheme.of(context).secondaryBackground,
+        backgroundColor: AzaBankTheme
+            .of(context)
+            .secondaryBackground,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
@@ -60,7 +142,9 @@ class _ConCreditosWidgetState extends State<ConCreditosWidget> {
                           },
                           child: Icon(
                             Icons.arrow_back_ios,
-                            color: AzaBankTheme.of(context).primaryText,
+                            color: AzaBankTheme
+                                .of(context)
+                                .primaryText,
                             size: 24.0,
                           ),
                         ),
@@ -69,13 +153,14 @@ class _ConCreditosWidgetState extends State<ConCreditosWidget> {
                               5.0, 0.0, 0.0, 0.0),
                           child: Text(
                             'Creditos',
-                            style: AzaBankTheme.of(context).headlineMedium,
+                            style: AzaBankTheme
+                                .of(context)
+                                .headlineMedium,
                           ),
                         ),
                       ],
                     ),
                   ),
-
                   Column(
                     children: [
                       Padding(
@@ -87,8 +172,7 @@ class _ConCreditosWidgetState extends State<ConCreditosWidget> {
                           children: [
                             Column(
                               mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment:
-                              MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
                                   width: 100.0,
@@ -102,14 +186,31 @@ class _ConCreditosWidgetState extends State<ConCreditosWidget> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 10.0, 0.0, 0.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Nombre Completo',
+                                        '${nombresUsuarioActivo}',
                                         style: TextStyle(
-                                          color: AzaBankTheme.of(context).primary,
+                                          color:
+                                          AzaBankTheme
+                                              .of(context)
+                                              .primary,
+                                          fontFamily: 'Poppins',
+                                          fontSize: 25.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${apellidosUsuarioActivo}',
+                                        style: TextStyle(
+                                          color:
+                                          AzaBankTheme
+                                              .of(context)
+                                              .primary,
                                           fontFamily: 'Poppins',
                                           fontSize: 25.0,
                                           fontWeight: FontWeight.w600,
@@ -117,37 +218,37 @@ class _ConCreditosWidgetState extends State<ConCreditosWidget> {
                                       ),
                                       SizedBox(height: 5.0),
                                       Text(
-                                        'Monto: \$300.00',
+                                        'Cuota : \$${montoM}',
                                         style: TextStyle(
-                                          color: AzaBankTheme.of(context).primaryText,  // Color negro
+                                          color: AzaBankTheme
+                                              .of(context)
+                                              .primaryText, // Color negro
                                           fontFamily: 'Poppins',
                                           fontSize: 20.0,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 ),
-
                               ],
                             ),
                           ],
                         ),
                       ),
-
                       Padding(
-                        padding:
-                        EdgeInsetsDirectional.fromSTEB(30.0, 10.0, 30.0, 50.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            30.0, 20.0, 30.0, 20.0),
                         child: Container(
-
                           width: 332.0,
-                          height: 310.0,
+                          height: 230.0,
                           decoration: BoxDecoration(
                             color: Color(0x12000000),
                             borderRadius: BorderRadius.circular(5.0),
                             border: Border.all(
-                              color: AzaBankTheme.of(context).primaryText,
+                              color: AzaBankTheme
+                                  .of(context)
+                                  .primaryText,
                               width: 2.0,
                             ),
                           ),
@@ -155,100 +256,92 @@ class _ConCreditosWidgetState extends State<ConCreditosWidget> {
                             mainAxisSize: MainAxisSize.max,
                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             //crossAxisAlignment: CrossAxisAlignment.start,
-                            children:[
-                              Padding (
+                            children: [
+                              Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    10.0, 0.0, 0.0, 40.0),
+                                    20.0, 20.0, 0.0, 20.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children:[
+                                  children: [
                                     Text(
-                                      'Fecha Pago:     ',
-                                      style: AzaBankTheme.of(context)
+                                      'Fecha Pago:    ${fechaPagoM} ',
+                                      style: AzaBankTheme
+                                          .of(context)
                                           .bodyMedium
                                           .override(
                                         fontFamily: 'Poppins',
                                         fontSize: 17.0,
-                                        color: AzaBankTheme.of(context)
+                                        color: AzaBankTheme
+                                            .of(context)
                                             .primaryText,
                                       ),
                                     ),
                                     SizedBox(height: 10.0),
                                     Text(
-                                      'Vencimiento:       ',
-                                      style: AzaBankTheme.of(context)
+                                      'Vencimiento:    ${vencimientoM}   ',
+                                      style: AzaBankTheme
+                                          .of(context)
                                           .bodyMedium
                                           .override(
                                         fontFamily: 'Poppins',
                                         fontSize: 17.0,
-                                        color:
-                                        AzaBankTheme.of(context)
+                                        color: AzaBankTheme
+                                            .of(context)
                                             .primaryText,
                                       ),
                                     ),
                                     SizedBox(height: 10.0),
                                     Text(
-                                      'Cuotas Restantes:     ',
-                                      style: AzaBankTheme.of(context)
+                                      'Cuotas Restantes:    ${cuotasRestantesM} ',
+                                      style: AzaBankTheme
+                                          .of(context)
                                           .bodyMedium
                                           .override(
                                         fontFamily: 'Poppins',
                                         fontSize: 17.0,
-                                        color:
-                                        AzaBankTheme.of(context)
+                                        color: AzaBankTheme
+                                            .of(context)
+                                            .primaryText,
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 10.0),
+                                    Text(
+                                      'Estado:    ${estadoM}  ',
+                                      style: AzaBankTheme
+                                          .of(context)
+                                          .bodyMedium
+                                          .override(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 17.0,
+                                        color: AzaBankTheme
+                                            .of(context)
                                             .primaryText,
                                       ),
                                     ),
                                     SizedBox(height: 10.0),
                                     Text(
-                                      'Tipo de cobro:    ',
-                                      style: AzaBankTheme.of(context)
+                                      'Saldo:   ${saldoM}  ',
+                                      style: AzaBankTheme
+                                          .of(context)
                                           .bodyMedium
                                           .override(
                                         fontFamily: 'Poppins',
                                         fontSize: 17.0,
-                                        color:
-                                        AzaBankTheme.of(context)
-                                            .primaryText,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10.0),
-                                    Text(
-                                      'Estado:      ',
-                                      style: AzaBankTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 17.0,
-                                        color:
-                                        AzaBankTheme.of(context)
-                                            .primaryText,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10.0),
-                                    Text(
-                                      'Saldo:     ',
-                                      style: AzaBankTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 17.0,
-                                        color:
-                                        AzaBankTheme.of(context)
+                                        color: AzaBankTheme
+                                            .of(context)
                                             .primaryText,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-
                             ],
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 ],
@@ -259,7 +352,4 @@ class _ConCreditosWidgetState extends State<ConCreditosWidget> {
       ),
     );
   }
-  
 }
-
-
