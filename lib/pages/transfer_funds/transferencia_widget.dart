@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import 'package:intl/intl.dart';
@@ -41,7 +42,9 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
   late TransferenciaModel _model;
   String opcionSeleccionada = 'Banco Pichincha';
   List<String> opciones = ['Banco Pichincha', 'Produbanco', 'Banco Guayaquil'];
-
+  String? cuentaDestino;
+  String? propietarioCtaDestino;
+  double? montoTrasnferir;
   String? email;
   List<AhorroAporte> listaAportes = [];
 
@@ -52,16 +55,44 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
   final TextEditingController montoController = TextEditingController();
   final TextEditingController cuentaDestinoController = TextEditingController();
   final TextEditingController propietarioController = TextEditingController();
+  String? identificacionUsuarioActivo;
+  String? nombresUsuarioActivo;
+  double? saldoActualM;
 
     final NumberFormat currencyFormat = NumberFormat("#,##0.00", "es_ES");
 
 
-
+  Future<void> cargarDatos() async{
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? identificacionShared = prefs.getString('identificacion') ?? "";
+      String? nombresShared = prefs.getString("nombres") ?? "";
+      setState(() {
+        identificacionUsuarioActivo = identificacionShared;
+        nombresUsuarioActivo = nombresShared;
+      });
+    } catch (error) {
+      print("Error al cargar datos desde Firebase: $error");
+      return;
+    }
+    CollectionReference coleccionReference = await FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(identificacionUsuarioActivo).collection("ahorros");
+    QuerySnapshot ahorrosSnapshot = await coleccionReference.get();
+    double sumaMontos = 0.0;
+    ahorrosSnapshot.docs.forEach((documento) {
+      double monto =  double.parse(documento['monto'].toString());
+      sumaMontos += monto;
+    });
+    setState(() {
+      saldoActualM = sumaMontos;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    //cargarDatosDesdeFireBase();
+    cargarDatos();
     _model = createModel(context, () => TransferenciaModel());
 
   }
@@ -210,7 +241,7 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
                                             FontWeight.w600,
                                           ),
                                           children: [
-                                            TextSpan(text: 'Nombre Completo ',
+                                            TextSpan(text: '${nombresUsuarioActivo} ',
                                               style: TextStyle(
                                                 color: AzaBankTheme.of(
                                                     context)
@@ -245,7 +276,7 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
                                       ),
                                     ),
                                       TextSpan(
-                                        text: '\$$saldoTotal',
+                                        text: '\$$saldoActualM',
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize:
@@ -288,7 +319,7 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
                     child: TextField(
                       controller: propietarioController,
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(labelText: 'Propietario'),
+                      decoration: InputDecoration(labelText: 'Propietario Cta. Destino'),
                     ),
                   ),
 
