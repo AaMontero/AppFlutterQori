@@ -56,7 +56,6 @@ class _ConCreditosWidgetState extends State<ConCreditosWidget> {
       Map<String, dynamic> datosCredito =
       primerCredito.data() as Map<String, dynamic>;
       String fechaVencimiento = datosCredito['fecha_vencimiento'];
-      double saldo = datosCredito['saldo'].toDouble();
       String estado = datosCredito['estado'];
       setState(() {
         vencimientoM = fechaVencimiento;

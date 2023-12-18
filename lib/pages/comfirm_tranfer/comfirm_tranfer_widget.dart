@@ -1,10 +1,10 @@
+import 'package:aza_bank/main.dart';
 import 'package:aza_bank/pages/transfer_funds/transferencia_widget.dart';
-import '/components/comfirm_tranfer_section/comfirm_tranfer_section_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
-
-import '/main.dart';
 import 'package:flutter/material.dart';
 import 'comfirm_tranfer_model.dart';
 export 'comfirm_tranfer_model.dart';
@@ -29,13 +29,66 @@ class ComfirmTranferWidget extends StatefulWidget {
 
 class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
   late ComfirmTranferModel _model;
-
+  var db = FirebaseFirestore.instance;
+  String? identificacionUsuarioActivo;
+  String? nombresUsuarioActivo;
+  double? saldoActualM;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
-
+  Future<void> cargarDatos() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? identificacionShared = prefs.getString('identificacion') ?? "";
+      String? nombresShared = prefs.getString("nombres") ?? "";
+      setState(() {
+        identificacionUsuarioActivo = identificacionShared;
+        nombresUsuarioActivo = nombresShared;
+      });
+    } catch (error) {
+      print("Error al cargar datos desde Firebase: $error");
+      return;
+    }
+    CollectionReference coleccionReference = await FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(identificacionUsuarioActivo)
+        .collection("ahorros");
+    QuerySnapshot ahorrosSnapshot = await coleccionReference.get();
+    double sumaMontos = 0.0;
+    ahorrosSnapshot.docs.forEach((documento) {
+      double monto = double.parse(documento['monto'].toString());
+      sumaMontos += monto;
+    });
+    setState(() {
+      saldoActualM = sumaMontos;
+    });
+  }
+  void realizarSolicitudTrasnferencia(
+      bancoDestino, cuentaDestino, monto) async {
+    try {
+      String? fechaString = DateFormat('dd-MM-yyyy').format(DateTime.now());
+      final solTransaccion = <String, dynamic>{
+        "banco_destino": bancoDestino,
+        "cuenta_destino": cuentaDestino,
+        "estado": true,
+        "fecha": fechaString,
+        "identificacion": identificacionUsuarioActivo,
+        "monto": monto,
+        "saldo": saldoActualM,
+      };
+      db
+          .collection("solicitudTransferencia")
+          .doc()
+          .set(solTransaccion)
+          .then((_) => print(
+          'Documento agregado con éxito para el usuario:'));
+    } catch (e) {
+      print('Error al solicitar Transferencia: $e');
+    }
+  }
   @override
   void initState() {
     super.initState();
+    cargarDatos();
     _model = createModel(context, () => ComfirmTranferModel());
   }
 
@@ -218,7 +271,7 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  'Propetario Cuenta Destino',
+                                  'Propietario Cuenta Destino',
                                   style: AzaBankTheme.of(context).bodySmall.override(
                                     fontFamily: 'Poppins',
                                     color: AzaBankTheme.of(context).secondaryText,
@@ -293,10 +346,19 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 10.0, 0.0),
                               child: FFButtonWidget(
                                 onPressed: () {
-
-
+                                  realizarSolicitudTrasnferencia(widget.opcionSeleccionada!,widget.cuentaDestinoController.text, double.parse(widget.montoTransferencia ));
+                                  Navigator.push(
+                                    context,
+                                    PageTransition(
+                                      type: PageTransitionType.scale,
+                                      alignment: Alignment.bottomCenter,
+                                      duration: Duration(milliseconds: 300),
+                                      reverseDuration: Duration(milliseconds: 300),
+                                      child: NavBarPage(initialPage: 'HomePage'),
+                                    ),
+                                  );
                                 },
-                                text: 'Comfirmar Transferencia',
+                                text: 'Confirmar Transferencia',
                                 options: FFButtonOptions(
                                   width: 130.0,
                                   height: 55.0,
