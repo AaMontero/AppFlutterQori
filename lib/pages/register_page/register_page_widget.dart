@@ -60,7 +60,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
   }
 
   bool isValidEmail(String email) {
-    final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+$');
+    final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+');
     return emailRegex.hasMatch(email);
   }
     registrar(correo, contrasenia, nombres, apellidos, numIdentificacion,
@@ -1172,11 +1172,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      bool isRepetido = await isCorreoRepetido(correoReg!);
-                                      if (isRepetido) {
-                                        showValidationError('Correo repetido');
-                                        return;
-                                      }
                                       // Validaciones de campos
                                       if (correoReg == null || !isValidEmail(correoReg!)) {
                                         showValidationError('Correo electrónico no válido, debe tener "@"');
@@ -1184,13 +1179,16 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                       }
 
                                       if (passwordReg == null || passwordReg!.length < 6) {
-                                        // Muestra un mensaje de error para la contraseña
                                         showValidationError('La contraseña debe tener al menos 6 caracteres');
                                         return;
                                       }
                                       if (numCedulaReg == null || numCedulaReg!.length < 10) {
-                                        // Muestra un mensaje de error para la contraseña
                                         showValidationError('Cedula debe tener 10 dijitos');
+                                        return;
+                                      }
+                                      bool isRepetido = await isCorreoRepetido(correoReg!);
+                                      if (isRepetido) {
+                                        showValidationError('Correo repetido');
                                         return;
                                       }
 
@@ -1213,11 +1211,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                   .of(context)
                                                   .titleSmall,
                                             ),
-                                            duration: Duration(
-                                                milliseconds: 4000),
-                                            backgroundColor: AzaBankTheme
-                                                .of(context)
-                                                .error,
+                                            duration: Duration(milliseconds: 4000),
+                                            backgroundColor: AzaBankTheme.of(context).error,
                                           ),
                                         );
                                         return;
