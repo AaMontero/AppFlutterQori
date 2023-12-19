@@ -8,8 +8,6 @@ import 'register_page_model.dart';
 export 'register_page_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
-
 class RegisterPageWidget extends StatefulWidget {
   const RegisterPageWidget({Key? key}) : super(key: key);
 
@@ -60,8 +58,21 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
   }
 
   bool isValidEmail(String email) {
-    final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+$');
+    final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+');
     return emailRegex.hasMatch(email);
+  }
+  bool isStrongPassword(String password) {
+    // Validar que la contraseña tenga al menos una mayúscula, una minúscula,
+    // un carácter especial (.,_&$@) y un número.
+    final upperCaseRegex = RegExp(r'[A-Z]');
+    final lowerCaseRegex = RegExp(r'[a-z]');
+    final digitRegex = RegExp(r'[0-9]');
+    final specialCharRegex = RegExp(r'[.,_&$@]');
+
+    return upperCaseRegex.hasMatch(password) &&
+        lowerCaseRegex.hasMatch(password) &&
+        digitRegex.hasMatch(password) &&
+        specialCharRegex.hasMatch(password);
   }
     registrar(correo, contrasenia, nombres, apellidos, numIdentificacion,
         numCelular, empresa, cargo, fechaNacimiento) async {
@@ -76,8 +87,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
         return;
       }
 
-      if (contrasenia.length < 6) {
-        showValidationError('La contraseña es demasiado corta. Debe tener al menos 6 caracteres.');
+      if (contrasenia.length < 7) {
+        showValidationError('La contraseña es demasiado corta. Debe tener al menos 7 caracteres.');
         return;
       }
 
@@ -425,8 +436,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           15.0, 0.0, 20.0, 0.0),
                                       child: TextFormField(
                                         validator: (value){
-                                          if (value!.isEmpty || value.length < 6) {
-                                            return 'La contraseña es demasiado corta. Debe tener al menos 6 caracteres';
+                                          if (value!.isEmpty || value.length < 7) {
+                                            return 'La contraseña es demasiado corta. Debe tener al menos 7 caracteres';
                                           }
                                           return null;
                                         },
@@ -1172,25 +1183,23 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      bool isRepetido = await isCorreoRepetido(correoReg!);
-                                      if (isRepetido) {
-                                        showValidationError('Correo repetido');
-                                        return;
-                                      }
                                       // Validaciones de campos
                                       if (correoReg == null || !isValidEmail(correoReg!)) {
                                         showValidationError('Correo electrónico no válido, debe tener "@"');
                                         return;
                                       }
 
-                                      if (passwordReg == null || passwordReg!.length < 6) {
-                                        // Muestra un mensaje de error para la contraseña
+                                      if (passwordReg == null || passwordReg!.length < 7) {
                                         showValidationError('La contraseña debe tener al menos 6 caracteres');
                                         return;
                                       }
                                       if (numCedulaReg == null || numCedulaReg!.length < 10) {
-                                        // Muestra un mensaje de error para la contraseña
                                         showValidationError('Cedula debe tener 10 dijitos');
+                                        return;
+                                      }
+                                      bool isRepetido = await isCorreoRepetido(correoReg!);
+                                      if (isRepetido) {
+                                        showValidationError('Correo repetido');
                                         return;
                                       }
 
@@ -1213,11 +1222,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                   .of(context)
                                                   .titleSmall,
                                             ),
-                                            duration: Duration(
-                                                milliseconds: 4000),
-                                            backgroundColor: AzaBankTheme
-                                                .of(context)
-                                                .error,
+                                            duration: Duration(milliseconds: 4000),
+                                            backgroundColor: AzaBankTheme.of(context).error,
                                           ),
                                         );
                                         return;
