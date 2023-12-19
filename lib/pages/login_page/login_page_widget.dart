@@ -1,6 +1,8 @@
+import 'package:aza_bank/pages/onboarding_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import '../../theme/aza_bank_widgets.dart';
@@ -82,6 +84,20 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     return false;
   }
 
+  Future<bool> checkIfFirstTimeAfterLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isFirstTime = prefs.getBool('isFirstTimeAfterLogin') ?? true;
+
+    if (isFirstTime) {
+      // Si es la primera vez después de iniciar sesión, actualiza el valor
+      prefs.setBool('isFirstTimeAfterLogin', false);
+
+    }
+
+    return isFirstTime;
+  }
+
+
   bool isValidEmail(String email) {
     final emailRegex = RegExp(r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return emailRegex.hasMatch(email);
@@ -100,7 +116,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   }
 
 
-
   @override
   void dispose() {
     _model.dispose();
@@ -111,8 +126,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -470,6 +483,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                 padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 0.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
+                                    BuildContext currentContext = context;
 
                                     //Validaciones
                                     if (correo == null || !isValidEmail(correo!)) {
@@ -486,34 +500,50 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
                                     print("Credenciales: " + correo!);
                                     print("Credenciales: " + password!);
+
+                                    bool isFirstTime = await checkIfFirstTimeAfterLogin();
+
                                     if(await logearSesionCorreoPass(correo, password)){
 
-                                      await Navigator.push(
-                                        context,
-                                        PageTransition(
-                                          type: PageTransitionType.scale,
-                                          alignment: Alignment.bottomCenter,
-                                          duration: Duration(milliseconds: 200),
-                                          reverseDuration: Duration(milliseconds: 200),
-                                          child: SplashScreem1(),
-                                        ),
-                                      );
 
-                                      await Navigator.push(
-                                        context,
-                                        PageTransition(
-                                          type: PageTransitionType.scale,
-                                          alignment: Alignment.bottomCenter,
-                                          duration: Duration(milliseconds: 300),
-                                          reverseDuration:
-                                          Duration(milliseconds: 300),
-                                          child:
-                                          NavBarPage(initialPage: 'HomePage'),
+                                      print('isFirstTime: $isFirstTime');
 
-                                        ),
-                                      );
+                                      if (isFirstTime) {
+                                      Navigator.pushReplacement(
+                                           currentContext,
+                                           PageTransition(
+                                             type: PageTransitionType.scale,
+                                             alignment: Alignment.bottomCenter,
+                                             duration: Duration(milliseconds: 300),
+                                             reverseDuration: Duration(milliseconds: 300),
+                                             child:  OnboardingWidget(),
+                                           ),
+                                         );
 
-                                    }else{
+                                      } else{
+                                        Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            type: PageTransitionType.scale,
+                                            alignment: Alignment.bottomCenter,
+                                            duration: Duration(milliseconds: 200),
+                                            reverseDuration: Duration(milliseconds: 200),
+                                            child: SplashScreem1(),
+                                          ),
+                                        );
+
+                                        Navigator.pushReplacement(
+                                          currentContext,
+                                          PageTransition(
+                                            type: PageTransitionType.scale,
+                                            alignment: Alignment.bottomCenter,
+                                            duration: Duration(milliseconds: 300),
+                                            reverseDuration: Duration(milliseconds: 300),
+                                            child: NavBarPage(initialPage: 'HomePage'),
+                                          ),
+                                        );
+                                      }
+                                    } else {
                                       print("No se pudo acceder a la cuenta");
                                     }
 
