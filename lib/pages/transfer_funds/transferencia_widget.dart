@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
-import 'package:intl/intl.dart';
 import '../../theme/aza_bank_widgets.dart';
 import '/main.dart';
 import '/pages/comfirm_tranfer/comfirm_tranfer_widget.dart';
@@ -370,22 +369,32 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
                         EdgeInsetsDirectional.fromSTEB(0.0, 80.0, 0.0, 0.0),
                     child: FFButtonWidget(
                       onPressed: () async {
+                        //Validacion
+                        if (montoController.text.isNotEmpty &&
+                        cuentaDestinoController.text.isNotEmpty &&
+                        propietarioController.text.isNotEmpty) {
 
-                        await Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.scale,
-                            alignment: Alignment.bottomCenter,
-                            duration: Duration(milliseconds: 300),
-                            reverseDuration: Duration(milliseconds: 300),
-                            child: ComfirmTranferWidget(
-                              opcionSeleccionada: opcionSeleccionada,
-                              montoTransferencia: montoController.text,
-                              cuentaDestinoController: cuentaDestinoController,
-                              propietarioController: propietarioController,
+                          await Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.scale,
+                              alignment: Alignment.bottomCenter,
+                              duration: Duration(milliseconds: 300),
+                              reverseDuration: Duration(milliseconds: 300),
+                              child: ComfirmTranferWidget(
+                                opcionSeleccionada: opcionSeleccionada,
+                                montoTransferencia: montoController.text,
+                                cuentaDestinoController: cuentaDestinoController,
+                                propietarioController: propietarioController,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }else{
+                          //Mostrar mensaje de error
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('Todos los campos son obligatorios'),
+                          ));
+                        }
                       },
                       text: 'Continuar',
                       options: FFButtonOptions(

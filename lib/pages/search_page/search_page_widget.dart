@@ -1,3 +1,4 @@
+import '../../main.dart';
 import '../../theme/aza_bank_theme.dart';
 import '../../theme/aza_bank_util.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,15 @@ class _SearchPageWidgetState extends State<SearchPageWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        Navigator.pop(context);
+                        Navigator.push(context,
+                          PageTransition(
+                            type: PageTransitionType.scale,
+                            alignment: Alignment.bottomCenter,
+                            duration: Duration(milliseconds: 300),
+                            reverseDuration: Duration(milliseconds: 300),
+                            child: NavBarPage(initialPage: 'HomePage'),
+                          ),
+                        );
                       },
                       child: Icon(
                         Icons.arrow_back_ios,

@@ -91,6 +91,10 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
         showValidationError('La contraseña es demasiado corta. Debe tener al menos 7 caracteres.');
         return;
       }
+      if (!isStrongPassword(contrasenia)) {
+        showValidationError('La contraseña debe tener al menos una mayúscula, una minúscula, un carácter especial (.,_&@) y un número.');
+        return;
+      }
 
       if (numIdentificacion.length < 10) {
         showValidationError('Cedula debe tener 10 dijitos');

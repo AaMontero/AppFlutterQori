@@ -134,7 +134,7 @@ class _ContactosWidgetState extends State<ContactosWidget> {
                         ),
                       ),
 
-                      Padding(
+                      /*Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(20.0, 10.0, 20.0, 10.0),
                         child: InkWell(
                           splashColor: Colors.transparent,
@@ -263,7 +263,7 @@ class _ContactosWidgetState extends State<ContactosWidget> {
                             ),
                           ),
                         ),
-                      ),
+                      ),*/
 
 
                       Padding(
@@ -308,7 +308,7 @@ class _ContactosWidgetState extends State<ContactosWidget> {
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
                                       child: Text(
-                                        'Whatsapp',
+                                        '',
                                         style: AzaBankTheme.of(context)
                                             .titleSmall
                                             .override(

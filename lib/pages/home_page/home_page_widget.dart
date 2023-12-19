@@ -495,7 +495,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     SvgPicture.asset(
-                                      'assets/images/tranfer-icon.svg',
+                                      'assets/images/credit_card.svg',
                                       width: 28.0,
                                       height: 28.0,
                                       fit: BoxFit.scaleDown,
