@@ -336,7 +336,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            InkWell(
+                            //Código para ahorros
+                            /*InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
                               hoverColor: Colors.transparent,
@@ -394,8 +395,66 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   ],
                                 ),
                               ),
+                            ),*/
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                await Navigator.push(
+                                  context,
+                                  PageTransition(
+                                    type: PageTransitionType.scale,
+                                    alignment: Alignment.bottomCenter,
+                                    duration: Duration(milliseconds: 300),
+                                    reverseDuration:
+                                    Duration(milliseconds: 300),
+                                    child: WithdrawFundsWidget(),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                width: 100.0,
+                                height: 100.0,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFEEEEEE),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 30.0,
+                                      color: Color(0x123629B7),
+                                      offset: Offset(0.0, -5.0),
+                                      spreadRadius: 30.0,
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/images/wedraw-icon.svg',
+                                      width: 28.0,
+                                      height: 28.0,
+                                      fit: BoxFit.scaleDown,
+                                    ),
+                                    Text(
+                                      'Inversión',
+                                      textAlign: TextAlign.center,
+                                      style: AzaBankTheme.of(context)
+                                          .bodySmall
+                                          .override(
+                                        fontFamily: 'Poppins',
+                                        color: AzaBankTheme.of(context)
+                                            .secondaryText,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-
                             InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -456,7 +515,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 ),
                               ),
                             ),
-
                             InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -464,77 +522,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                               highlightColor: Colors.transparent,
                               onTap: () async {
                                 await Navigator.push(
-                                  context,
-                                  PageTransition(
-                                    type: PageTransitionType.scale,
-                                    alignment: Alignment.bottomCenter,
-                                    duration: Duration(milliseconds: 300),
-                                    reverseDuration:
-                                        Duration(milliseconds: 300),
-                                    child: WithdrawFundsWidget(),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                width: 100.0,
-                                height: 100.0,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFEEEEEE),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 30.0,
-                                      color: Color(0x123629B7),
-                                      offset: Offset(0.0, -5.0),
-                                      spreadRadius: 30.0,
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/images/wedraw-icon.svg',
-                                      width: 28.0,
-                                      height: 28.0,
-                                      fit: BoxFit.scaleDown,
-                                    ),
-                                    Text(
-                                      'Inversión',
-                                      textAlign: TextAlign.center,
-                                      style: AzaBankTheme.of(context)
-                                          .bodySmall
-                                          .override(
-                                            fontFamily: 'Poppins',
-                                            color: AzaBankTheme.of(context)
-                                                .secondaryText,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            20.0, 10.0, 20.0, 20.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-
-                            InkWell(
-                              splashColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                await Navigator.push(
-                                  context,
+                                    context,
                                     MaterialPageRoute(builder: (context) => TransferenciaWidget())
                                 );
                               },
@@ -579,6 +567,19 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 ),
                               ),
                             ),
+
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            20.0, 10.0, 20.0, 20.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+
+
 
 
                           ],
