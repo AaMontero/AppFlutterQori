@@ -286,6 +286,7 @@ class _AccountandcardWidgetState extends State<AccountandcardWidget> {
                     return AhorroAporte(
                         concepto: concepto, fecha: fecha, monto: monto);
                   }));
+                  listaAportes.sort((a, b) => b.fecha.compareTo(a.fecha));
                   saldoTotal = listaAportes
                       .map((aporte) => aporte.monto)
                       .fold(0.0, (a, b) => a! + b);

@@ -16,17 +16,17 @@ class _ConCreditosWidgetState extends State<ConCreditosWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
   bool tieneCredito = false;
-  String? identificacionUsuarioActivo;
-  String? nombresUsuarioActivo;
-  String? apellidosUsuarioActivo;
-  String? fechaPagoM;
-  String? vencimientoM;
-  int? cuotasRestantesM;
-  String? tipoDeCobroM;
-  String? estadoM;
-  double? saldoM;
-  String? nombreCompletoM;
-  double? montoM;
+  String? identificacionUsuarioActivo = "";
+  String? nombresUsuarioActivo = "";
+  String? apellidosUsuarioActivo = "";
+  String? fechaPagoM = "";
+  String? vencimientoM = "";
+  int? cuotasRestantesM = 0;
+  String? tipoDeCobroM = "";
+  String? estadoM = "";
+  double? saldoM = 0.0;
+  String? nombreCompletoM = "";
+  double? montoM = 0.0;
 
   Future<void> cargarDatosCreditoActivo() async {
     try {

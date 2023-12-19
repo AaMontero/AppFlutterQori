@@ -38,20 +38,20 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
   late TransferenciaModel _model;
   String opcionSeleccionada = 'Banco Pichincha';
   List<String> opciones = ['Banco Pichincha', 'Produbanco', 'Banco Guayaquil'];
-  String? cuentaDestino;
-  String? propietarioCtaDestino;
-  double? montoTrasnferir;
+  String? cuentaDestino = "";
+  String? propietarioCtaDestino= "";
+  double? montoTrasnferir= 0.0;
   var db = FirebaseFirestore.instance;
-  double? saldoTotal;
+  double? saldoTotal=0.0;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
 
   final TextEditingController montoController = TextEditingController();
   final TextEditingController cuentaDestinoController = TextEditingController();
   final TextEditingController propietarioController = TextEditingController();
-  String? identificacionUsuarioActivo;
-  String? nombresUsuarioActivo;
-  double? saldoActualM;
+  String? identificacionUsuarioActivo = "";
+  String? nombresUsuarioActivo= "";
+  double? saldoActualM= 0.0;
 
   final NumberFormat currencyFormat = NumberFormat("#,##0.00", "es_ES");
 
