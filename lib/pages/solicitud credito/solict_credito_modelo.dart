@@ -33,6 +33,7 @@ class SolicitCreditoModel extends  AzaBankModel with ChangeNotifier {
   }
 
   void dispose() {
+    super.dispose();
     textController1?.dispose();
     textControllerCuotas?.dispose();
     textControllerResultado?.dispose();

@@ -74,7 +74,7 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
     CollectionReference coleccionReference = await FirebaseFirestore.instance
         .collection("usuarios")
         .doc(identificacionUsuarioActivo)
-        .collection("ahorros");
+        .collection("inversiones");
     QuerySnapshot ahorrosSnapshot = await coleccionReference.get();
     double sumaMontos = 0.0;
     ahorrosSnapshot.docs.forEach((documento) {
