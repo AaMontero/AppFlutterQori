@@ -255,14 +255,16 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                       topRight: Radius.circular(30.0),
                     ),
                   ),
-                  child: Padding(
+                  child: SingleChildScrollView(
                     padding:
                     EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 20.0),
                     child: SingleChildScrollView(
                       primary: false,
+
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
@@ -272,7 +274,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Bienvenido',
+                                  'Crear nueva cuenta',
                                   style: AzaBankTheme
                                       .of(context)
                                       .displaySmall
@@ -285,17 +287,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                 ),
                               ],
                             ),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Crear una cuenta nueva',
-                                style: AzaBankTheme
-                                    .of(context)
-                                    .bodyMedium,
-                              ),
-                            ],
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
@@ -313,7 +304,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 40.0, 0.0, 10.0),
@@ -411,7 +401,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -529,7 +518,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -629,7 +617,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -729,7 +716,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -832,7 +818,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -932,7 +917,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -1032,7 +1016,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 10.0),
@@ -1132,7 +1115,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0,
                                 0.0, 10.0),
@@ -1176,7 +1158,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(5.0, 20.0, 5.0, 0.0),
                             child: Column(
@@ -1290,7 +1271,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                               ],
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 30.0, 0.0, 0.0),
