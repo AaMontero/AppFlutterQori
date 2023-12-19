@@ -22,12 +22,12 @@ class HomePageWidget extends StatefulWidget {
 
 class _HomePageWidgetState extends State<HomePageWidget> {
   late HomePageModel _model;
-  String? nombresUsuarioActivo;
-  String? apellidosUsuarioActivo;
-  String? email;
-  String? cargoUsuarioActivo;
-  String? empresaUsuarioActivo;
-  String? identificacionUsuarioActivo;
+  String? nombresUsuarioActivo = "";
+  String? apellidosUsuarioActivo = "";
+  String? email = "";
+  String? cargoUsuarioActivo = "";
+  String? empresaUsuarioActivo = "";
+  String? identificacionUsuarioActivo = "";
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
 

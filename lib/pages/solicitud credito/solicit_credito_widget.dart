@@ -19,12 +19,12 @@ class SolicitCreditoWidget extends StatefulWidget {
 
 class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
   late SolicitCreditoModel _model;
-  double? sumaMontosInversion;
-  String? identificacionUsuarioActivo;
-  double? montoM;
-  int? numCuotasM;
-  double? promGastosM;
-  double? promIngresosM;
+  double? sumaMontosInversion =0.0;
+  String? identificacionUsuarioActivo ="";
+  double? montoM = 0.0;
+  int? numCuotasM= 0;
+  double? promGastosM= 0.0;
+  double? promIngresosM= 0.0;
   String selectedStatus = '0';
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
