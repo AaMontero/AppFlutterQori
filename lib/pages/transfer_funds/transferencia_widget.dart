@@ -373,27 +373,46 @@ class _TransferenciaWidgetState extends State<TransferenciaWidget> {
                         if (montoController.text.isNotEmpty &&
                         cuentaDestinoController.text.isNotEmpty &&
                         propietarioController.text.isNotEmpty) {
-
-                          await Navigator.push(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.scale,
-                              alignment: Alignment.bottomCenter,
-                              duration: Duration(milliseconds: 300),
-                              reverseDuration: Duration(milliseconds: 300),
-                              child: ComfirmTranferWidget(
-                                opcionSeleccionada: opcionSeleccionada,
-                                montoTransferencia: montoController.text,
-                                cuentaDestinoController: cuentaDestinoController,
-                                propietarioController: propietarioController,
+                          if(montoTrasnferir!<= saldoActualM!){
+                            await Navigator.push(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.scale,
+                                alignment: Alignment.bottomCenter,
+                                duration: Duration(milliseconds: 300),
+                                reverseDuration: Duration(milliseconds: 300),
+                                child: ComfirmTranferWidget(
+                                  opcionSeleccionada: opcionSeleccionada,
+                                  montoTransferencia: montoController.text,
+                                  cuentaDestinoController: cuentaDestinoController,
+                                  propietarioController: propietarioController,
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }else{
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "El monto es superior al Saldo Actual",
+                                  style: AzaBankTheme.of(context).titleSmall,
+                                ),
+                                duration: Duration(milliseconds: 4000),
+                                backgroundColor: AzaBankTheme.of(context).error,
+                              ),
+                            );
+                          }
+
                         }else{
                           //Mostrar mensaje de error
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Todos los campos son obligatorios'),
-                          ));
+                            content: Text(
+                              "Es necesario completar todos los campos",
+                              style: AzaBankTheme.of(context).titleSmall,
+                            ),
+                            duration: Duration(milliseconds: 4000),
+                            backgroundColor: AzaBankTheme.of(context).error,
+                          ),
+                          );
                         }
                       },
                       text: 'Continuar',
