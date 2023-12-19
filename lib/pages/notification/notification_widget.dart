@@ -35,44 +35,37 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   void obtenerAhorros(String email) async {
-      CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
-      QuerySnapshot querySnapshot = await usuarios.where('correo', isEqualTo: email).get();
-      if (querySnapshot.docs.isNotEmpty) {
-        print("Aviso: Se encontro un elemento con esa cedula en Ahorros");
-        DocumentSnapshot document = querySnapshot.docs.first;
-        DocumentReference usuarioActivo = document.reference;
-        usuarioActivo.collection("ahorros").get().then((QuerySnapshot querySnapshot) {
-          setState(() {
-            listaNotificaciones.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-              String concepto = data['concepto'];
-              double monto = double.parse(data['monto'].toString());
-              String fecha = data['fecha'].toString();
-              return NotificacionObjeto(concepto: concepto, fecha: fecha, monto: monto);
-            }));
-          });
-        }).catchError((error) {
-          print("Error al obtener datos de Firebase: $error");
-        });
-        print(listaNotificaciones.toString());
-        usuarioActivo.collection("inversiones").get().then((QuerySnapshot querySnapshot) {
-          setState(() {
-            listaNotificaciones.addAll(querySnapshot.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-              String concepto = data['concepto'];
-              double monto = double.parse(data['monto'].toString());
-              String fecha = data['fecha'].toString();
-              return NotificacionObjeto(concepto: concepto, fecha: fecha, monto: monto);
-            }));
+    CollectionReference usuarios = FirebaseFirestore.instance.collection('usuarios');
+    QuerySnapshot querySnapshot = await usuarios.where('correo', isEqualTo: email).get();
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot document = querySnapshot.docs.first;
+      DocumentReference usuarioActivo = document.reference;
+      List<NotificacionObjeto> listaNotificacionesAux = [];
 
-          });
-        }).catchError((error) {
-          print("Error al obtener datos de Firebase: $error");
+      try {
+        QuerySnapshot ahorrosSnapshot = await usuarioActivo.collection("ahorros").get();
+        listaNotificacionesAux.addAll(transformarNotificaciones(ahorrosSnapshot));
+        QuerySnapshot inversionesSnapshot = await usuarioActivo.collection("inversiones").get();
+        listaNotificacionesAux.addAll(transformarNotificaciones(inversionesSnapshot));
+        listaNotificacionesAux.sort((a, b) => b.fecha.compareTo(a.fecha));
+
+        setState(() {
+          listaNotificaciones = listaNotificacionesAux;
         });
+      } catch (error) {
+        print("Error al obtener datos de Firebase: $error");
       }
+    }
+  }
 
-
-
+  List<NotificacionObjeto> transformarNotificaciones(QuerySnapshot snapshot) {
+    return snapshot.docs.map((DocumentSnapshot document) {
+      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+      String concepto = data['concepto'];
+      double monto = double.parse(data['monto'].toString());
+      String fecha = data['fecha'].toString();
+      return NotificacionObjeto(concepto: concepto, fecha: fecha, monto: monto);
+    }).toList();
   }
   void cargarDatosDesdeFireBase() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
