@@ -28,6 +28,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   String? password = "";
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +36,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     _model.textController1 ??= TextEditingController();
     _model.textController2 ??= TextEditingController();
   }
+
   Future<void> actualizarTokenEnFirestore(String email, String fcmToken) async {
     print("Entra al metodo futuro");
     try {
@@ -67,29 +69,53 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     final fCMToken = await firebaseMessaging.getToken();
     print('El token que llega a logear es: $fCMToken');
     try {
-      actualizarTokenEnFirestore(correoPar, fCMToken!);
+      await actualizarTokenEnFirestore(correoPar, fCMToken!);
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: correoPar,
           password: passwordPar
       );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Inicio de sesión exitoso',
+            style: AzaBankTheme.of(context).titleSmall,
+          ),
+          duration: Duration(milliseconds: 4000),
+          backgroundColor: AzaBankTheme.of(context).success,
+        ),
+      );
+
 
       return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'Usuario no encontrado') {
-        print('No se encontró ningún usuario para ese correo electrónico.');
+        showValidationError('No se encontró ningún usuario para ese correo electrónico.');
       } else if (e.code == 'contraseña incorrecta') {
-        print('contraseña incorrecta');
+        if (passwordPar.length > 7) {
+          showValidationError('Contraseña incorrecta. Debe tener un máximo de 6 caracteres.');
+        } else {
+          showValidationError('Contraseña incorrecta');
+        }
+      } else {
+        // Mostrar un mensaje de error general
+        showValidationError('Error al iniciar sesión. Por favor, intenta de nuevo.');
+        print('Error en FirebaseAuth: $e');
       }
+    } catch (e) {
+      // Mostrar un mensaje de error general
+      showValidationError('Error al iniciar sesión. Por favor, intenta de nuevo.');
+      print('Error al iniciar sesión: $e');
     }
     return false;
   }
+
+
 
   Future<bool> checkIfFirstTimeAfterLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isFirstTime = prefs.getBool('isFirstTimeAfterLogin') ?? true;
 
     if (isFirstTime) {
-      // Si es la primera vez después de iniciar sesión, actualiza el valor
       prefs.setBool('isFirstTimeAfterLogin', false);
 
     }
@@ -102,24 +128,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     final emailRegex = RegExp(r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return emailRegex.hasMatch(email);
   }
-  void showValidationError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: AzaBankTheme.of(context).titleSmall,
-        ),
-        duration: Duration(milliseconds: 4000),
-        backgroundColor: AzaBankTheme.of(context).error,
-      ),
-    );
-  }
 
 
   @override
   void dispose() {
     _model.dispose();
-
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -405,23 +418,26 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                             _model.passwordVisibility
                                                 ? Icons.visibility_outlined
                                                 : Icons.visibility_off_outlined,
-                                            color: AzaBankTheme.of(context)
-                                                .primaryText,
+                                            color: AzaBankTheme.of(context).primaryText,
                                             size: 22.0,
                                           ),
                                         ),
                                       ),
-                                      style: AzaBankTheme.of(context)
-                                          .bodyMedium
-                                          .override(
+                                      style: AzaBankTheme.of(context).bodyMedium.override(
                                             fontFamily: 'Poppins',
-                                            color: AzaBankTheme.of(context)
-                                                .primaryText,
+                                            color: AzaBankTheme.of(context).primaryText,
                                           ),
                                       keyboardType:
                                           TextInputType.visiblePassword,
-                                      validator: _model.textController2Validator
-                                          .asValidator(context),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'La contraseña no puede estar vacía';
+                                          }
+                                          if (value.length > 7) {
+                                            return 'La contraseña debe tener un máximo de 6 caracteres';
+                                          }
+                                          return null; // La validación pasa correctamente
+                                        },
                                       onChanged: (value) {
                                         password = value;
                                       }
@@ -473,8 +489,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                         ),
 
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 20.0, 5.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(5.0, 20.0, 5.0, 0.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -483,29 +498,28 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                 padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 0.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    BuildContext currentContext = context;
+                                    if (correo == null || correo!.isEmpty || password == null || password!.isEmpty) {
+                                      showValidationError('Por favor, ingresa tu correo y contraseña.');
+                                      return;
+                                    }
 
                                     //Validaciones
                                     if (correo == null || !isValidEmail(correo!)) {
                                       showValidationError('Correo electrónico no válido');
                                       return;
                                     }
-
-                                    if (password == null || password!.length < 6) {
+                                    if (password == null || password!.length > 7) {
                                       // Muestra un mensaje de error para la contraseña
-                                      showValidationError('Contraseña incorrecta');
+                                      showValidationError('Contraseña incorrecta, Debe tener un máximo de 6 caracteres.');
                                       return;
                                     }
 
-
-                                    print("Credenciales: " + correo!);
-                                    print("Credenciales: " + password!);
+                                    BuildContext currentContext = context;
 
                                     bool isFirstTime = await checkIfFirstTimeAfterLogin();
+                                    bool loginSuccess = await logearSesionCorreoPass(correo, password);
 
-                                    if(await logearSesionCorreoPass(correo, password)){
-
-
+                                      if(loginSuccess) {
                                       print('isFirstTime: $isFirstTime');
 
                                       if (isFirstTime) {
@@ -547,7 +561,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       print("No se pudo acceder a la cuenta");
                                     }
 
-                                  },
+
+                                 },
                                   text: 'Ingresar',
                                   options: FFButtonOptions(
                                     width: 130.0,
@@ -637,6 +652,18 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       ),
     );
   }
-
+  void showValidationError(String message) {
+    print("Contexto: $context");
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: AzaBankTheme.of(context).titleSmall,
+        ),
+        duration: Duration(milliseconds: 4000),
+        backgroundColor: AzaBankTheme.of(context).error,
+      ),
+    );
+  }
 
 }

@@ -2,6 +2,8 @@ import 'package:aza_bank/components/data/contents_onboarding.dart';
 import 'package:aza_bank/index.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 class OnboardingWidget extends StatefulWidget {
   const OnboardingWidget({Key? key}) : super(key: key);
 
@@ -86,7 +88,9 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                 child: MaterialButton(
                   onPressed: () async{
                     if (currenIndex == contents.length -1){
-                      Navigator.push(context, MaterialPageRoute(builder: (_)=> HomePageWidget()),);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_)=>  NavBarPage(initialPage: 'HomePage')),);
                     }
                     _controller.nextPage(
                       duration: Duration(seconds: 1),
