@@ -105,7 +105,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
           ),
           TextButton(
             child: Text("Aceptar"),
-            onPressed: () {
+            onPressed: () async {
               enviarSolicitudCredito(
                   identificacionUsuarioActivo,
                   sumaMontosInversion,
@@ -113,7 +113,17 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                   numCuotasM,
                   promGastosM,
                   promIngresosM);
-              Navigator.pop(context);
+              await Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.scale,
+                  alignment: Alignment.bottomCenter,
+                  duration: Duration(milliseconds: 300),
+                  reverseDuration: Duration(milliseconds: 300),
+                  child: NavBarPage(initialPage: 'HomePage'),
+                ),
+              );
+
               // Muestra el SnackBar después de aceptar
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -886,9 +896,36 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                               children: [
                                                 FFButtonWidget(
                                                   onPressed: () {
+                                                    if(sumaMontosInversion!= null && montoM!= null){
+                                                      print("Entra al primer if");
+                                                      if(sumaMontosInversion! > montoM!){
+                                                        print('Suma monto inversion ${sumaMontosInversion}');
+                                                        print('Monto ${montoM}');
+                                                        _mostrarAlerta(context);
+
+                                                      }else{
+                                                        //Mostrar mensaje de incorrecto
+                                                        ScaffoldMessenger.of(context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(
+                                                              'El monto es superior al permitido',
+                                                              style: AzaBankTheme
+                                                                  .of(context)
+                                                                  .titleSmall,
+                                                            ),
+                                                            duration: Duration(milliseconds: 4000),
+                                                            backgroundColor: AzaBankTheme.of(context).error,
+                                                          ),
+                                                        );}
+                                                    }else{
+                                                      print("No entra al primer if");
+                                                    }
+
+
                                                     _model.textController1
                                                         ?.clear();
-                                                    _mostrarAlerta(context);
+
                                                   },
                                                   text: 'Enviar',
                                                   options: FFButtonOptions(
