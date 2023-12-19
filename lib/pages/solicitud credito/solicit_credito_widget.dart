@@ -90,61 +90,72 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
     }
   }
 
-  void _mostrarAlerta(BuildContext context) {
-    showDialog(
-      builder: (context) => AlertDialog(
-        title: Text("Enviar"),
-        content: Text("Desea enviar los datos"),
-        actions: [
-          TextButton(
-            child: Text("Cancelar"),
-            onPressed: () {
-              print("NO");
-              Navigator.pop(context);
-            },
-          ),
-          TextButton(
-            child: Text("Aceptar"),
-            onPressed: () async {
-              enviarSolicitudCredito(
-                  identificacionUsuarioActivo,
-                  sumaMontosInversion,
-                  montoM,
-                  numCuotasM,
-                  promGastosM,
-                  promIngresosM);
-              await Navigator.push(
-                context,
-                PageTransition(
-                  type: PageTransitionType.scale,
-                  alignment: Alignment.bottomCenter,
-                  duration: Duration(milliseconds: 300),
-                  reverseDuration: Duration(milliseconds: 300),
-                  child: NavBarPage(initialPage: 'HomePage'),
-                ),
-              );
 
-              // Muestra el SnackBar después de aceptar
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Formulario Enviado',
-                    style: AzaBankTheme.of(context).titleSmall.override(
-                          fontFamily: 'Poppins',
-                          color: AzaBankTheme.of(context).primary3,
-                        ),
+  void _mostrarAlerta(BuildContext context) {
+    if (_todosLosCamposEstanLlenos()){
+      showDialog(
+        builder: (context) => AlertDialog(
+          title: Text("Enviar"),
+          content: Text("Desea enviar los datos"),
+          actions: [
+            TextButton(
+              child: Text("Cancelar"),
+              onPressed: () {
+                print("NO");
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: Text("Aceptar"),
+              onPressed: () async {
+                enviarSolicitudCredito(
+                    identificacionUsuarioActivo,
+                    sumaMontosInversion,
+                    montoM,
+                    numCuotasM,
+                    promGastosM,
+                    promIngresosM);
+                await Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.scale,
+                    alignment: Alignment.bottomCenter,
+                    duration: Duration(milliseconds: 300),
+                    reverseDuration: Duration(milliseconds: 300),
+                    child: NavBarPage(initialPage: 'HomePage'),
                   ),
-                  duration: Duration(milliseconds: 3000),
-                  backgroundColor: AzaBankTheme.of(context).green,
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      barrierDismissible: false,
-      context: context,
-    );
+                );
+
+                // Muestra el SnackBar después de aceptar
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Formulario Enviado',
+                      style: AzaBankTheme.of(context).titleSmall.override(
+                        fontFamily: 'Poppins',
+                        color: AzaBankTheme.of(context).primary3,
+                      ),
+                    ),
+                    duration: Duration(milliseconds: 3000),
+                    backgroundColor: AzaBankTheme.of(context).green,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        barrierDismissible: false,
+        context: context,
+      );
+    }
+
+  }
+  bool _todosLosCamposEstanLlenos() {
+    return _model.textController1.text.isNotEmpty &&
+        _model.textController2.text.isNotEmpty &&
+        _model.textController3.text.isNotEmpty &&
+        _model.textControllerResultado.text.isNotEmpty &&
+        _model.textControllerCuotas.text.isNotEmpty;
   }
 
   void cargarValorMaximoCredito() async {
@@ -886,67 +897,63 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                             ),
                                           ),
                                           Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 30.0, 0.0, 0.0),
+                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
                                             child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               // Puedes ajustar según tus preferencias
                                               children: [
                                                 FFButtonWidget(
                                                   onPressed: () {
-                                                    if(sumaMontosInversion!= null && montoM!= null){
-                                                      print("Entra al primer if");
-                                                      if(sumaMontosInversion! > montoM!){
-                                                        print('Suma monto inversion ${sumaMontosInversion}');
-                                                        print('Monto ${montoM}');
-                                                        _mostrarAlerta(context);
-
-                                                      }else{
-                                                        //Mostrar mensaje de incorrecto
-                                                        ScaffoldMessenger.of(context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                            content: Text(
-                                                              'El monto es superior al permitido',
-                                                              style: AzaBankTheme
-                                                                  .of(context)
-                                                                  .titleSmall,
+                                                    if (_todosLosCamposEstanLlenos()) {
+                                                      // Acciones cuando todos los campos están llenos
+                                                      if (sumaMontosInversion != null && montoM != null) {
+                                                        print("Entra al primer if");
+                                                        if (sumaMontosInversion! > montoM!) {
+                                                          print('Suma monto inversion ${sumaMontosInversion}');
+                                                          print('Monto ${montoM}');
+                                                          _mostrarAlerta(context);
+                                                        } else {
+                                                          //Mostrar mensaje de incorrecto
+                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                'El monto es superior al permitido',
+                                                                style: AzaBankTheme.of(context).titleSmall,
+                                                              ),
+                                                              duration: Duration(
+                                                                  milliseconds: 4000),
+                                                              backgroundColor: AzaBankTheme.of(context).error,
                                                             ),
-                                                            duration: Duration(milliseconds: 4000),
-                                                            backgroundColor: AzaBankTheme.of(context).error,
+                                                          );
+                                                        }
+                                                      } else {
+                                                        print("No entra al primer if");
+                                                      }
+                                                      _model.textController1?.clear();
+
+                                                  }else {
+                                                      // Mostrar mensaje de error si no todos los campos están llenos
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                            'Todos los campos son obligatorios',
+                                                            style: AzaBankTheme.of(context).titleSmall,
                                                           ),
-                                                        );}
-                                                    }else{
-                                                      print("No entra al primer if");
+                                                          duration: Duration(milliseconds: 4000),
+                                                          backgroundColor: AzaBankTheme.of(context).error,
+                                                        ),
+                                                      );
                                                     }
-
-
-                                                    _model.textController1
-                                                        ?.clear();
-
                                                   },
                                                   text: 'Enviar',
                                                   options: FFButtonOptions(
                                                     width: 130.0,
                                                     height: 55.0,
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 0.0,
+                                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                                    iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0,
                                                                 0.0, 0.0),
-                                                    iconPadding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 0.0,
-                                                                0.0, 0.0),
-                                                    color:
-                                                        AzaBankTheme.of(context)
-                                                            .primary,
-                                                    textStyle: AzaBankTheme.of(
-                                                            context)
-                                                        .titleSmall
-                                                        .override(
-                                                          fontFamily: 'Poppins',
+                                                    color: AzaBankTheme.of(context).primary,
+                                                    textStyle: AzaBankTheme.of(context).titleSmall.override(fontFamily: 'Poppins',
                                                           color: Colors.white,
                                                         ),
                                                     elevation: 2.0,
@@ -959,13 +966,11 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                             12.0),
                                                   ),
                                                 ),
+
                                                 FFButtonWidget(
-                                                  onPressed: () => {
-                                                    Navigator.push(
-                                                      context,
+                                                  onPressed: () => {Navigator.push(context,
                                                       MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              SinCreditosWidget()),
+                                                          builder: (context) => SinCreditosWidget()),
                                                     ),
                                                   },
                                                   text: 'Volver',
@@ -973,18 +978,11 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                     width: 130.0,
                                                     height: 55.0,
                                                     padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 0.0,
-                                                                0.0, 0.0),
+                                                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                                     iconPadding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 0.0,
-                                                                0.0, 0.0),
+                                                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                                     color: Colors.blue,
-                                                    textStyle: AzaBankTheme.of(
-                                                            context)
-                                                        .titleSmall
-                                                        .override(
+                                                    textStyle: AzaBankTheme.of(context).titleSmall.override(
                                                           fontFamily: 'Poppins',
                                                           color: Colors.white,
                                                         ),
@@ -994,8 +992,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                       width: 1.0,
                                                     ),
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            12.0),
+                                                        BorderRadius.circular(12.0),
                                                   ),
                                                 ),
                                               ],
