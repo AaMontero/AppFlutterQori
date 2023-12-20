@@ -36,10 +36,10 @@ class _SplashScreemState extends State<SplashScreem> {
           alignment: Alignment.bottomCenter,
           child: ListTile(
             titleTextStyle: TextStyle(color: Colors.white),
-            title: Text('FinTech',style: TextStyle(fontSize: 25),
+            title: Text('FinTech',style: TextStyle(fontSize: 30),
               textAlign: TextAlign.center,
             ),
-            subtitle: Text("Bienvenido a la App",style: TextStyle(fontSize: 25,color: Colors.white),
+            subtitle: Text("Bienvenido a la App",style: TextStyle(fontSize: 30,color: Colors.white),
               textAlign: TextAlign.center,
 
             ),
@@ -47,7 +47,7 @@ class _SplashScreemState extends State<SplashScreem> {
         ),
       ),
       const Padding(
-          padding: EdgeInsets.all(600),
+          padding: EdgeInsets.all(110),
       child: Align(
         alignment: Alignment.bottomCenter,
         child: CircularProgressIndicator(
