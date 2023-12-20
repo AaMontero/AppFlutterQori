@@ -1,5 +1,6 @@
 import 'package:aza_bank/components/data/contents_onboarding.dart';
 import 'package:aza_bank/index.dart';
+
 import 'package:flutter/material.dart';
 
 import '../main.dart';
@@ -33,8 +34,8 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
     return Scaffold(
         body: Container(
           decoration: BoxDecoration(gradient: LinearGradient(colors:[
-            Colors.indigo,
-            Colors.blue,
+            Colors.indigo.shade400,
+            Colors.indigo.shade200,
           ])),
           child: Column(
             children: [
@@ -48,11 +49,17 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                   },
                   itemBuilder: (_,i){
                     return SingleChildScrollView(
-                      child: Padding(padding: EdgeInsets.all(40),
+                      child: Padding(padding: EdgeInsets.all(50),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset(contents[i].image),
-                            SizedBox(height:20),
+                            Image.asset(contents[i].image,
+                              width: 300.0,
+                              height: 250.0,
+                              fit: BoxFit.cover,
+                              alignment: Alignment.center,
+                            ),
+                            SizedBox(height:50),
                             Text(
                               contents[i].text,
                               style: TextStyle(
@@ -60,14 +67,16 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                 fontSize: 25,
                               ),
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: 30),
                             Text (
                               contents[i].descripcion,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                                fontSize: 16.0,
+                                fontStyle: FontStyle.normal,
                               ),
-                              textAlign: TextAlign.justify,
+
                             ),
                           ],
                         ),
@@ -90,16 +99,16 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                     if (currenIndex == contents.length -1){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_)=>  NavBarPage(initialPage: 'HomePage')),);
+                        MaterialPageRoute(builder: (_)=>  WelcomePageWidget()),);
                     }
                     _controller.nextPage(
                       duration: Duration(seconds: 1),
                       curve: Curves.easeInOut,
                     );
                   },
-                  color: Colors.indigo,
+                  color: Colors.indigo[900],
                   textColor: Colors.white,
-                  shape: RoundedRectangleBorder(side: BorderSide(width: 1, color: Colors.white),
+                  shape: RoundedRectangleBorder(side: BorderSide(width: 1, color: Colors.indigo.shade900),
                     borderRadius: BorderRadius.circular(20),
                   ),
 
@@ -122,7 +131,7 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
       margin: EdgeInsets.only(right: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: currenIndex==index ? Colors.red : Colors.green.withOpacity(0.4)
+        color: currenIndex==index ? Colors.blue.shade900 : Colors.white.withOpacity(0.4)
       ),
     );
   }

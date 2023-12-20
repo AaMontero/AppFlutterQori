@@ -60,9 +60,6 @@ class _MyAppState extends State<MyApp> {
         "splash":(context)=>SplashScreem(),
         "welcomepage":(context)=>WelcomePageWidget(),
 
-
-
-
       },
       localizationsDelegates: [
         FFLocalizationsDelegate(),

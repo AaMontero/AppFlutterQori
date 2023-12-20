@@ -5,7 +5,7 @@
 
 
     <application
-        android:label="AzaBank"
+        android:label="FinTech"
         tools:replace="android:label"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true">

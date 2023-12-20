@@ -80,7 +80,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
             'Inicio de sesión exitoso',
             style: AzaBankTheme.of(context).titleSmall,
           ),
-          duration: Duration(milliseconds: 4000),
+          duration: Duration(milliseconds: 3000),
           backgroundColor: AzaBankTheme.of(context).success,
         ),
       );
@@ -520,8 +520,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                     bool loginSuccess = await logearSesionCorreoPass(correo, password);
 
                                       if(loginSuccess) {
-                                      print('isFirstTime: $isFirstTime');
-
                                       if (isFirstTime) {
                                       Navigator.pushReplacement(
                                            currentContext,
@@ -540,22 +538,23 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                           PageTransition(
                                             type: PageTransitionType.scale,
                                             alignment: Alignment.bottomCenter,
-                                            duration: Duration(milliseconds: 200),
-                                            reverseDuration: Duration(milliseconds: 200),
+                                            duration: Duration(milliseconds: 400),
+                                            reverseDuration: Duration(milliseconds: 400),
                                             child: SplashScreem1(),
                                           ),
                                         );
-
-                                        Navigator.pushReplacement(
-                                          currentContext,
-                                          PageTransition(
-                                            type: PageTransitionType.scale,
-                                            alignment: Alignment.bottomCenter,
-                                            duration: Duration(milliseconds: 300),
-                                            reverseDuration: Duration(milliseconds: 300),
-                                            child: NavBarPage(initialPage: 'HomePage'),
-                                          ),
-                                        );
+                                        Future.delayed(Duration(milliseconds: 2000), () {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            PageTransition(
+                                              type: PageTransitionType.scale,
+                                              alignment: Alignment.bottomCenter,
+                                              duration: Duration(milliseconds: 300),
+                                              reverseDuration: Duration(milliseconds: 300),
+                                              child: NavBarPage(initialPage: 'HomePage'),
+                                            ),
+                                          );
+                                        });
                                       }
                                     } else {
                                       print("No se pudo acceder a la cuenta");
