@@ -99,7 +99,7 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                     if (currenIndex == contents.length -1){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_)=>  WelcomePageWidget()),);
+                        MaterialPageRoute(builder: (_)=>  NavBarPage(initialPage: 'HomePage')),);
                     }
                     _controller.nextPage(
                       duration: Duration(seconds: 1),

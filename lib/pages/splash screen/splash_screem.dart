@@ -36,7 +36,7 @@ class _SplashScreemState extends State<SplashScreem> {
           alignment: Alignment.bottomCenter,
           child: ListTile(
             titleTextStyle: TextStyle(color: Colors.white),
-            title: Text('AzaBanck',style: TextStyle(fontSize: 25),
+            title: Text('FinTech',style: TextStyle(fontSize: 25),
               textAlign: TextAlign.center,
             ),
             subtitle: Text("Bienvenido a la App",style: TextStyle(fontSize: 25,color: Colors.white),
@@ -47,7 +47,7 @@ class _SplashScreemState extends State<SplashScreem> {
         ),
       ),
       const Padding(
-          padding: EdgeInsets.all(90),
+          padding: EdgeInsets.all(600),
       child: Align(
         alignment: Alignment.bottomCenter,
         child: CircularProgressIndicator(
