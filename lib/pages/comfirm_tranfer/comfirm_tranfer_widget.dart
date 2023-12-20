@@ -63,12 +63,13 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
     });
   }
   void realizarSolicitudTrasnferencia(
-      bancoDestino, cuentaDestino, monto) async {
+      bancoDestino, cuentaDestino, propietarioCtaDestino,monto) async {
     try {
       String? fechaString = DateFormat('dd-MM-yyyy').format(DateTime.now());
       final solTransaccion = <String, dynamic>{
         "banco_destino": bancoDestino,
         "cuenta_destino": cuentaDestino,
+        "propietario_cta_dest": propietarioCtaDestino,
         "estado": true,
         "fecha": fechaString,
         "identificacion": identificacionUsuarioActivo,
@@ -346,7 +347,7 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 10.0, 0.0),
                               child: FFButtonWidget(
                                 onPressed: () {
-                                  realizarSolicitudTrasnferencia(widget.opcionSeleccionada!,widget.cuentaDestinoController.text, double.parse(widget.montoTransferencia ));
+                                  realizarSolicitudTrasnferencia(widget.opcionSeleccionada,widget.cuentaDestinoController.text,widget.propietarioController.text, double.parse(widget.montoTransferencia ));
                                   Navigator.push(
                                     context,
                                     PageTransition(
