@@ -21,7 +21,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
   late SolicitCreditoModel _model;
   double? sumaMontosInversion =0.0;
   String? identificacionUsuarioActivo ="";
-  double? montoM = 0.0;
+  double montoM = 0.0;
   int? numCuotasM= 0;
   double? promGastosM= 0.0;
   double? promIngresosM= 0.0;
@@ -92,7 +92,6 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
 
 
   void _mostrarAlerta(BuildContext context) {
-    if (_todosLosCamposEstanLlenos()){
       showDialog(
         builder: (context) => AlertDialog(
           title: Text("Enviar"),
@@ -149,16 +148,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
       );
     }
 
-  }
-  bool _todosLosCamposEstanLlenos() {
-    return _model.textController1.text.isNotEmpty &&
-        _model.textController2.text.isNotEmpty &&
-        _model.textController3.text.isNotEmpty &&
-        _model.textControllerResultado.text.isNotEmpty &&
-        _model.textControllerCuotas.text.isNotEmpty;
-  }
-
-  void cargarValorMaximoCredito() async {
+    void cargarValorMaximoCredito() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       String? identificacionShared = prefs.getString('identificacion') ?? "";
@@ -194,6 +184,11 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
 
   @override
   void dispose() {
+    _model.textController1?.dispose();
+    _model.textController2?.dispose();
+    _model.textController3?.dispose();
+    _model.textControllerResultado?.dispose();
+    _model.textControllerCuotas?.dispose();
     _model.dispose();
     _unfocusNode.dispose();
     super.dispose();
@@ -387,16 +382,13 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                   obscureText: false,
                                                   onChanged: (value) {
                                                     setState(() {
-                                                      _model
-                                                          .calcularResultados();
-                                                      montoM =
-                                                          double.parse(value);
+                                                      _model.calcularResultados();
+                                                      montoM = double.parse(value);
                                                     });
                                                   },
                                                   decoration: InputDecoration(
                                                     labelText: 'Monto Crédito',
-                                                    errorText: _model
-                                                            .mostrarError
+                                                    errorText: _model.mostrarError
                                                         ? 'Llenar campo Monto Crédito'
                                                         : null,
                                                     enabledBorder:
@@ -904,39 +896,18 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                               children: [
                                                 FFButtonWidget(
                                                   onPressed: () {
-                                                    if (_todosLosCamposEstanLlenos()) {
-                                                      // Acciones cuando todos los campos están llenos
-                                                      if (sumaMontosInversion != null && montoM != null) {
-                                                        print("Entra al primer if");
-                                                        if (sumaMontosInversion! > montoM!) {
-                                                          print('Suma monto inversion ${sumaMontosInversion}');
-                                                          print('Monto ${montoM}');
-                                                          _mostrarAlerta(context);
-                                                        } else {
-                                                          //Mostrar mensaje de incorrecto
-                                                          ScaffoldMessenger.of(context).showSnackBar(
-                                                            SnackBar(
-                                                              content: Text(
-                                                                'El monto es superior al permitido',
-                                                                style: AzaBankTheme.of(context).titleSmall,
-                                                              ),
-                                                              duration: Duration(
-                                                                  milliseconds: 4000),
-                                                              backgroundColor: AzaBankTheme.of(context).error,
-                                                            ),
-                                                          );
-                                                        }
-                                                      } else {
-                                                        print("No entra al primer if");
-                                                      }
-                                                      _model.textController1?.clear();
-
-                                                  }else {
-                                                      // Mostrar mensaje de error si no todos los campos están llenos
+                                                    if (_todosLosCamposEstanLlenos() &&
+                                                        sumaMontosInversion != null &&
+                                                        montoM != null &&
+                                                        sumaMontosInversion! > montoM!) {
+                                                      // Mostrar la alerta de confirmación
+                                                      _mostrarAlerta(context);
+                                                    } else {
+                                                      // Mostrar mensaje de error
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         SnackBar(
                                                           content: Text(
-                                                            'Todos los campos son obligatorios',
+                                                            'Todos los campos son obligatorios o el monto es superior al permitido',
                                                             style: AzaBankTheme.of(context).titleSmall,
                                                           ),
                                                           duration: Duration(milliseconds: 4000),
@@ -944,26 +915,29 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                                                         ),
                                                       );
                                                     }
-                                                  },
+                                                    // Limpiar campos
+                                                    _model.textController1?.clear();
+                                                    _model.textController2?.clear();
+                                                    _model.textController3?.clear();
+                                                    },
+
                                                   text: 'Enviar',
                                                   options: FFButtonOptions(
                                                     width: 130.0,
                                                     height: 55.0,
                                                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                                    iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0,
-                                                                0.0, 0.0),
+                                                    iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                                     color: AzaBankTheme.of(context).primary,
-                                                    textStyle: AzaBankTheme.of(context).titleSmall.override(fontFamily: 'Poppins',
-                                                          color: Colors.white,
-                                                        ),
+                                                    textStyle: AzaBankTheme.of(context).titleSmall.override(
+                                                      fontFamily: 'Poppins',
+                                                      color: Colors.white,
+                                                    ),
                                                     elevation: 2.0,
                                                     borderSide: BorderSide(
                                                       color: Colors.transparent,
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12.0),
+                                                    borderRadius: BorderRadius.circular(12.0),
                                                   ),
                                                 ),
 
@@ -1017,5 +991,10 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
         ),
       ),
     );
+  }
+  bool _todosLosCamposEstanLlenos() {
+    return _model.textController1!.text.isNotEmpty &&
+        _model.textController2!.text.isNotEmpty &&
+        _model.textController3!.text.isNotEmpty;
   }
 }
