@@ -347,7 +347,26 @@ class _ComfirmTranferWidgetState extends State<ComfirmTranferWidget> {
                               EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 10.0, 0.0),
                               child: FFButtonWidget(
                                 onPressed: () {
-                                  realizarSolicitudTrasnferencia(widget.opcionSeleccionada,widget.cuentaDestinoController.text,widget.propietarioController.text, double.parse(widget.montoTransferencia ));
+                                  realizarSolicitudTrasnferencia(
+                                      widget.opcionSeleccionada,
+                                      widget.cuentaDestinoController.text,
+                                      widget.propietarioController.text,
+                                      double.parse(widget.montoTransferencia ),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Transferencia exitosa',
+                                        style: TextStyle(
+                                          // Ajusta el estilo del mensaje según tus preferencias
+                                          color: Colors.white,
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                      duration: Duration(seconds: 3), // Duración del mensaje
+                                      backgroundColor: Colors.green, // Color de fondo del mensaje
+                                    ),
+                                  );
                                   Navigator.push(
                                     context,
                                     PageTransition(
