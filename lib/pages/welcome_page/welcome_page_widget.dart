@@ -72,7 +72,7 @@ class _WelcomePageWidgetState extends State<WelcomePageWidget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Text(
-                              'FinTech',
+                              'Almagro',
                               style: AzaBankTheme.of(context)
                                   .displaySmall
                                   .override(

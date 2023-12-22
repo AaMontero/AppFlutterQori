@@ -36,7 +36,7 @@ class _SplashScreemState extends State<SplashScreem> {
           alignment: Alignment.bottomCenter,
           child: ListTile(
             titleTextStyle: TextStyle(color: Colors.white),
-            title: Text('FinTech',style: TextStyle(fontSize: 30),
+            title: Text('Almagro',style: TextStyle(fontSize: 30),
               textAlign: TextAlign.center,
             ),
             subtitle: Text("Bienvenido a la App",style: TextStyle(fontSize: 30,color: Colors.white),
