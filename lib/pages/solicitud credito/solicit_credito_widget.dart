@@ -169,7 +169,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
       querySnap.docs.forEach((doc) {
         // Verificar si el documento tiene el campo "monto"
         if (doc.data().containsKey("monto")) {
-          montoSuma += double.parse(doc["monto"]);
+          montoSuma += double.parse(doc["monto"].toString());
           print("Entra a verificar el monto:");
         }
       });
