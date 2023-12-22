@@ -187,7 +187,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 4.0, 0.0, 0.0),
                             child: Text(
-                              '\$$monto',
+                              '${monto < 0 ? '-' : ''}\$${monto.abs()}',
                               style: AzaBankTheme.of(context)
                                   .bodyMedium
                                   .override(
