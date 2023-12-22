@@ -114,6 +114,20 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                     numCuotasM,
                     promGastosM,
                     promIngresosM);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Solicitud de crédito enviada exitosamente',
+                      style: AzaBankTheme.of(context).titleSmall.override(
+                        fontFamily: 'Poppins',
+                        color: AzaBankTheme.of(context).primary3,
+                      ),
+                    ),
+                    duration: Duration(milliseconds: 3000),
+                    backgroundColor: AzaBankTheme.of(context).green,
+                  ),
+                );
+
                 await Navigator.push(
                   context,
                   PageTransition(
@@ -126,19 +140,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
                 );
 
                 // Muestra el SnackBar después de aceptar
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Formulario Enviado',
-                      style: AzaBankTheme.of(context).titleSmall.override(
-                        fontFamily: 'Poppins',
-                        color: AzaBankTheme.of(context).primary3,
-                      ),
-                    ),
-                    duration: Duration(milliseconds: 3000),
-                    backgroundColor: AzaBankTheme.of(context).green,
-                  ),
-                );
+
               },
             ),
           ],
