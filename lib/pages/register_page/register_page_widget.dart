@@ -1184,7 +1184,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     onPressed: () async {
                                       // Validaciones de campos
                                       if (correoReg == null || !isValidEmail(correoReg!)) {
-                                        showValidationError('Correo electrónico no válido, debe tener "@"');
+                                        showValidationError('Correo electrónico no válido');
                                         return;
                                       }
 
@@ -1198,7 +1198,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                       }
                                       bool isRepetido = await isCorreoRepetido(correoReg!);
                                       if (isRepetido) {
-                                        showValidationError('Correo repetido');
+                                        showValidationError('El correo ya está registrado');
                                         return;
                                       }
 
