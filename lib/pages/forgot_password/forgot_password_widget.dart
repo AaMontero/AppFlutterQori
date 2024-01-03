@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -52,17 +53,32 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
   }
   Future<void> cambiarPassword(String email) async {
     try {
-      var usuariosGet = FirebaseFirestore.instance.collection('usuarios').doc(email);
-      var usuariosSnapShot = await usuariosGet.get();
-      if (usuariosSnapShot.exists) {
+      // Validar el formato del correo electrónico
+      if (!EmailValidator.validate(email)) {
+        Fluttertoast.showToast(
+          msg: "Correo electrónico no válido.",
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+        return;
+      }
+
+     var usuariosQuery = FirebaseFirestore.instance.collection('usuarios').where('correo', isEqualTo: email);
+     var usuariosSnapshots = await usuariosQuery.get();
+
+      if (usuariosSnapshots.docs.isNotEmpty) {
+        // Al menos un documento encontrado con el correo proporcionado
         await FirebaseAuth.instance.setLanguageCode("es");
         await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
         Fluttertoast.showToast(
-          msg: "Se ha enviado un correo.",
+          msg: "Se ha enviado un correo para restablecer la contraseña.",
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.green,
           textColor: Colors.white,
         );
+
         _model.textController1?.clear();
       } else {
         Fluttertoast.showToast(
@@ -72,11 +88,22 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
           textColor: Colors.white,
         );
       }
-
     } catch (e) {
       if (e is FirebaseAuthException) {
+        Fluttertoast.showToast(
+          msg: "Error al cambiar la contraseña: ${e.message}",
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
         print("Error al cambiar la contraseña: ${e.message}");
       } else {
+        Fluttertoast.showToast(
+          msg: "Error general al cambiar la contraseña.",
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
         print("Error general: $e");
       }
     }
@@ -406,62 +433,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                           ),
                         ],
                       ),
-                      Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 100.0,
-                            decoration: BoxDecoration(
-                              color:
-                                  AzaBankTheme.of(context).secondaryBackground,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  10.0, 0.0, 10.0, 25.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 2.0),
-                                    child: InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        await _model.pageViewController
-                                            ?.previousPage(
-                                          duration: Duration(milliseconds: 300),
-                                          curve: Curves.ease,
-                                        );
-                                      },
-                                      child: Icon(
-                                        Icons.arrow_back_ios,
-                                        color: AzaBankTheme.of(context)
-                                            .primaryText,
-                                        size: 24.0,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        5.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      'Olvidaste tu contraseña',
-                                      style: AzaBankTheme.of(context)
-                                          .headlineMedium,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+
                     ],
                   ),
                 ),
