@@ -108,7 +108,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
       }
 
       if (numIdentificacion.length < 10) {
-        showValidationError('Cedula debe tener 10 dijitos');
+        showValidationError('Cedula debe tener 10 dígitos');
         return "ERROR";
       }
       try {
