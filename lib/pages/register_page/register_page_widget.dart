@@ -80,25 +80,25 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
       // Validaciones
       if (correo.isEmpty || !isValidEmail(correo)) {
         showValidationError('Correo electrónico no válido');
-        return;
+        return "ERROR";
       }
       if (!correo.contains('@')) {
         showValidationError('El correo electrónico debe contener el carácter "@"');
-        return;
+        return "ERROR";
       }
 
       if (contrasenia.length < 7) {
         showValidationError('La contraseña es demasiado corta. Debe tener al menos 7 caracteres.');
-        return;
+        return "ERROR";
       }
       if (!isStrongPassword(contrasenia)) {
         showValidationError('La contraseña debe tener al menos una mayúscula, una minúscula, un carácter especial (.,_&@) y un número.');
-        return;
+        return "ERROR";
       }
 
       if (numIdentificacion.length < 10) {
         showValidationError('Cedula debe tener 10 dijitos');
-        return;
+        return "ERROR";
       }
       try {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -117,7 +117,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
         };
         db.collection("usuarios").doc(numIdentificacion).set(usuario).then((_) =>
             print('Documento agregado con éxito para el correo: $correo'));
-        return "valido";
+        String respuesta = "valido";
+        print("La respuesta es: "+ respuesta);
+        return respuesta;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'Contraseña debil') {
           print('La contraseña proporcionada es demasiado débil.');
@@ -1214,7 +1216,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                         );
                                         return;
                                       }
-                                        String resultado = registrar(
+                                        String resultado ="Sin cargar";
+                                        resultado = await registrar(
                                           correoReg!,
                                           passwordReg!,
                                           nombresReg!,
@@ -1225,8 +1228,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           cargoReg!,
                                           selectedDate,
                                         );
-                                      if("valido"==resultado){
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                      print("Lo que llega es:" + resultado);
+                                      if(resultado =="valido"){
+                                        await ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
                                             content: Text(
                                               'Cuenta creada correctamente',
@@ -1236,7 +1240,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                             backgroundColor: AzaBankTheme.of(context).green,
                                           ),
                                         );
-                                      }
                                         await Navigator.push(
                                           context,
                                           PageTransition(
@@ -1247,6 +1250,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                             child: LoginPageWidget(),
                                           ),
                                         );
+                                      }
+
 
                                     },
                                     text: 'Registro',

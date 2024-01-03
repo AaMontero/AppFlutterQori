@@ -67,6 +67,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   Future<bool> logearSesionCorreoPass(correoPar, passwordPar) async {
     final firebaseMessaging = FirebaseMessaging.instance;
     final fCMToken = await firebaseMessaging.getToken();
+
     print('El token que llega a logear es: $fCMToken');
     try {
       await actualizarTokenEnFirestore(correoPar, fCMToken!);
@@ -91,8 +92,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       if (e.code == 'Usuario no encontrado') {
         showValidationError('No se encontró ningún usuario para ese correo electrónico.');
       } else if (e.code == 'contraseña incorrecta') {
-        if (passwordPar.length > 7) {
-          showValidationError('Contraseña incorrecta. Debe tener un máximo de 7 caracteres.');
+        if (passwordPar.length < 7) {
+          showValidationError('Contraseña incorrecta. Debe tener un mínimo de 7 caracteres.');
         } else {
           showValidationError('Contraseña incorrecta');
         }
@@ -433,8 +434,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                           if (value == null || value.isEmpty) {
                                             return 'La contraseña no puede estar vacía';
                                           }
-                                          if (value.length > 7) {
-                                            return 'La contraseña debe tener un máximo de 6 caracteres';
+                                          if (value.length < 7) {
+                                            return 'La contraseña debe tener un mínimo de 7 caracteres';
                                           }
                                           return null; // La validación pasa correctamente
                                         },
@@ -508,7 +509,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       showValidationError('Correo electrónico no válido');
                                       return;
                                     }
-                                    if (password == null || password!.length > 7) {
+                                    if (password == null || password!.length < 7) {
                                       // Muestra un mensaje de error para la contraseña
                                       showValidationError('Contraseña incorrecta, Debe tener un máximo de 7 caracteres.');
                                       return;
