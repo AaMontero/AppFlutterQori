@@ -1175,7 +1175,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                       }
 
                                       if (passwordReg == null || passwordReg!.length < 7) {
-                                        showValidationError('La contraseña debe tener al menos 6 caracteres');
+                                        showValidationError('La contraseña debe tener al menos 7 caracteres');
                                         return;
                                       }
                                       if (numCedulaReg == null || numCedulaReg!.length < 10) {
