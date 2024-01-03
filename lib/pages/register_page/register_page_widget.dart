@@ -80,6 +80,18 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
         digitRegex.hasMatch(contrasenia) &&
         specialCharRegex.hasMatch(contrasenia);
   }
+  String capitalizeWords(String text) {
+    List<String> words = text.split(' ');
+    words = words.map((word) {
+      if (word.isNotEmpty) {
+        return word[0].toUpperCase() + word.substring(1).toLowerCase();
+      } else {
+        return word;
+      }
+    }).toList();
+    return words.join(' ');
+  }
+
     registrar(correo, contrasenia, nombres, apellidos, numIdentificacion,
         numCelular, empresa, cargo, fechaNacimiento) async {
       print(numIdentificacion);
@@ -118,12 +130,12 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
         );
         final usuario = <String, dynamic>{
           "correo": correo,
-          "nombres": nombres,
-          "apellidos": apellidos,
+          "nombres": capitalizeWords(nombres),
+          "apellidos": capitalizeWords(apellidos),
           "identificacion": numIdentificacion,
           "numero_celular": numCelular,
-          "empresa": empresa,
-          "cargo": cargo,
+          "empresa": capitalizeWords(empresa),
+          "cargo": capitalizeWords(cargo),
           "fecha_nacimiento": fechaNacimiento
         };
         db.collection("usuarios").doc(numIdentificacion).set(usuario).then((_) =>
