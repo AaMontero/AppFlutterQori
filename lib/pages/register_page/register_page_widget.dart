@@ -57,11 +57,11 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
     }
   }
 
-  bool isValidEmail(String email) {
+  bool isValidEmail(String correo) {
     final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+');
-    return emailRegex.hasMatch(email);
+    return emailRegex.hasMatch(correo);
   }
-  bool isStrongPassword(String password) {
+  bool isStrongPassword(String contrasenia) {
     // Validar que la contraseña tenga al menos una mayúscula, una minúscula,
     // un carácter especial (.,_&$@) y un número.
     final upperCaseRegex = RegExp(r'[A-Z]');
@@ -69,10 +69,10 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
     final digitRegex = RegExp(r'[0-9]');
     final specialCharRegex = RegExp(r'[.,_&$@]');
 
-    return upperCaseRegex.hasMatch(password) &&
-        lowerCaseRegex.hasMatch(password) &&
-        digitRegex.hasMatch(password) &&
-        specialCharRegex.hasMatch(password);
+    return upperCaseRegex.hasMatch(contrasenia) &&
+        lowerCaseRegex.hasMatch(contrasenia) &&
+        digitRegex.hasMatch(contrasenia) &&
+        specialCharRegex.hasMatch(contrasenia);
   }
     registrar(correo, contrasenia, nombres, apellidos, numIdentificacion,
         numCelular, empresa, cargo, fechaNacimiento) async {
@@ -1176,7 +1176,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                       }
 
                                       if (passwordReg == null || passwordReg!.length < 7) {
-                                        showValidationError('La contraseña debe tener al menos 6 caracteres');
+                                        showValidationError('La contraseña debe tener al menos 7 caracteres');
                                         return;
                                       }
                                       if (numCedulaReg == null || numCedulaReg!.length < 10) {

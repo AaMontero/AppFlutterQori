@@ -164,7 +164,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Text(
-                                '\$$montoTransaccion',
+                                '${montoTransaccion < 0 ? '-' : ''}\$${montoTransaccion.abs()}',
                                 style: AzaBankTheme.of(context)
                                     .titleMedium
                                     .override(

@@ -71,29 +71,18 @@ class _WelcomePageWidgetState extends State<WelcomePageWidget> {
                         Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            Text(
-                              'FinTech',
-                              style: AzaBankTheme.of(context)
-                                  .displaySmall
-                                  .override(
-                                    fontFamily: 'Poppins',
-                                    color: AzaBankTheme.of(context).primary3,
-                                    fontSize: 50.0,
-                                    fontWeight: FontWeight.bold,
-                                    lineHeight: 2.0,
-                                  ),
-                            ),
-                            Text(
-                              'More than banking',
-                              style: AzaBankTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Poppins',
-                                    color: AzaBankTheme.of(context).primary3,
-                                  ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: Image.asset(
+                                'assets/images/almagrofintech.png',
+                                height: 300,
+                                width: 300,
+                              ),
                             ),
                           ],
                         ),
+
+
                       ],
                     ),
                   ],
