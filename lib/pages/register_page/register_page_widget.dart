@@ -117,6 +117,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
         };
         db.collection("usuarios").doc(numIdentificacion).set(usuario).then((_) =>
             print('Documento agregado con éxito para el correo: $correo'));
+        return "valido";
       } on FirebaseAuthException catch (e) {
         if (e.code == 'Contraseña debil') {
           print('La contraseña proporcionada es demasiado débil.');
@@ -1179,7 +1180,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                         return;
                                       }
                                       if (numCedulaReg == null || numCedulaReg!.length < 10) {
-                                        showValidationError('Cedula debe tener 10 dijitos');
+                                        showValidationError('Cedula debe tener 10 dígitos');
                                         return;
                                       }
                                       bool isRepetido = await isCorreoRepetido(correoReg!);
@@ -1213,7 +1214,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                         );
                                         return;
                                       }
-                                        registrar(
+                                        String resultado = registrar(
                                           correoReg!,
                                           passwordReg!,
                                           nombresReg!,
@@ -1224,7 +1225,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           cargoReg!,
                                           selectedDate,
                                         );
-
+                                      if("valido"==resultado){
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
                                             content: Text(
@@ -1235,7 +1236,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                             backgroundColor: AzaBankTheme.of(context).green,
                                           ),
                                         );
-
+                                      }
                                         await Navigator.push(
                                           context,
                                           PageTransition(

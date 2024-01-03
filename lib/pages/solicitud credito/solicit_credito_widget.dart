@@ -992,6 +992,7 @@ class _SolicitCreditoWidgetState extends State<SolicitCreditoWidget> {
       ),
     );
   }
+
   bool _todosLosCamposEstanLlenos() {
     return _model.textController1!.text.isNotEmpty &&
         _model.textController2!.text.isNotEmpty &&
