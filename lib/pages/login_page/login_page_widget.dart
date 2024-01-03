@@ -92,7 +92,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
         showValidationError('No se encontró ningún usuario para ese correo electrónico.');
       } else if (e.code == 'contraseña incorrecta') {
         if (passwordPar.length > 7) {
-          showValidationError('Contraseña incorrecta. Debe tener un máximo de 6 caracteres.');
+          showValidationError('Contraseña incorrecta. Debe tener un máximo de 7 caracteres.');
         } else {
           showValidationError('Contraseña incorrecta');
         }
@@ -510,7 +510,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                     }
                                     if (password == null || password!.length > 7) {
                                       // Muestra un mensaje de error para la contraseña
-                                      showValidationError('Contraseña incorrecta, Debe tener un máximo de 6 caracteres.');
+                                      showValidationError('Contraseña incorrecta, Debe tener un máximo de 7 caracteres.');
                                       return;
                                     }
 

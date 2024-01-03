@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'AzaBank',
       debugShowCheckedModeBanner: false,
-      initialRoute: "splash" ,
+      initialRoute: "splash"  ,
       routes: {
 
         "splash":(context)=>SplashScreem(),
