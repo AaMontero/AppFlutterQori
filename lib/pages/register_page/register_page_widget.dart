@@ -61,6 +61,12 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
     final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+');
     return emailRegex.hasMatch(correo);
   }
+  bool isMayorDeEdad(DateTime fechaNac){
+    DateTime fechaActual = DateTime.now();
+    int edadAnios = fechaActual.year - fechaNac.year;
+    return edadAnios<=18;
+  }
+
   bool isStrongPassword(String contrasenia) {
     // Validar que la contraseña tenga al menos una mayúscula, una minúscula,
     // un carácter especial (.,_&$@) y un número.
@@ -81,6 +87,11 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
       if (correo.isEmpty || !isValidEmail(correo)) {
         showValidationError('Correo electrónico no válido');
         return "ERROR";
+      }
+      if(isMayorDeEdad(fechaNacimiento)){
+        showValidationError('Debe tener más de 18 años');
+        return "ERROR";
+
       }
       if (!correo.contains('@')) {
         showValidationError('El correo electrónico debe contener el carácter "@"');
