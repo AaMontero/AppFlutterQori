@@ -229,7 +229,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 alignment: Alignment.bottomCenter,
                                 duration: Duration(milliseconds: 300),
                                 reverseDuration: Duration(milliseconds: 300),
-                                child: AccountandcardWidget(),
+                                child: WithdrawFundsWidget(),
                               ),
                             );
                           },

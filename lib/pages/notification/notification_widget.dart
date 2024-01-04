@@ -21,7 +21,42 @@ class NotificacionObjeto {
   String toString(){
     return "Objeto Notificación" + this.concepto + this.fecha + this.monto.toString();
   }
+  NotificacionDTO toDTO() {
+
+    DateTime parsedFecha = DateFormat('dd-MM-yyyy').parse(this.fecha);
+
+    return NotificacionDTO(
+      concepto: this.concepto,
+      fecha: parsedFecha,
+      monto: this.monto,
+    );
+  }
 }
+class NotificacionDTO {
+  String concepto;
+  DateTime fecha;
+  double monto;
+
+  // Constructor
+  NotificacionDTO({
+    required this.concepto,
+    required this.fecha,
+    required this.monto,
+  });
+
+  NotificacionObjeto fromDTO() {
+    return NotificacionObjeto(
+      concepto: this.concepto,
+      fecha: DateFormat('dd-MM-yyyy').format(this.fecha),
+      monto: this.monto,
+    );
+  }
+
+  String toString(){
+    return "Objeto Notificación" + this.concepto + this.fecha.toString() + this.monto.toString();
+  }
+}
+
 class NotificationWidget extends StatefulWidget {
   const NotificationWidget({Key? key}) : super(key: key);
   @override
@@ -32,6 +67,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   late NotificationModel _model;
   List<NotificacionObjeto> listaNotificaciones = [];
   List<NotificacionObjeto> combinedList = [];
+  List<NotificacionDTO> listaNotificacionesDTO = [];
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   void obtenerAhorros(String email) async {
@@ -41,7 +77,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
       DocumentSnapshot document = querySnapshot.docs.first;
       DocumentReference usuarioActivo = document.reference;
       List<NotificacionObjeto> listaNotificacionesAux = [];
-
       try {
         QuerySnapshot ahorrosSnapshot = await usuarioActivo.collection("ahorros").get();
         listaNotificacionesAux.addAll(transformarNotificaciones(ahorrosSnapshot));
@@ -50,7 +85,16 @@ class _NotificationWidgetState extends State<NotificationWidget> {
         listaNotificacionesAux.sort((a, b) => b.fecha.compareTo(a.fecha));
 
         setState(() {
+          listaNotificacionesDTO.clear();
           listaNotificaciones = listaNotificacionesAux;
+          listaNotificacionesDTO = listaNotificaciones.map((aporte) => aporte.toDTO()).toList();
+          listaNotificacionesDTO.sort((a, b) => b.fecha.compareTo(a.fecha));
+          print("Llega a despues de ordenar");
+          listaNotificaciones.clear();
+          listaNotificacionesDTO.forEach((element) {
+            listaNotificaciones.add(element.fromDTO());
+          });
+
         });
       } catch (error) {
         print("Error al obtener datos de Firebase: $error");

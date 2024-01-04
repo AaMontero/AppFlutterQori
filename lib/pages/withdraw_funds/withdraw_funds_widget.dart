@@ -22,8 +22,35 @@ class InversionAporte {
   String toString() {
     return "Objeto Ahorro" + this.concepto + this.fecha + this.monto.toString();
   }
+  InversionAporteDTO toDTO() {
+    DateTime parsedFecha = DateFormat('dd-MM-yyyy').parse(this.fecha);
+    return InversionAporteDTO(
+      concepto: this.concepto,
+      fecha: parsedFecha,
+      monto: this.monto,
+    );
+  }
+
 }
 
+class InversionAporteDTO{
+  String concepto;
+  DateTime fecha;
+  double monto;
+  InversionAporteDTO({
+    required this.concepto,
+    required this.fecha,
+    required this.monto,
+});
+
+  InversionAporte fromDTO() {
+  return InversionAporte(
+  concepto: this.concepto,
+  fecha: DateFormat('dd-MM-yyyy').format(this.fecha),
+  monto: this.monto,
+  );
+}
+}
 class WithdrawFundsWidget extends StatefulWidget {
   const WithdrawFundsWidget({Key? key}) : super(key: key);
 
@@ -39,6 +66,7 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
   String? identificacion;
   double? saldoTotal = 0;
   List<InversionAporte> listaAportes = [];
+  List<InversionAporteDTO> listaAportesDto = [];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
   late CollectionReference coleccionUsuarios;
@@ -237,11 +265,12 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
     String fechaFormateada = DateFormat('dd-MM-yyyy').format(nowDate);
     var path = '$identificacion/inversiones/$now.jpg';
     if (image != null) {
+
       file = File(image.path);
       var refStorage = firebase_storage.FirebaseStorage.instance.ref(path);
       await refStorage.putFile(file!);
       url = await refStorage.getDownloadURL();
-      print(url);
+      print("La url es la siguiente: "+ url.toString());
       Map<String, dynamic> nuevaNotificacion = {
         'concepto': 'Inversion',
         'estado': true,
@@ -286,12 +315,27 @@ class _WithdrawFundsWidgetState extends State<WithdrawFundsWidget> {
                 String fecha = data['fecha'].toString();
                 return InversionAporte(
                     concepto: concepto, fecha: fecha, monto: monto);
-              }));
+              }
+              )
+              );
               listaAportes.sort((a, b) => b.fecha.compareTo(a.fecha));
               saldoTotal = listaAportes
                   .map((aporte) => aporte.monto)
                   .fold(0.0, (a, b) => a! + b);
+              print("Saldo total: " + saldoTotal.toString());
+            }
+            );
+            setState(() {
+              listaAportesDto.clear();
+              print("Esta entrando al segundo state");
+              listaAportesDto = listaAportes.map((aporte) => aporte.toDTO()).toList();
+              listaAportesDto.sort((a, b) => b.fecha.compareTo(a.fecha));
+              listaAportes.clear();
+              listaAportesDto.forEach((element) {
+                listaAportes.add(element.fromDTO());
+              });
             });
+
           }).catchError((error) {
             print("Error al obtener datos de Firebase: $error");
           });

@@ -52,11 +52,14 @@ class _CreditosWidgetState extends State<CreditosWidget> {
       });
       return;
     }
-    QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection("usuarios")
-          .doc(identificacionUsuarioActivo).collection("creditos")
-          .get();
-    bool tieneCreditoLocal = querySnapshot.docs.length > 0;
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(identificacionUsuarioActivo)
+        .collection("creditos")
+        .where("estado", whereIn: ["activo","Activo", "Morosidad","morosidada"])
+        .get();
+
+    bool tieneCreditoLocal = querySnapshot.docs.isNotEmpty;
 
     if (tieneCredito != tieneCreditoLocal) {
       setState(() {

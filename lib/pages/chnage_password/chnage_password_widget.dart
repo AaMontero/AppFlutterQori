@@ -32,21 +32,39 @@ class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
       }
     });
   }
-  Future<void> cambiarPassWord(
-      String nuevaContrasenia, String confNuevaContrasenia) async {
+  Future<String> cambiarPassWord(String nuevaContrasenia, String confNuevaContrasenia) async {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (nuevaContrasenia == confNuevaContrasenia) {
-      try {
-        await user?.updatePassword(nuevaContrasenia);
-        print("Contraseña cambiada con éxito");
-      } catch (error) {
-        print("Error al cambiar la contraseña: $error");
+      if (isStrongPassword(nuevaContrasenia)) {
+        try {
+          await user?.updatePassword(nuevaContrasenia);
+          return "cambio exitoso";
+        } catch (error) {
+          return "Error al cambiar la contraseña: $error";
+        }
+      } else {
+        return "La contraseña debe tener al menos una legra mayúscula, minúscula, un número, y un caracter. especial ";
       }
     } else {
-      print("Las contraseñas no son iguales");
+      return "Las contraseñas no son iguales";
     }
   }
+
+  bool isStrongPassword(String contrasenia) {
+    // Validar que la contraseña tenga al menos una mayúscula, una minúscula,
+    // un carácter especial (.,_&$@) y un número.
+    final upperCaseRegex = RegExp(r'[A-Z]');
+    final lowerCaseRegex = RegExp(r'[a-z]');
+    final digitRegex = RegExp(r'[0-9]');
+    final specialCharRegex = RegExp(r'[.,_&$@]');
+
+    return upperCaseRegex.hasMatch(contrasenia) &&
+        lowerCaseRegex.hasMatch(contrasenia) &&
+        digitRegex.hasMatch(contrasenia) &&
+        specialCharRegex.hasMatch(contrasenia);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -395,43 +413,87 @@ class _ChnagePasswordWidgetState extends State<ChnagePasswordWidget> {
                                     0.0, 20.0, 0.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    cambiarPassWord(nuevaContrasenia!, confirmarNuevaContrasenia!);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'Contraseña modificada',
-                                          style: TextStyle(
-                                            color: AzaBankTheme.of(context)
-                                                .primary3,
+                                    String cambio = await cambiarPassWord(nuevaContrasenia!, confirmarNuevaContrasenia!);
+                                    if(cambio == "cambio exitoso"){
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Contraseña modificada exitosamente',
+                                            style: TextStyle(
+                                              color: AzaBankTheme.of(context)
+                                                  .primary3,
+                                            ),
+                                          ),
+                                          duration: Duration(milliseconds: 4000),
+                                          backgroundColor:
+                                          AzaBankTheme.of(context).green,
+                                          action: SnackBarAction(
+                                            label: 'Okay ',
+                                            textColor:
+                                            AzaBankTheme.of(context).primary3,
+                                            onPressed: () async {
+                                              await Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                  type: PageTransitionType.scale,
+                                                  alignment:
+                                                  Alignment.bottomCenter,
+                                                  duration:
+                                                  Duration(milliseconds: 300),
+                                                  reverseDuration:
+                                                  Duration(milliseconds: 300),
+                                                  child: NavBarPage(
+                                                      initialPage:
+                                                      'Settingspage'),
+                                                ),
+                                              );
+                                            },
                                           ),
                                         ),
-                                        duration: Duration(milliseconds: 4000),
-                                        backgroundColor:
-                                            AzaBankTheme.of(context).orange,
-                                        action: SnackBarAction(
-                                          label: 'Okay ',
-                                          textColor:
-                                              AzaBankTheme.of(context).primary3,
-                                          onPressed: () async {
-                                            await Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                type: PageTransitionType.scale,
-                                                alignment:
-                                                    Alignment.bottomCenter,
-                                                duration:
-                                                    Duration(milliseconds: 300),
-                                                reverseDuration:
-                                                    Duration(milliseconds: 300),
-                                                child: NavBarPage(
-                                                    initialPage:
-                                                        'Settingspage'),
-                                              ),
-                                            );
-                                          },
+                                      );
+                                      _model.textController2?.clear();
+                                      _model.textController3?.clear();
+                                    }else{
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            cambio,
+                                            style: TextStyle(
+                                              color: AzaBankTheme.of(context)
+                                                  .primary3,
+                                            ),
+                                          ),
+                                          duration: Duration(milliseconds: 4000),
+                                          backgroundColor:
+                                          AzaBankTheme.of(context).orange,
+                                          action: SnackBarAction(
+                                            label: 'Okay ',
+                                            textColor:
+                                            AzaBankTheme.of(context).primary3,
+                                            onPressed: () async {
+                                              await Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                  type: PageTransitionType.scale,
+                                                  alignment:
+                                                  Alignment.bottomCenter,
+                                                  duration:
+                                                  Duration(milliseconds: 300),
+                                                  reverseDuration:
+                                                  Duration(milliseconds: 300),
+                                                  child: NavBarPage(
+                                                      initialPage:
+                                                      'Settingspage'),
+                                                ),
+                                              );
+                                            },
+                                          ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    }
+
+
+
                                   },
                                   text: 'Cambiar Contraseña',
                                   options: FFButtonOptions(

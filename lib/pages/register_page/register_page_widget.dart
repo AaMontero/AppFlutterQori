@@ -30,7 +30,6 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
   String? numCedulaReg;
   DateTime? selectedDate = DateTime.now();
 
-
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
